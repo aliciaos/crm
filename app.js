@@ -4,9 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var partials = require('express-partials');
+var flash = require('express-flash');
+var methodOverride = require('method-override');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+var router = require('./routes');
 
 var app = express();
 
@@ -15,18 +18,49 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(session({secret: "CRM 2017",
+                 resave: false,
+                 saveUninitialized: true}));
+app.use(methodOverride('_method', {methods: ["POST", "GET"]}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(partials());
+app.use(flash());
 
-app.use('/', index);
-app.use('/users', users);
+// Helper dinamico:
+app.use(function(req, res, next) {
+
+    // Hacer visible req.session en las vistas
+    res.locals.session = req.session;
+
+    // Hacer visible req.url en las vistas
+    res.locals.url = req.url;
+  
+    next();
+});
+
+app.use(router);
+
+// Helper estatico:
+app.locals.escapeText =  function(text) {
+   return String(text || "")
+          .replace(/&(?!\w+;)/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/\n/g, '<br />');
+};
+
+// Descomentar si se desea limpiar la historia cuando hay un error:
+//app.use(hc.reset);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
