@@ -1,0 +1,28 @@
+
+
+<h2> Pacientes </h2>
+
+<table>
+  <% for (var i in patients) { %> 
+    <% var patient = patients[i]; %>      
+
+     <tr>
+        <td>
+           <a href="/patients/<%= patient.id %>"><%= patient.name %></a>
+        </td>
+     </tr>
+
+     <tr>
+        <td colspan="2">
+            <a href="/patients/<%= patient.id %>/edit"><button>editar</button></a>
+            <a href="/patients/<%= patient.id %>?_method=DELETE" 
+               onClick="return confirm('Borrar: <%= patient.name %>');">
+               <button>borrar</button>
+            </a>
+        </td>
+     </tr> 
+  <% } %>
+</table>
+
+
+<a href="/patients/new"><button type="button">Crear nueva paciente</button></a>
