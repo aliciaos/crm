@@ -1,6 +1,8 @@
 
 
-<h2> Resultados de Tipos de Diagnósticos </h2>
+<h2> Resultados: </h2>
+
+<a href="/dtypes/<%= dtype.id %>/dtresults/new"><button type="button">Crear nuevo resultado</button></a>
 
 <table>
   <% for (var i in dtresults) { %> 
@@ -26,8 +28,19 @@
         </td>
      </tr> 
 
+
+ 
+     <tr>
+        <td>
+            <%  var dtroptions = dtresult.DTROptions %>
+
+            <%- include ../dtroptions/index.ejs %>
+        </td>
+     </tr> 
+
+
+
   <% } %>
 </table>
 
 
-<a href="/dtypes/<%= dtype.id %>/dtresults/new"><button type="button">Crear nuevo resultado</button></a>

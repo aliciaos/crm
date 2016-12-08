@@ -4,6 +4,7 @@ var router = express.Router();
 var patientController = require('../controllers/patient_controller');
 var dtypeController = require('../controllers/dtype_controller');
 var dtresultController = require('../controllers/dtresult_controller');
+var dtroptionController = require('../controllers/dtroption_controller');
 
 
 /* GET home page. */
@@ -16,6 +17,8 @@ router.get('/', function(req, res, next) {
 router.param('patientId', patientController.load);  
 router.param('dtypeId',   dtypeController.load);  
 router.param('dtresultId',   dtresultController.load);  
+router.param('dtroptionId',   dtroptionController.load);  
+
 
 
 // Definición de rutas de /patients
@@ -28,7 +31,22 @@ router.put('/patients/:patientId(\\d+)',       	patientController.update);
 router.delete('/patients/:patientId(\\d+)',    	patientController.destroy);
 
 
-// Definición de rutas de /dtresults
+
+
+
+// Definición de rutas de /dtypes/:dtypeId/dtresults/dtresultId/dtroptions
+router.get(   '/dtypes/:dtypeId(\\d+)/dtresults/:dtresultId(\\d+)/dtroptions',                     		dtroptionController.index);
+router.get(   '/dtypes/:dtypeId(\\d+)/dtresults/:dtresultId(\\d+)/dtroptions/:dtroptionId(\\d+)',       dtroptionController.show);
+router.get(   '/dtypes/:dtypeId(\\d+)/dtresults/:dtresultId(\\d+)/dtroptions/new',                 		dtroptionController.new);
+router.post(  '/dtypes/:dtypeId(\\d+)/dtresults/:dtresultId(\\d+)/dtroptions',                    		dtroptionController.create);
+router.get(   '/dtypes/:dtypeId(\\d+)/dtresults/:dtresultId(\\d+)/dtroptions/:dtroptionId(\\d+)/edit', 	dtroptionController.edit);
+router.put(   '/dtypes/:dtypeId(\\d+)/dtresults/:dtresultId(\\d+)/dtroptions/:dtroptionId(\\d+)',      	dtroptionController.update);
+router.delete('/dtypes/:dtypeId(\\d+)/dtresults/:dtresultId(\\d+)/dtroptions/:dtroptionId(\\d+)',   	dtroptionController.destroy);
+
+
+
+
+// Definición de rutas de /dtypes/:dtypeId/dtresults
 router.get(   '/dtypes/:dtypeId(\\d+)/dtresults',                     		dtresultController.index);
 router.get(   '/dtypes/:dtypeId(\\d+)/dtresults/:dtresultId(\\d+)',       	dtresultController.show);
 router.get(   '/dtypes/:dtypeId(\\d+)/dtresults/new',                 		dtresultController.new);

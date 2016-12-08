@@ -6,13 +6,15 @@ var Sequelize = require('sequelize');
 
 // Autoload el tipo de diagnostico asociado a :dtypeId
 exports.load = function(req, res, next, dtypeId) {
-    models.DType.findById(dtypeId, { include: [ models.DTResult ] })
+    models.DType.findById(dtypeId, 
+                          { include: [ { model: models.DTResult,
+                                         include: [ models.DTROption ] 
+                                       } 
+                                     ] 
+                          })
     .then(function(dtype) {
         if (dtype) {
             req.dtype = dtype;
-
-console.log(dtype);
-
             next();
         } else { 
             throw new Error('No existe ningún tipo de diagnóstico con Id=' + dtypeId);

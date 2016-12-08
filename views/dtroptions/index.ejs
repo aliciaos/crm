@@ -1,0 +1,34 @@
+
+
+<h2> Opciones: </h2>
+
+<table>
+  <% for (var i in dtroptions) { %> 
+    <% var dtroption = dtroptions[i]; %>      
+
+     <tr>
+        <td>
+           <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/dtroptions/<%= dtroption.id %>"> 
+               <%= dtroption.code %> - <%= dtroption.title %> </a>
+        </td>
+
+        <td>
+            <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/dtroptions/<%= dtroption.id %>/edit"><button>editar</button></a>
+            <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/dtroptions/<%= dtroption.id %>?_method=DELETE" 
+               onClick="return confirm('Borrar: <%= dtroption.code %>');">
+               <button>borrar</button>
+            </a>
+        </td>
+     </tr> 
+
+     <tr>
+        <td>
+           <%= dtroption.description %>
+        </td>
+     </tr> 
+
+  <% } %>
+</table>
+
+
+<a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/dtroptions/new"><button type="button">Crear nueva opción</button></a>

@@ -1,0 +1,4 @@
+
+Al borrar un tipo de diagnostico, hay que borrar sus resultados y opciones.
+
+Al borrar un resultado de tipo de diagnostico, hay que borrar sus opciones.
