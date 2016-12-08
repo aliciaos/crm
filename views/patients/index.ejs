@@ -10,10 +10,8 @@
         <td>
            <a href="/patients/<%= patient.id %>"><%= patient.name %></a>
         </td>
-     </tr>
 
-     <tr>
-        <td colspan="2">
+        <td>
             <a href="/patients/<%= patient.id %>/edit"><button>editar</button></a>
             <a href="/patients/<%= patient.id %>?_method=DELETE" 
                onClick="return confirm('Borrar: <%= patient.name %>');">

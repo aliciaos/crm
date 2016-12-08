@@ -1,0 +1,10 @@
+
+<p>
+Editar Resultado de Tipo de Diagnóstico
+</p>
+
+<p>
+  <form method="post" action="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>?_method=PUT" >
+     <% include _form.ejs %>
+  </form>
+</p>

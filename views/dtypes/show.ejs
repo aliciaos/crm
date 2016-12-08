@@ -1,0 +1,20 @@
+
+<h2> Tipo de Diagnóstico </h2>
+
+       
+<p>
+  Código: <%= dtype.code %>
+</p>
+
+
+<p>
+  Título: <%= dtype.title %>
+</p>
+
+
+<%  var dtresults = dtype.DTResults %>
+
+
+<hr />
+<%- include ../dtresults/index.ejs %>
+<hr />

@@ -6,6 +6,7 @@ module.exports = function(sequelize, DataTypes) {
         'DTResult', 
         {   code: {
                 type: DataTypes.STRING,
+                unique: true,
                 validate: { notEmpty: {msg: "Falta el código del resultado de un tipo de diagnóstico."}}
             },
             title: {

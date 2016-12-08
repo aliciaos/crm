@@ -1,0 +1,33 @@
+
+
+<h2> Resultados de Tipos de Diagnósticos </h2>
+
+<table>
+  <% for (var i in dtresults) { %> 
+    <% var dtresult = dtresults[i]; %>      
+
+     <tr>
+        <td>
+           <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>"> <%= dtresult.code %> - <%= dtresult.title %> </a>
+        </td>
+
+        <td>
+            <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/edit"><button>editar</button></a>
+            <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>?_method=DELETE" 
+               onClick="return confirm('Borrar: <%= dtresult.code %>');">
+               <button>borrar</button>
+            </a>
+        </td>
+     </tr> 
+
+     <tr>
+        <td>
+           <%= dtresult.description %>
+        </td>
+     </tr> 
+
+  <% } %>
+</table>
+
+
+<a href="/dtypes/<%= dtype.id %>/dtresults/new"><button type="button">Crear nuevo resultado</button></a>
