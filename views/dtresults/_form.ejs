@@ -1,14 +1,18 @@
-
+<p>
 	<label>Código:</label>
-	<input type="text" name="code" value="<%= dtresult.code %>" placeholder="Código" /> <p>
+	<input type="text" name="code" value="<%= dtresult.code %>" placeholder="Código" />
+</p>
 
+<p>
 	<label>Título:</label>
-	<input type="text" name="title" value="<%= dtresult.title %>" placeholder="Título" /> <p>
+	<input type="text" name="title" value="<%= dtresult.title %>" placeholder="Título" />
+</p>
 
+<p>
 	<label>Descripción:</label>
-	<input type="text" name="description" value="<%= dtresult.description %>" placeholder="Descripción" /> <p>
+	<br />
+	<textarea type="text" name="description" placeholder="Descripción" rows="10" cols="80"><%= dtresult.description %></textarea>
+</p>
 
-
-	<a href="/dtypes"><button type="button">Cancelar</button></a>
-
-	<input type="submit" value="Salvar" >
+<a href="/dtypes"><button type="button">Cancelar</button></a>
+<input type="submit" value="Salvar" >

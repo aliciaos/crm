@@ -12,16 +12,13 @@ module.exports = {
                 },
                 DTResultId: { type: Sequelize.INTEGER },
                 code:  { 
-                    type: Sequelize.STRING,
-                    validate: { notEmpty: {msg: "Falta el código de la opción de diagnóstico."}}
+                    type: Sequelize.STRING
                 },
                 title: { 
-                    type: Sequelize.STRING,
-                    validate: { notEmpty: {msg: "Falta el código de la opción de diagnóstico."}}
+                    type: Sequelize.STRING
                 },
                 description: { 
-                    type: Sequelize.TEXT,
-                    validate: { notEmpty: {msg: "Falta la descripción de la opción de diagnóstico."}}
+                    type: Sequelize.TEXT
                 },
                 createdAt: { type: Sequelize.DATE, allowNull: false },
                 updatedAt: { type: Sequelize.DATE, allowNull: false }

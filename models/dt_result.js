@@ -14,8 +14,7 @@ module.exports = function(sequelize, DataTypes) {
                 validate: { notEmpty: {msg: "Falta el título del resultado de un tipo de diagnóstico."}}
             },
             description: {
-                type: DataTypes.TEXT,
-                validate: { notEmpty: {msg: "Falta la descripción del resultado de un tipo de diagnóstico."}}
+                type: DataTypes.TEXT
             }
         });
 };

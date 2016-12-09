@@ -20,8 +20,7 @@ module.exports = {
                     validate: { notEmpty: {msg: "Falta el título del resultado de diagnóstico."}}
                 },
                 description: { 
-                    type: Sequelize.TEXT,
-                    validate: { notEmpty: {msg: "Falta la descripción del resultado de diagnóstico."}}
+                    type: Sequelize.TEXT
                 },
                 createdAt: { type: Sequelize.DATE, allowNull: false },
                 updatedAt: { type: Sequelize.DATE, allowNull: false }

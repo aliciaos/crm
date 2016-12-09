@@ -5,16 +5,13 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define(
         'DTROption', 
         {   code: {
-                type: DataTypes.STRING,
-                validate: { notEmpty: {msg: "Falta el código de la opción del diagnóstico."}}
+                type: DataTypes.STRING
             },
             title: {
-                type: DataTypes.STRING,
-                validate: { notEmpty: {msg: "Falta el código de la opción del diagnóstico."}}
+                type: DataTypes.STRING
             },
             description: {
-                type: DataTypes.TEXT,
-                validate: { notEmpty: {msg: "Falta la descripción de la opción del diagnóstico."}}
+                type: DataTypes.TEXT
             }
         });
 };

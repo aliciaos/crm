@@ -1,26 +1,23 @@
 
 
-<h2> Tipos de Diagnósticos </h2>
+<h1> Diagnósticos: </h1>
 
-<table>
+<ul>
   <% for (var i in dtypes) { %> 
     <% var dtype = dtypes[i]; %>      
 
-     <tr>
-        <td>
-           <a href="/dtypes/<%= dtype.id %>"> <%= dtype.code %> - <%= dtype.title %> </a>
-        </td>
+     <li>
+          <a href="/dtypes/<%= dtype.id %>"> <%= dtype.code %> - <%= dtype.title %> </a>
 
-        <td>
-            <a href="/dtypes/<%= dtype.id %>/edit"><button>editar</button></a>
-            <a href="/dtypes/<%= dtype.id %>?_method=DELETE" 
-               onClick="return confirm('Borrar: <%= dtype.code %>');">
+          <a href="/dtypes/<%= dtype.id %>/edit"><button>editar</button></a>
+
+          <a href="/dtypes/<%= dtype.id %>?_method=DELETE" 
+               onClick="return confirm('¿Seguro que quiere borrar el diagnóstico: <%= dtype.code %>?');">
                <button>borrar</button>
-            </a>
-        </td>
-     </tr> 
+          </a>
+     </li> 
   <% } %>
-</table>
+</ul>
 
 
 <a href="/dtypes/new"><button type="button">Crear nuevo tipo de diagnóstico</button></a>

@@ -6,6 +6,7 @@ var dtypeController = require('../controllers/dtype_controller');
 var dtresultController = require('../controllers/dtresult_controller');
 var dtroptionController = require('../controllers/dtroption_controller');
 
+var dtypeSeeder = require('../seeders/dcodes');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -65,6 +66,11 @@ router.post('/dtypes',                    	dtypeController.create);
 router.get('/dtypes/:dtypeId(\\d+)/edit',  	dtypeController.edit);
 router.put('/dtypes/:dtypeId(\\d+)',       	dtypeController.update);
 router.delete('/dtypes/:dtypeId(\\d+)',    	dtypeController.destroy);
+
+
+
+// Seed códigos de diagnosticos
+router.post('/dtypes/seed',                    	dtypeSeeder.seed);
 
 
 

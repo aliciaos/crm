@@ -1,46 +1,40 @@
 
 
-<h2> Resultados: </h2>
+<h2> 
 
-<a href="/dtypes/<%= dtype.id %>/dtresults/new"><button type="button">Crear nuevo resultado</button></a>
+    Resultados: 
 
-<table>
-  <% for (var i in dtresults) { %> 
-    <% var dtresult = dtresults[i]; %>      
+    <a href="/dtypes/<%= dtype.id %>/dtresults/new">
+        <button type="button">Crear nuevo resultado</button>
+    </a>
 
-     <tr>
-        <td>
-           <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>"> <%= dtresult.code %> - <%= dtresult.title %> </a>
-        </td>
+</h2>
 
-        <td>
+
+<ul>
+    <% for (var i in dtresults) { %> 
+        <% var dtresult = dtresults[i]; %>      
+
+        <li>
+            <b> <%= dtresult.code %> - <%= dtresult.title %> </b>
+
             <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/edit"><button>editar</button></a>
+
             <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>?_method=DELETE" 
-               onClick="return confirm('Borrar: <%= dtresult.code %>');">
-               <button>borrar</button>
+                onClick="return confirm('Borrar: <%= dtresult.code %>');">
+                <button>borrar</button>
             </a>
-        </td>
-     </tr> 
 
-     <tr>
-        <td>
-           <%= dtresult.description %>
-        </td>
-     </tr> 
+            <p>
+               <%- escapeText(dtresult.description) %>
+            </p>
 
-
- 
-     <tr>
-        <td>
             <%  var dtroptions = dtresult.DTROptions %>
 
             <%- include ../dtroptions/index.ejs %>
-        </td>
-     </tr> 
 
-
-
-  <% } %>
-</table>
+        </li> 
+    <% } %>
+</ul>
 
 

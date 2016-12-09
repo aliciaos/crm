@@ -1,19 +1,15 @@
 
-<h2> Tipo de Diagnóstico </h2>
+<h1> 
+    Diagnóstico: 
 
-       
-<p>
-  Código: <%= dtype.code %>
-</p>
+    <%= dtype.code %> - <%= dtype.title %> 
 
-
-<p>
-  Título: <%= dtype.title %>
-</p>
-
+    <a href="/dtypes/<%= dtype.id %>/edit">
+        <button>editar</button>
+    </a> 
+</h1>
 
 <%  var dtresults = dtype.DTResults %>
-
 
 <hr />
 <%- include ../dtresults/index.ejs %>
