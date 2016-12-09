@@ -58,9 +58,6 @@ DTResult.hasMany(DTROption);
 Diagnose.belongsTo(Report);
 Report.hasMany(Diagnose);
 
-Diagnose.belongsTo(DType);
-DType.hasMany(Diagnose);
-
 // Exportar:
 
 exports.Patient   = Patient;

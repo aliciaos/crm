@@ -3,6 +3,8 @@ var models = require('../models');
 var Sequelize = require('sequelize');
 
 
+//-----------------------------------------------------------
+
 
 // Autoload el tipo de diagnostico asociado a :dtypeId
 exports.load = function(req, res, next, dtypeId) {

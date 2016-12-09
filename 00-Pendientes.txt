@@ -2,3 +2,15 @@
 Al borrar un tipo de diagnostico, hay que borrar sus resultados y opciones.
 
 Al borrar un resultado de tipo de diagnostico, hay que borrar sus opciones.
+
+Paginacion de pacientes
+
+Paginacion de informes
+
+Filtro para listar pacientes
+
+Filtro para listar informes
+
+Meter un nuevo campo en los informes que indique si el informe se ha imprimido ya o no.
+
+meter en los autoloads de parametros dos tipos de parametros en funcion de si se quiere hacer carga ansiosa o no.

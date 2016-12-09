@@ -1,0 +1,34 @@
+
+<h1> Informe </h1>
+
+
+<p>
+	Doctor:
+	<%= report.doctor %>
+</p>
+
+<p>
+	Fecha de recepción:
+	<%= moment(report.receptionAt).format("DD/MM/YYYY") %>
+</p>
+
+<p>
+	Fecha última menstruación:
+    <%= report.lastMenstruationAt %>
+</p>
+
+<p>
+	Día del ciclo:
+	<%= report.cycleDay %>
+</p>
+
+<h2>
+	Diagnosticos
+
+	<a href="/patients/<%= patient.id %>/reports">
+		<button>Añadir diagnóstico</button>
+	</a>
+
+</h2>
+
+               

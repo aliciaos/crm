@@ -3,6 +3,8 @@ var models = require('../models');
 var Sequelize = require('sequelize');
 
 
+//-----------------------------------------------------------
+
 
 // Autoload el paciente asociado a :patientId
 exports.load = function(req, res, next, patientId) {
@@ -17,6 +19,9 @@ exports.load = function(req, res, next, patientId) {
         })
         .catch(function(error) { next(error); });
 };
+
+
+//-----------------------------------------------------------
 
 
 // GET /patients

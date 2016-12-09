@@ -10,9 +10,17 @@ module.exports = function(sequelize, DataTypes) {
             },
             receptionAt: { 
                 type: DataTypes.DATE,
-                validate: { notEmpty: {msg: "Falta la fecha de recepción."}}
+                validate: {
+                    isDate: {
+                        msg: "La fecha de recepción no es una fecha válida."
+                    }
+                }
             },
-            lastMenstruationAt: { type: DataTypes.DATE },
-            cycleDay: { type: DataTypes.INTEGER }
+            lastMenstruationAt: { 
+                type: DataTypes.STRING 
+            },
+            cycleDay: { 
+                type: DataTypes.INTEGER 
+            }
         });
 };

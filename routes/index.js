@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+var reportController = require('../controllers/report_controller');
 var patientController = require('../controllers/patient_controller');
 var dtypeController = require('../controllers/dtype_controller');
 var dtresultController = require('../controllers/dtresult_controller');
@@ -15,10 +16,22 @@ router.get('/', function(req, res, next) {
 
 
 // Autoload de parametros
+router.param('reportId', reportController.load);  
 router.param('patientId', patientController.load);  
 router.param('dtypeId',   dtypeController.load);  
 router.param('dtresultId',   dtresultController.load);  
 router.param('dtroptionId',   dtroptionController.load);  
+
+
+// Definicion de rutas para los informes
+router.get('/reports',                     	        					reportController.index);
+router.get('/patients/:patientId(\\d+)/reports',    					reportController.index);
+router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)', 		reportController.show);
+router.get('/patients/:patientId(\\d+)/reports/new',    				reportController.new);
+router.post('/patients/:patientId(\\d+)/reports',    					reportController.create);
+router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/edit',	reportController.edit);
+router.put('/patients/:patientId(\\d+)/reports/:reportId(\\d+)',		reportController.update);
+router.delete('/patients/:patientId(\\d+)/reports/:reportId(\\d+)',		reportController.destroy);
 
 
 

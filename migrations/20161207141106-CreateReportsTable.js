@@ -18,8 +18,12 @@ module.exports = {
                     type: Sequelize.DATE,
                     validate: { notEmpty: {msg: "Falta la fecha de recepción."}}
                 },
-                lastMenstruationAt: { type: Sequelize.DATE },
-                cycleDay: { type: Sequelize.INTEGER },
+                lastMenstruationAt: { 
+                    type: Sequelize.STRING 
+                },
+                cycleDay: { 
+                    type: Sequelize.INTEGER 
+                },
                 createdAt: { type: Sequelize.DATE,     allowNull: false },
                 updatedAt: { type: Sequelize.DATE,     allowNull: false }
            },

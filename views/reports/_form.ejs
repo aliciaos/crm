@@ -1,0 +1,34 @@
+
+<p>
+	<label>Doctor:</label>
+	<input type="text" name="doctor" value="<%= report.doctor %>" placeholder="Doctor" />
+</p>
+
+<p>
+	<label>Fecha de recepción (DD/MM/AAAA):</label>
+	<input type="text" name="receptionAt" 
+	       value="<%= moment(report.receptionAt).format("DD/MM/YYYY") %>" 
+	       placeholder="Fecha de recepción" />
+</p>
+
+<p>
+	<label>Fecha última menstruación:</label>
+	<input type="text" name="lastMenstruationAt" 
+	       value="<%= report.lastMenstruationAt %>" 
+	       placeholder="Fecha última menstruación" />
+</p>
+
+<p>
+	<label>Día del ciclo:</label>
+	<input type="text" name="cycleDay" value="<%= report.cycleDay %>" placeholder="Día del ciclo" />
+</p>
+
+<p>
+
+<a href="/patients/<%= patient.id %>">
+	<button type="button">Cancelar</button>
+</a>
+
+<input type="submit" value="Salvar">
+
+
