@@ -10,7 +10,9 @@ var moment = require('moment');
 
 // Autoload el informe asociado a :reportId
 exports.load = function(req, res, next, reportId) {
-    models.Report.findById(reportId)
+    models.Report.findById(reportId,
+    						{ include: [ models.Diagnose,
+                                         models.Patient ] })
     .then(function(report) {
         if (report) {
             req.report = report;
@@ -89,7 +91,7 @@ exports.create = function(req, res, next) {
     .then(function(report) {
         req.flash('success', 'Informe creado con éxito.');   
 
-        res.redirect("/patients/" + req.patient.id + "/reports/" + report.id);
+        res.redirect("/patients/" + req.patient.id + "/reports/" + report.id + "/edit");
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -111,6 +113,19 @@ exports.create = function(req, res, next) {
     }); 
 };
 
+
+// POST /patients/:patientId/reports/auto
+exports.autocreate = function(req, res, next) {
+
+    req.body = {    doctor:             req.patient.doctor, 
+                    receptionAt:        moment().format("DD/MM/YYYY"),
+                    lastMenstruationAt: "",
+                    cycleDay:           "",
+                    PatientId:          req.patient.id 
+                };
+
+    exports.create(req, res, next);
+};
 
 
 

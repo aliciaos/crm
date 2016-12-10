@@ -1,0 +1,10 @@
+
+<h1>
+Editar Diagnóstico
+</h1>
+
+<p>
+  <form method="post" action="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>?_method=PUT" >
+     <% include _form.ejs %>
+  </form>
+</p>

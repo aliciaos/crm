@@ -22,13 +22,9 @@
 	<%= report.cycleDay %>
 </p>
 
-<h2>
-	Diagnosticos
 
-	<a href="/patients/<%= patient.id %>/reports">
-		<button>Añadir diagnóstico</button>
-	</a>
+<%  var diagnoses = report.Diagnoses %>
 
-</h2>
-
-               
+<hr />
+	<%- include ../diagnoses/index.ejs %>
+<hr />

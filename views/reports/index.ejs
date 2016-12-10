@@ -20,6 +20,8 @@
             <%= report.lastMenstruationAt %>
             <%= report.cycleDay %>
 
+            <a href="/patients/<%= patient.id %>/reports/<%= report.id %>"><button>Ver</button></a>
+
             <a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit"><button>editar</button></a>
 
             <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?_method=DELETE" 

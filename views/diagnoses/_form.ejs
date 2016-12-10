@@ -1,0 +1,34 @@
+<p>
+	<label>Tipo:</label>
+	<input type="text" name="dtypeCode" value="<%= diagnose.dtypeCode %>" placeholder="Tipo" />
+</p>
+
+<p>
+	<label>Resultado:</label>
+	<input type="text" name="dtresultCode" value="<%= diagnose.dtresultCode %>" placeholder="Resultado" />
+</p>
+
+<p>
+	<label>Observaciones:</label>
+	<br />
+	<textarea type="text" name="resultNotes" placeholder="Observaciones" rows="10" cols="80"><%= diagnose.resultNotes %></textarea>
+</p>
+
+<p>
+	<label>Opción:</label>
+	<input type="text" name="dtroptionCode" value="<%= diagnose.dtroptionCode %>" placeholder="Opción" />
+</p>
+
+<p>
+	<label>Observaciones:</label>
+	<br />
+	<textarea type="text" name="optionNotes" placeholder="Observaciones" rows="10" cols="80"><%= diagnose.optionNotes %></textarea>
+</p>
+
+
+<a href="/patients/<%= report.Patient.id %>/reports/<%= report.id %>/edit">
+	<button type="button">Cancelar</button>
+</a>
+
+<input type="submit" value="Salvar" >
+
