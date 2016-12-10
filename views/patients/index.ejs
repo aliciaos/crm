@@ -8,11 +8,13 @@
 
 <table>
     <% for (var i in patients) { %> 
-        <% var patient = patients[i]; %>      
+        <% var patient = patients[i]; %>     
+
+        <% var redir = url || "/patients"; %>
 
         <tr>
             <td>
-               <a href="/patients/<%= patient.id %>"><%= patient.name %></a>
+                <a href="/patients/<%= patient.id %>?redir=<%= redir %>"><%= patient.name %></a>
             </td>
 
             <td>
@@ -23,13 +25,11 @@
                    <button>borrar</button>
                 </a>
 
-                <a href="/patients/<%= patient.id %>/reports/auto?_method=POST">
-                    <button>Crear nuevo informe</button>
-                </a>
+                <% var redir2 = url || "/patients"; %>
 
-                <a href="/patients/<%= patient.id %>/reports">
-                    <button>Ver informes existentes</button>
-                </a>
+                <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><button>Crear nuevo informe</button></a>
+
+                <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><button>Ver informes existentes</button></a>
             </td>
         </tr> 
     <% } %>

@@ -33,6 +33,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(partials());
 app.use(flash());
 
+// Helper dinamico:
+app.use(function(req, res, next) {
+
+    // Hacer visible req.url en las vistas
+    res.locals.url = req.url;
+  
+    next();
+});
+
 app.use('/', index);
 
 // Helper estatico:

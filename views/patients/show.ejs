@@ -1,23 +1,41 @@
 
-<h2> Paciente</h2>
+<h2> 
+    Paciente
+
+    <a href="/patients/<%= patient.id %>/edit"><button>editar</button></a>
+</h2>
 
        
-    <p>
-      Nombre: <%= patient.name %>
-    </p>
+<p>
+  Nombre: <%= patient.name %>
+</p>
 
-    <p>
-      Dirección: <%= patient.address %>
-    </p>
+<p>
+  Dirección: <%= patient.address %>
+</p>
 
-    <p>
-      Ciudad: <%= patient.city %>
-    </p>
+<p>
+  Ciudad: <%= patient.city %>
+</p>
 
-    <p>
-      Telefóno: <%= patient.phone %>
-    </p>
+<p>
+  Telefóno: <%= patient.phone %>
+</p>
 
-    <p>
-      Doctor: <%= patient.doctor %>
-    </p>
+<p>
+  Doctor: <%= patient.doctor %>
+</p>
+
+
+<% var redir = url || "/patients" %>
+
+
+<a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><button>Ver informes existentes</button></a>
+
+<br />
+
+<a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><button>Crear nuevo informe</button></a>
+
+<br />
+
+<a href="/patients"><button type="button">Volver</button></a>

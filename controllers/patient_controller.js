@@ -32,7 +32,7 @@ exports.index = function(req, res, next) {
 
     models.Patient.findAll(options)
     .then(function(patients) {
-        res.render('patients/index.ejs', {patients: patients});
+        res.render('patients/index.ejs', {patients: patients });
     })
     .catch(function(error) {
         next(error);
