@@ -42,3 +42,13 @@
    onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');">
        <button>borrar</button>
 </a>
+
+
+
+<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/print?redir=<%= redir %>">
+    <button>imprimir</button>
+</a>
+
+
+
+

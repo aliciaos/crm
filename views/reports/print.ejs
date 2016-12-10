@@ -1,0 +1,61 @@
+
+<h1> 
+    Unidad de Citología PAP - Dr. Perea
+</h1>
+
+<h1> 
+    PAP - TEST
+</h1>
+
+<hr />
+
+<p>
+  Prescripción Dr./a: <%= report.doctor %>
+</p>
+
+<p>
+  <%= patient.name %>
+</p>
+
+<p>
+	Fecha de recepción: <%= moment(report.receptionAt).format("DD/MM/YYYY") %>
+</p>
+
+<p>
+	U.R.: <%= report.lastMenstruationAt %>
+</p>
+
+<p>
+	D.C.: <%= report.cycleDay %>
+</p>
+
+<hr />
+
+<h2>
+ORIENTACIÓN DIAGNOSTICA DEL EXTENDIDO 
+</h2>
+
+<% for (var i in diagnoses) { %> 
+    <% var diagnose = diagnoses[i]; %>      
+
+    <h3>
+    	<%= diagnose.dtype.title %>
+    </h3>
+
+    	<%= diagnose.dtresult.title %>
+    	<br />
+    	<%= diagnose.dtresult.description %>
+    	<br />
+    	<%= diagnose.dtroption.title %>
+    	<br />
+    	<%= diagnose.dtroption.description %>
+
+      
+<% } %>
+
+<hr />
+
+<% var redir = redir || "/" %>
+<a href="<%= redir %>">
+	<button type="button">Volver</button>
+</a>

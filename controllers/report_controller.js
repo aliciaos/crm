@@ -214,3 +214,77 @@ exports.destroy = function(req, res, next) {
 };
 
 
+//-----------------------------------------------------------
+
+
+// GET /patients/:patientId/reports/:reportId
+exports.print = function(req, res, next) {
+
+    var redir = req.query.redir || "/";
+
+    var diagnosesInfo = [];
+
+    Sequelize.Promise.all(req.report.Diagnoses)
+    .each(function(diagnose) {
+
+        var diagnoseInfo = { dtype: { title: "" },
+                             dtresult: { title: "", description: "" },
+                             dtroption: { title: "", description: "" }
+                           };
+
+        return models.DType.findOne({where: {code: { $like: "%"+diagnose.dtypeCode+"%"}}})
+        .then(function(dtype) {
+
+            if (!dtype) return;
+
+            diagnoseInfo.dtype = { title: dtype.title };
+
+            return models.DTResult.findOne({where: {DTypeId: dtype.id,
+                                                    code: { $like: "%"+diagnose.dtresultCode+"%"}}})
+            .then(function(dtresult) {
+
+                if (!dtresult) return;
+
+                diagnoseInfo.dtresult = { title: dtresult.title,
+                                           description: dtresult.description
+                                        };
+
+                return models.DTROption.findOne({where: {DTResultId: dtresult.id,
+                                                         code: { $like: "%"+diagnose.dtroptionCode+"%"}}})
+                .then(function(dtroption) {
+
+                    if (!dtroption) return;
+
+                    diagnoseInfo.dtroption = { title: dtroption.title,
+                                               description: dtroption.description 
+                                             };
+                });
+            });
+        })
+        .then(function() {
+            diagnosesInfo.push(diagnoseInfo);
+        });
+    })
+    .then(function() {
+
+        req.flash('success', 'Generado informe para imprimir.');
+
+        res.render('reports/print', {   report: req.report,
+                                        patient: req.patient,
+                                        diagnoses: diagnosesInfo,
+                                        moment: moment,
+                                        redir: redir });
+    })
+    .catch(function(error){
+        req.flash('error', 'Error crear un informe para imprimir: ' + error.message);
+        next(error);
+    });
+
+};
+
+
+
+
+
+
+

@@ -39,6 +39,7 @@ router.delete('/reports/:reportId(\\d+)/diagnoses/:diagnoseId(\\d+)',   	diagnos
 
 // Definicion de rutas para los informes
 router.get('/reports',                     	        					reportController.index);
+
 router.get('/patients/:patientId(\\d+)/reports',    					reportController.index);
 router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)', 		reportController.show);
 
@@ -49,6 +50,8 @@ router.post('/patients/:patientId(\\d+)/reports',    					reportController.creat
 router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/edit',	reportController.edit);
 router.put('/patients/:patientId(\\d+)/reports/:reportId(\\d+)',		reportController.update);
 router.delete('/patients/:patientId(\\d+)/reports/:reportId(\\d+)',		reportController.destroy);
+
+router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/print',  reportController.print);
 
 
 
