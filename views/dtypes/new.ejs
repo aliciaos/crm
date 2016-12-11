@@ -1,12 +1,15 @@
 
-<p>
-  Crear Tipo de Diagnóstico: 
-</p>
+<form method="post" action="/dtypes" >
 
-<p>
-  <form method="post" action="/dtypes" >
+	<h1>
+  		Crear Tipo de Diagnóstico: 
+
+		<a href="/dtypes"><button type="button">Cancelar</button></a>
+
+		<input type="submit" value="Salvar" >
+	</h1>
 
 	<% include _form.ejs %>
 
-  </form>
-</p>
+</form>
+

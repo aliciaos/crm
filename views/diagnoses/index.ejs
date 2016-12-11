@@ -27,9 +27,9 @@
                 <% } %>
 
                 <% if (locals.readwrite) { %>
-                    <a href="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>/edit"><button>editar</button></a>
+                    <a href="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>/edit?redir=<%= redir %>"><button>editar</button></a>
 
-                    <a href="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>?_method=DELETE" 
+                    <a href="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>?redir=<%= redir %>&_method=DELETE" 
                         onClick="return confirm('¿Seguro que quiere borrar el diagnóstico <%= diagnose.dtypeCode %>-<%= diagnose.dtresultCode %>-<%= diagnose.dtroptionCode %>?');">
                         <button>borrar</button>
                     </a>

@@ -1,20 +1,23 @@
 
-<h1>
-	Editar Informe
-</h1>
 
-<p>
-	<form method="post" action="/patients/<%= patient.id %>/reports/<%= report.id %>?_method=PUT" >
-		<% include _form.ejs %>
+<form method="post" action="/patients/<%= patient.id %>/reports/<%= report.id %>?_method=PUT" >
 
-		<%  var diagnoses = report.Diagnoses; %>
-		<%  locals.readwrite = true; %>
-		<hr />
-			<%- include ../diagnoses/index.ejs %>
-		<hr />
+	<h1>
+		Editar Informe
 
 		<input type="submit" value="Salvar">
 
-	</form>
-</p>
+		<a href="<%= redir %>"><button type="button">Cancelar</button></a>
+	</h1>
 
+	<% include _form.ejs %>
+
+</form>
+
+
+
+<%  var diagnoses = report.Diagnoses; %>
+<%  locals.readwrite = true; %>
+<hr />
+	<%- include ../diagnoses/index.ejs %>
+<hr />

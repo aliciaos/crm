@@ -1,12 +1,14 @@
 
-<p>
-  Crear Resultado de Tipo de Diagnóstico: 
-</p>
 
-<p>
-  <form method="post" action="/dtypes/<%= dtype.id %>/dtresults" >
+<form method="post" action="/dtypes/<%= dtype.id %>/dtresults" >
+
+	<h1>
+	  	Crear Resultado
+
+	  	<a href="/dtypes"><button type="button">Cancelar</button></a>
+		<input type="submit" value="Salvar" >
+	</h1>
 
 	<% include _form.ejs %>
 
-  </form>
-</p>
+</form>

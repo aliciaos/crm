@@ -1,18 +1,16 @@
 
-<h1>
-  Crear Informe: 
-</h1>
 
-<p>
-  <form method="post" action="/patients/<%= patient.id %>/reports" >
+
+<form method="post" action="/patients/<%= patient.id %>/reports" >
+
+	<h1>
+	  Crear Informe: 
+
+	  	<a href="/patients/<%= patient.id %>"><button type="button">Cancelar</button></a>
+
+		<input type="submit" value="Salvar">
+	</h1>
 
 	<% include _form.ejs %>
 
-	<a href="/patients/<%= patient.id %>">
-		<button type="button">Cancelar</button>
-	</a>
-
-	<input type="submit" value="Salvar">
-
-  </form>
-</p>
+</form>

@@ -1,10 +1,16 @@
 
-<p>
-Editar Tipo de Diagnóstico
-</p>
 
-<p>
-  <form method="post" action="/dtypes/<%= dtype.id %>?_method=PUT" >
-     <% include _form.ejs %>
-  </form>
-</p>
+
+<form method="post" action="/dtypes/<%= dtype.id %>?_method=PUT" >
+
+	<h1>
+		Editar Tipo de Diagnóstico
+
+		<a href="/dtypes"><button type="button">Cancelar</button></a>
+
+		<input type="submit" value="Salvar" >
+	</h1>
+
+    <% include _form.ejs %>
+
+</form>

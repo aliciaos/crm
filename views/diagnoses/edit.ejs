@@ -1,10 +1,16 @@
 
-<h1>
-Editar Diagnóstico
-</h1>
 
-<p>
-  <form method="post" action="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>?_method=PUT" >
+<form method="post" action="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>?_method=PUT" >
+
+	<h1>
+		Editar Diagnóstico
+
+		<a href="/patients/<%= report.Patient.id %>/reports/<%= report.id %>/edit"><button type="button">Cancelar</button></a>
+
+    	<input type="submit" value="Salvar" >
+	</h1>
+
      <% include _form.ejs %>
-  </form>
-</p>
+
+</form>
+

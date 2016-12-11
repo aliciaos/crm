@@ -1,12 +1,16 @@
 
-<p>
-  Crear Paciente: 
-</p>
 
-<p>
-  <form method="post" action="/patients" >
+<form method="post" action="/patients" >
+
+	<h1>
+  		Crear Paciente: 
+
+		<a href="/patients"><button type="button">Cancelar</button></a>
+
+		<input type="submit" value="Salvar">
+	</h1>
 
 	<% include _form.ejs %>
 
-  </form>
-</p>
+</form>
+
