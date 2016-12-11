@@ -12,9 +12,9 @@
         
         <li>
             Paciente: <b> <%= report.Patient.name %> </b>
-            (<%= moment(report.receptionAt).format("DD/MM/YYYY") %>)
+            (<%= moment(report.receptionAt).format("DD-MM-YYYY") %>)
             <%= report.doctor %>
-            <%= moment(report.receptionAt).format("DD/MM/YYYY") %>
+            <%= moment(report.receptionAt).format("DD-MM-YYYY") %>
             <%= report.lastMenstruationAt %>
             <%= report.cycleDay %>
 

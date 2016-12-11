@@ -72,7 +72,7 @@ exports.new = function(req, res, next) {
     var redir = req.query.redir || "/patients/" + req.patient.id + "/reports/";
 
     var report = models.Report.build({ 	doctor: req.patient.doctor, 
-                                       	receptionAt: moment().format("DD/MM/YYYY"),
+                                       	receptionAt: moment().format("DD-MM-YYYY"),
                                         lastMenstruationAt: "",
                                         cycleDay: "" });
 
@@ -88,7 +88,7 @@ exports.create = function(req, res, next) {
 
     var redir = req.body.redir || "/patients/" + req.patient.id + "/reports/";
 
-	var momentReceptionAt = moment(req.body.receptionAt + " 08:00", "DD/MM/YYYY");
+	var momentReceptionAt = moment(req.body.receptionAt + " 08:00", "DD-MM-YYYY");
 
     var report = { 	doctor:    			req.body.doctor, 
                     receptionAt:     	momentReceptionAt.toDate(),
@@ -110,7 +110,7 @@ exports.create = function(req, res, next) {
         };
   
   		if ( ! momentReceptionAt.isValid() ) {
-  			report.receptionAt = moment().format("DD/MM/YYYY");
+  			report.receptionAt = moment().format("DD-MM-YYYY");
   		}
 
         res.render('reports/new', { report: report,
@@ -130,7 +130,7 @@ exports.autocreate = function(req, res, next) {
 
     req.body = {    redir: req.query.redir || "/patients/" + req.patient.id + "/reports/",
                     doctor:             req.patient.doctor, 
-                    receptionAt:        moment().format("DD/MM/YYYY"),
+                    receptionAt:        moment().format("DD-MM-YYYY"),
                     lastMenstruationAt: "",
                     cycleDay:           "",
                     PatientId:          req.patient.id 
@@ -160,7 +160,7 @@ exports.update = function(req, res, next) {
 
     var redir = req.body.redir || "/patients/" + req.patient.id + "/reports/" + req.report.id
 
-	var momentReceptionAt = moment(req.body.receptionAt + " 08:00", "DD/MM/YYYY");
+	var momentReceptionAt = moment(req.body.receptionAt + " 08:00", "DD-MM-YYYY");
 
     req.report.doctor 				= req.body.doctor;
     req.report.receptionAt   		= momentReceptionAt.toDate();
@@ -182,7 +182,7 @@ exports.update = function(req, res, next) {
 		};
 
 		if ( ! momentReceptionAt.isValid() ) {
-  			report.receptionAt = moment().format("DD/MM/YYYY");
+  			report.receptionAt = moment().format("DD-MM-YYYY");
   		}
 
 		res.render('reports/edit', { report: req.report,

@@ -19,4 +19,3 @@ no se hace bien el redir al crear diagnosticos
 
 retocar entradas para eliminar espacios en blanco
 
-formato de fechas dd-mm-aaaa
