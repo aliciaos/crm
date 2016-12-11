@@ -8,16 +8,17 @@ var Sequelize = require('sequelize');
 
 // Autoload el paciente asociado a :patientId
 exports.load = function(req, res, next, patientId) {
-    models.Patient.findById(patientId)
-        .then(function(patient) {
-            if (patient) {
-                req.patient = patient;
-                next();
-            } else { 
-                throw new Error('No existe ningún paciente con Id=' + patientId);
-            }
-        })
-        .catch(function(error) { next(error); });
+    models.Patient.findById(patientId, 
+                            { include: [ models.Report ] })
+    .then(function(patient) {
+        if (patient) {
+            req.patient = patient;
+            next();
+        } else { 
+            throw new Error('No existe ningún paciente con Id=' + patientId);
+        }
+    })
+    .catch(function(error) { next(error); });
 };
 
 
@@ -140,13 +141,32 @@ exports.update = function(req, res, next) {
 // DELETE /patients/:patientId
 exports.destroy = function(req, res, next) {
 
-    req.patient.destroy()
-      .then( function() {
-      req.flash('success', 'Paciente borrada con éxito.');
+    Sequelize.Promise.all(req.patient.Reports)
+    .each(function(report) {
+
+        // Borrar los diagnosticos del informe:
+        return models.Diagnose.destroy({where: {ReportId: report.id}})
+        .then( function() {
+            req.flash('success', 'Diagnosticos de un informe borrados con éxito.');
+
+            // Borrar el informe
+            return report.destroy()
+            .then( function() {
+                req.flash('success', 'Informe borrado con éxito.');
+
+                // Borrar la paciente:
+                return req.patient.destroy()
+                .then(function() {
+                    req.flash('success', 'Paciente borrada con éxito.');
+                });
+            });
+        });
+    })
+    .then(function() {
         res.redirect("/patients");
-      })
-      .catch(function(error){
-      req.flash('error', 'Error al borrar un paciente: '+error.message);
+    })
+    .catch(function(error){
+        req.flash('error', 'Error al borrar una paciente: '+error.message);
         next(error);
-      });
+     });
 };

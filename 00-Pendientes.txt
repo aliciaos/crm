@@ -1,8 +1,5 @@
 
 
-
-Al borra una paciente, borrar sus informes, y los diagnosticos de este.
-
 Paginacion de pacientes
 
 Paginacion de informes
