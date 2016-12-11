@@ -1,9 +1,16 @@
 
 
+<form method="get" action="/patients" class="right vcenter">
+    <label>Filtrar por nombre:</label>
+    <input type="text" name="search" value="<%= locals.search || '' %>" placeholder="nombre a buscar" size="40" autocomplete="off"/>
+    <input type="image" width="24px" src="/images/find.png" border="0" alt="Submit" />
+</form>
+
+
 <h1> 
     Pacientes 
 
-    <a href="/patients/new"><img width="24px" src="/images/add.svg"></a>
+    <a href="/patients/new"><img width="24px" src="/images/add.png"></a>
 </h1>
 
 
@@ -12,11 +19,6 @@
 <% } %>
 
 
-<form method="get" action="/patients" class="right">
-    <label>Filtar por nombre:</label>
-    <input type="text" name="search" value="<%= locals.search || '' %>" placeholder="texto a buscar" autocomplete="off"/>
-    <input type="image" width="24px" src="/images/find.svg" border="0" alt="Submit" />
-</form>
 
 
 <table>
@@ -34,7 +36,7 @@
             
         </th>
     </tr> 
-        
+
     <% for (var i in patients) { %> 
         <% var patient = patients[i]; %>     
 
@@ -51,18 +53,18 @@
             </td>
 
             <td>
-                <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.svg"></a>
+                <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.png"></a>
 
-                <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.svg" alt="Ver informes"></a>
+                <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.png" alt="Ver informes"></a>
             </td>
 
             <td>
-                <a href="/patients/<%= patient.id %>"><img width="24px" src="/images/ver.svg"></a>
+                <a href="/patients/<%= patient.id %>"><img width="24px" src="/images/ver.png"></a>
 
-                <a href="/patients/<%= patient.id %>/edit"><img width="24px" src="/images/edit.svg"></a>
+                <a href="/patients/<%= patient.id %>/edit"><img width="24px" src="/images/edit.png"></a>
 
                 <a href="/patients/<%= patient.id %>?_method=DELETE" 
-                   onClick="return confirm('¿Seguro que desea borrar la paciente <%= patient.name %> y sus informes?');"><img width="24px" src="/images/basura.svg"></a>
+                   onClick="return confirm('¿Seguro que desea borrar la paciente <%= patient.name %> y sus informes?');"><img width="24px" src="/images/basura.png"></a>
 
                 <% var redir2 = url || "/patients"; %>
 

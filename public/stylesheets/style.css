@@ -5,6 +5,12 @@ body {
 
 }
 
+header {
+    text-align: center;
+    font-family: "PT Serif Bold",Georgia,serif,times;
+    font-size: 18px;
+}
+
 a {
   color: #00B7FF;
 }
@@ -59,10 +65,19 @@ nav a {
     color: white;
 }
 
+.version {
+    position: absolute;
+    bottom: 10px;
+}
+
 .vcenter {
 }
 
 .vcenter img {
+    vertical-align: middle;
+}
+
+.vcenter input {
     vertical-align: middle;
 }
 
@@ -167,7 +182,7 @@ nav a {
     padding: 6px 12px;
     margin-left: -1px;
     line-height: 1.42857143;
-    color: #03a9f4;
+    color: blue;
     text-decoration: none;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -182,7 +197,7 @@ nav a {
     z-index: 2;
     color: #fff;
     cursor: default;
-    background-color: #03a9f4;
+    background-color: blue;
     border-color: #03a9f4;
 }
 

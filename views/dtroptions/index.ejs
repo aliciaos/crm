@@ -4,7 +4,7 @@
     Opciones: 
 
     <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/dtroptions/new">
-        <img width="24px" src="/images/add.svg">
+        <img width="24px" src="/images/add.png">
     </a>
 
 </h3>
@@ -20,10 +20,10 @@
                 Vacío.
             <% } %>
 
-            <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/dtroptions/<%= dtroption.id %>/edit"><img width="24px" src="/images/edit.svg"></a>
+            <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/dtroptions/<%= dtroption.id %>/edit"><img width="24px" src="/images/edit.png"></a>
 
             <a href="/dtypes/<%= dtype.id %>/dtresults/<%= dtresult.id %>/dtroptions/<%= dtroption.id %>?_method=DELETE" 
-               onClick="return confirm('Borrar: <%= dtroption.code %>');"><img width="24px" src="/images/basura.svg"></a>
+               onClick="return confirm('Borrar: <%= dtroption.code %>');"><img width="24px" src="/images/basura.png"></a>
 
             <p>
                <%- escapeText(dtroption.description) %>

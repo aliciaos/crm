@@ -3,7 +3,7 @@
 <h1> 
     Diagnósticos: 
 
-    <a href="/dtypes/new"><img width="24px" src="/images/add.svg"></a>
+    <a href="/dtypes/new"><img width="24px" src="/images/add.png"></a>
 </h1>
 
 <table>
@@ -31,12 +31,12 @@
                 <%= dtype.title %>
             </td>
             <td>
-                <a href="/dtypes/<%= dtype.id %>"><img width="24px" src="/images/ver.svg"></a>
+                <a href="/dtypes/<%= dtype.id %>"><img width="24px" src="/images/ver.png"></a>
 
-                <a href="/dtypes/<%= dtype.id %>/edit"><img width="24px" src="/images/edit.svg"></a>
+                <a href="/dtypes/<%= dtype.id %>/edit"><img width="24px" src="/images/edit.png"></a>
 
                 <a href="/dtypes/<%= dtype.id %>?_method=DELETE" 
-                   onClick="return confirm('¿Seguro que quiere borrar el diagnóstico: <%= dtype.code %>?');"><img width="24px" src="/images/basura.svg"></a>
+                   onClick="return confirm('¿Seguro que quiere borrar el diagnóstico: <%= dtype.code %>?');"><img width="24px" src="/images/basura.png"></a>
             </td>
          </tr> 
     <% } %>

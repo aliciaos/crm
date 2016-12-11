@@ -4,16 +4,16 @@
 
 	<% var redir = redir || "/reports" %>
 	<a href="<%= redir %>">
-		<img width="24px" src="/images/back.svg">
+		<img width="24px" src="/images/back.png">
 	</a>
 
-	<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit?redir=<%= redir %>"><img width="24px" src="/images/edit.svg"></a>
+	<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit?redir=<%= redir %>"><img width="24px" src="/images/edit.png"></a>
 
 	<a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= redir %>&_method=DELETE" 
-	   onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');"><img width="24px" src="/images/basura.svg"></a>
+	   onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');"><img width="24px" src="/images/basura.png"></a>
 
 
-	<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/print?redir=<%= redir %>"><img width="24px" src="/images/print.svg"></a>
+	<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/print?redir=<%= redir %>"><img width="24px" src="/images/print.png"></a>
 
 </h1>
 

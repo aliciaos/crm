@@ -5,7 +5,7 @@
 
     <% if (locals.readwrite) { %>
         <a href="/reports/<%= report.id %>/diagnoses/new">
-            <img width="24px" src="/images/add.svg">
+            <img width="24px" src="/images/add.png">
         </a>
     <% } %>
 
@@ -27,11 +27,11 @@
                 <% } %>
 
                 <% if (locals.readwrite) { %>
-                    <a href="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>/edit?redir=<%= redir %>"><img width="24px" src="/images/edit.svg"></a>
+                    <a href="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>/edit?redir=<%= redir %>"><img width="24px" src="/images/edit.png"></a>
 
                     <a href="/reports/<%= report.id %>/diagnoses/<%= diagnose.id %>?redir=<%= redir %>&_method=DELETE" 
                         onClick="return confirm('¿Seguro que quiere borrar el diagnóstico <%= diagnose.dtypeCode %>-<%= diagnose.dtresultCode %>-<%= diagnose.dtroptionCode %>?');">
-                        <img width="24px" src="/images/basura.svg">
+                        <img width="24px" src="/images/basura.png">
                     </a>
                 <% } %>
 
