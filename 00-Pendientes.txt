@@ -12,7 +12,6 @@ Meter un nuevo campo en los informes que indique si el informe se ha imprimido y
 
 meter en los autoloads de parametros dos tipos de parametros en funcion de si se quiere hacer carga ansiosa o no.
 
-// no se hace bien el redir al crear diagnosticos
+no se hace bien el redir al editar diagnosticos
 
-retocar entradas para eliminar espacios en blanco
-
+No puedo borrar tipos de diagnosticos sin resultados

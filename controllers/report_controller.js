@@ -44,6 +44,7 @@ exports.index = function(req, res, next) {
 
     models.Report.findAll(options)
     .then(function(reports) {
+
         res.render('reports/index.ejs', { reports: reports,
         									moment: moment,
                                             redir: redir });
@@ -241,7 +242,7 @@ exports.print = function(req, res, next) {
                              optionNotes: diagnose.optionNotes
                            };
 
-        return models.DType.findOne({where: {code: { $like: "%"+diagnose.dtypeCode+"%"}}})
+        return models.DType.findOne({where: {code: diagnose.dtypeCode}})
         .then(function(dtype) {
 
             if (!dtype) return;
@@ -249,7 +250,7 @@ exports.print = function(req, res, next) {
             diagnoseInfo.dtype = { title: dtype.title };
 
             return models.DTResult.findOne({where: {DTypeId: dtype.id,
-                                                    code: { $like: "%"+diagnose.dtresultCode+"%"}}})
+                                                    code: diagnose.dtresultCode}})
             .then(function(dtresult) {
 
                 if (!dtresult) return;
@@ -259,7 +260,7 @@ exports.print = function(req, res, next) {
                                         };
 
                 return models.DTROption.findOne({where: {DTResultId: dtresult.id,
-                                                         code: { $like: "%"+diagnose.dtroptionCode+"%"}}})
+                                                         code: diagnose.dtroptionCode}})
                 .then(function(dtroption) {
 
                     if (!dtroption) return;

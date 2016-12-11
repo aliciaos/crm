@@ -66,8 +66,8 @@ exports.new = function(req, res, next) {
 // POST /dtypes/:dtypeId/dtresults/create
 exports.create = function(req, res, next) {
 
-    var dtresult = { code:  req.body.code, 
-                     title: req.body.title,
+    var dtresult = { code:  req.body.code.trim().toUpperCase(), 
+                     title: req.body.title.trim(),
                      description: req.body.description,
                      DTypeId: req.dtype.id };
 
@@ -113,8 +113,8 @@ exports.edit = function(req, res, next) {
 // PUT /dtypes/:dtypeId/dtresults/:dtresultId
 exports.update = function(req, res, next) {
 
-    req.dtresult.code  = req.body.code;
-    req.dtresult.title = req.body.title;
+    req.dtresult.code  = req.body.code.trim().toUpperCase();
+    req.dtresult.title = req.body.title.trim();
     req.dtresult.description = req.body.description;
 
     req.dtresult.save({fields: ["code", "title", "description"]})

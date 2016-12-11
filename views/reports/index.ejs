@@ -10,6 +10,8 @@
         <% var report = reports[i]; %>      
         <% var patient = report.Patient %>
         
+        <%  if (!patient) continue; %>
+        
         <li>
             Paciente: <b> <%= report.Patient.name %> </b>
             (<%= moment(report.receptionAt).format("DD-MM-YYYY") %>)

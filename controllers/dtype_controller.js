@@ -64,8 +64,8 @@ exports.new = function(req, res, next) {
 // POST /dtypes/create
 exports.create = function(req, res, next) {
 
-    var dtype = { code:  req.body.code, 
-                  title: req.body.title };
+    var dtype = { code:  req.body.code.trim().toUpperCase(), 
+                  title: req.body.title.trim() };
 
     // Guarda en la tabla DTypes el nuevo tipo.
     models.DType.create(dtype)
@@ -104,8 +104,8 @@ exports.edit = function(req, res, next) {
 // PUT /dtypes/:dtypeId
 exports.update = function(req, res, next) {
 
-    req.dtype.code  = req.body.code;
-    req.dtype.title = req.body.title;
+    req.dtype.code  = req.body.code.trim().toUpperCase();
+    req.dtype.title = req.body.title.trim();
 
     req.dtype.save({fields: ["code", "title"]})
     .then(function(dtype) {

@@ -72,10 +72,10 @@ exports.new = function(req, res, next) {
 // POST /reports/:reportId/diagnoses/create
 exports.create = function(req, res, next) {
 
-    var diagnose = { dtypeCode:  req.body.dtypeCode, 
-                     dtresultCode: req.body.dtresultCode,
+    var diagnose = { dtypeCode:  req.body.dtypeCode.trim().toUpperCase(), 
+                     dtresultCode: req.body.dtresultCode.trim().toUpperCase(),
                      resultNotes: req.body.resultNotes,
-                     dtroptionCode: req.body.dtroptionCode,
+                     dtroptionCode: req.body.dtroptionCode.trim().toUpperCase(),
                      optionNotes: req.body.optionNotes,
                      ReportId: req.report.id };
 
@@ -122,10 +122,10 @@ exports.edit = function(req, res, next) {
 // PUT /reports/:reportId/diagnoses/:diagnoseId
 exports.update = function(req, res, next) {
 
-    req.diagnose.dtypeCode      = req.body.dtypeCode;
-    req.diagnose.dtresultCode   = req.body.dtresultCode;
+    req.diagnose.dtypeCode      = req.body.dtypeCode.trim().toUpperCase();
+    req.diagnose.dtresultCode   = req.body.dtresultCode.trim().toUpperCase();
     req.diagnose.resultNotes    = req.body.resultNotes;
-    req.diagnose.dtroptionCode  = req.body.dtroptionCode;
+    req.diagnose.dtroptionCode  = req.body.dtroptionCode.trim().toUpperCase();
     req.diagnose.optionNotes    = req.body.optionNotes;
 
     req.diagnose.save({fields: ["dtypeCode", "dtresultCode", "resultNotes", "dtroptionCode", "optionNotes"]})

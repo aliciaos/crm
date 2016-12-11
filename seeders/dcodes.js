@@ -11,49 +11,49 @@ exports.seed = function(req, res, next) {
 			{ 	code: "A", 
 				title: "Perfil Hormonal",
 				DTResults: [
-					{ 	code: " 1", 
+					{ 	code: "1", 
 						title: "Estrogénico débil", 
 						description: "Débil ínfluencia estrógenica.",
 						DTROptions: [
 						]
 					},
-					{ 	code: " 2", 
+					{ 	code: "2", 
 						title: "Estrogénico medio", 
 						description: "Frotis estrogénico con buen trofismo." ,
 						DTROptions: [
 						]
 					},
-					{ 	code: " 3", 
+					{ 	code: "3", 
 						title: "Estrogénico alto", 
 						description: "Predominio celular superficial,con abundantes células picnoticas. Compatibilidad con una alta influencia estrogenica." ,
 						DTROptions: [
 						]
 					},
-					{ 	code: " 4", 
+					{ 	code: "4", 
 						title: "Luteinico débil", 
 						description: "Discreta agrupación y algún plegamiento celular.(I.Pleg.+). Compatibilidad con una ínfluencia luteinica débil.",
 						DTROptions: [
 						] 
 					},
-					{ 	code: " 6", 
+					{ 	code: "6", 
 						title: "Luteinico marcado", 
 						description: "Células agrupadas y abundantes plegamientos.(I.Pleg.+++). Compatibilidad con marcada influencia luteinica.",
 						DTROptions: [
 						] 
 					},
-					{ 	code: " 7", 
+					{ 	code: "7", 
 						title: "Gestación", 
 						description: "Agrupación celular y plegamientos marcados (naviculares). (Compatibilidad con gestación).",
 						DTROptions: [
 						] 
 					},
-					{ 	code: " 8", 
+					{ 	code: "8", 
 						title: "Atrófico débil", 
 						description: "Presencia de células parabasales compatible con un hipotrofismo.",
 						DTROptions: [
 						] 
 					},
-					{ 	code: " 9", 
+					{ 	code: "9", 
 						title: "Atrófico moderado", 
 						description: "Abundantes células parabasales. Discreta autolisis con presencia de núcleos líbres. (Compatible con una atrofia moderada).",
 						DTROptions: [
@@ -133,7 +133,7 @@ exports.seed = function(req, res, next) {
 							{ code: "B", title: "Lactancia", description: "Células postnatales con refuerzo citoplasmático. Compatible con lactancia." }
 						] 
 					},
-					{ 	code: " 5", 
+					{ 	code: "5", 
 						title: "luteinico medio", 
 						description: "",
 						DTROptions: [
@@ -146,7 +146,7 @@ exports.seed = function(req, res, next) {
 			{ 	code: "B", 
 				title: "Microbiologia",
 				DTResults: [
-					{ 	code: " 1", 
+					{ 	code: "1", 
 						title: "Lactobacilos", 
 						description: "" ,
 						DTROptions: [
@@ -157,7 +157,7 @@ exports.seed = function(req, res, next) {
 							{ code: "E", title: "B.de Döderlein(++++).", description: "Abundantes lactobacilos.(I.Estimativo:4). Disbacteriosis vaginal, posible etiología de sígnos ó síntomas irritativos." }
 						]
 					},
-					{ 	code: " 2", 
+					{ 	code: "2", 
 						title: "Leptotrix", 
 						description: "" ,
 						DTROptions: [
@@ -165,7 +165,7 @@ exports.seed = function(req, res, next) {
 							{ code: "B", title: "Leptotrix (+++).", description: "Abundantes bacterias del G. leptotrix vaginalis líbres y agrupadas." }
 						]
 					},
-					{ 	code: " 3", 
+					{ 	code: "3", 
 						title: "Trichomonas", 
 						description: "",
 						DTROptions: [
@@ -174,7 +174,7 @@ exports.seed = function(req, res, next) {
 							{ code: "C", title: "Trichomonas y Gardenerellas.", description: "Asociacion de Trichomonas y gardenerellas vaginalis." }              
 						] 
 					},
-					{ 	code: " 4", 
+					{ 	code: "4", 
 						title: "Gardenerellas", 
 						description: "",
 						DTROptions: [
@@ -183,7 +183,7 @@ exports.seed = function(req, res, next) {
 							{ code: "B", title: "Gardenerellas.(++)", description: "  Gardenerellas spp.en fondo con presencia de células guías." }      
 						] 
 					},
-					{ 	code: " 5", 
+					{ 	code: "5", 
 						title: "Cocos", 
 						description: "",
 						DTROptions: [
@@ -195,7 +195,7 @@ exports.seed = function(req, res, next) {
 							{ code: "F", title: "Diplococos (intracél.)", description: "Diplococos intracelulares.Abundantes piocitos. (Sugerimos cultivo)." }
 						] 
 					},
-					{ 	code: " 6", 
+					{ 	code: "6", 
 						title: "Hongos", 
 						description: "",
 						DTROptions: [
@@ -208,20 +208,20 @@ exports.seed = function(req, res, next) {
 							{ code: "D", title: "Esporos (+).", description: "Algunos esporos de hongos líbres y agrupados." }                   
 						] 
 					},
-					{ 	code: " 7", 
+					{ 	code: "7", 
 						title: "Actinomicetos", 
 						description: "",
 						DTROptions: [
 							{ code: "A", title: "Actinomices.", description: "Presencia irregular de acúmulos bacilares de Actinomyces Israeli." }
 						] 
 					},
-					{ 	code: " 8", 
+					{ 	code: "8", 
 						title: "Opción líbre.", 
 						description: "" ,
 						DTROptions: [
 						]
 					},
-					{ 	code: " 9", 
+					{ 	code: "9", 
 						title: "Flora mixta", 
 						description: "",
 						DTROptions: [
@@ -242,7 +242,7 @@ exports.seed = function(req, res, next) {
 			{ 	code: "C", 
 				title: "Citomorfología",
 				DTResults: [
-					{ 	code: " 1", 
+					{ 	code: "1", 
 						title: "Normalidad", 
 						description: "" ,
 						DTROptions: [
@@ -256,7 +256,7 @@ exports.seed = function(req, res, next) {
 							{ code: "E", title: "Endocervicales(+++) 1", description: "Abundantes células endocervicales en placas y líbres. Carácteres morfologicos benignos." }
 						]
 					},
-					{ 	code: " 2", 
+					{ 	code: "2", 
 						title: "Inflamación", 
 						description: "" ,
 						DTROptions: [
@@ -275,7 +275,7 @@ exports.seed = function(req, res, next) {
 							{ code: "A", title: "Leucocitos (++).", description: "Infiltración leucocitaria." }
 						]
 					},
-					{ 	code: " 3", 
+					{ 	code: "3", 
 						title: "Metaplasia", 
 						description: "",
 						DTROptions: [
@@ -287,7 +287,7 @@ exports.seed = function(req, res, next) {
 							{ code: "D", title: "Metaplasia normal(Madura).", description: "Células metaplasicas en placas y aisladas con límites precisos." }
 						] 
 					},
-					{ 	code: " 4", 
+					{ 	code: "4", 
 						title: "Reparación", 
 						description: "" ,
 						DTROptions: [
@@ -295,7 +295,7 @@ exports.seed = function(req, res, next) {
 							{ code: "A", title: "Reparación atipica", description: "Grupos de reparación, con relación N/C alterada." }                   
 						]
 					},
-					{ 	code: " 5", 
+					{ 	code: "5", 
 						title: "Disqueratosis", 
 						description: "",
 						DTROptions: [
@@ -304,7 +304,7 @@ exports.seed = function(req, res, next) {
 							{ code: "C", title: "Hiperqueratosis +++", description: "Intensa descamación de células queratinizadas líbres y en placas." }  
 						] 
 					},
-					{ 	code: " 6", 
+					{ 	code: "6", 
 						title: "NIC I", 
 						description: "",
 						DTROptions: [
@@ -313,7 +313,7 @@ exports.seed = function(req, res, next) {
 							{ code: "A", title: "NIC I", description: "Células de epitelio escamoso de capas altas con alteraciones madurativas compatibles con Lesión intrapavimentosa de bajo grado. (N.I.C. I)." }
 						] 
 					},
-					{ 	code: " 7", 
+					{ 	code: "7", 
 						title: "NIC II", 
 						description: "",
 						DTROptions: [
@@ -321,7 +321,7 @@ exports.seed = function(req, res, next) {
 							{ code: "B", title: "N.I.C. II", description: "  Pleomorfismo nuclear e hipercromasia en células parabasales e intermedias compatibles con una Lesión intrapavimentosa de alto grado. (CIN II)." }
 						] 
 					},
-					{ 	code: " 8", 
+					{ 	code: "8", 
 						title: "NIC III", 
 						description: "" ,
 						DTROptions: [
@@ -331,7 +331,7 @@ exports.seed = function(req, res, next) {
 							{ code: "L", title: "líbre", description: "" }
 						]
 					},
-					{ 	code: " 9", 
+					{ 	code: "9", 
 						title: "C.I.S", 
 						description: "",
 						DTROptions: [
