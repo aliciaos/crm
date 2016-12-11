@@ -1,57 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="always" />
+    <title> PAP-TEST </title>
+    <link rel='stylesheet' href='/stylesheets/print.css' />
+</head> 
 
-<h1> 
-    Unidad de Citología PAP - Dr. Perea
-</h1>
+<body>
 
-<h1> 
-    PAP - TEST
-</h1>
+<header class="header1">
 
-<hr />
+	<div class="logo">
+	    <img width="160px" height="99px" src="/images/paplogo.png" />
+	</div>
 
-<p>
-  Prescripción Dr./a: <%= report.doctor %>
-</p>
+	<div class="perea">
+		<h1> 
+		    Dr. Perea
+		</h1>
+	</div>
 
-<p>
-  <%= patient.name %>
-</p>
+	<div class="paptest">
+	    <h1> 
+		    PAP - TEST
+	    </h1>
+	</div>
+</header>
 
-<p>
-	Fecha de recepción: <%= moment(report.receptionAt).format("DD/MM/YYYY") %>
-</p>
 
-<p>
-	U.R.: <%= report.lastMenstruationAt %>
-</p>
+<header class="header2">
+	<div class="patient">
+		<p>
+	  		Dª. <%= patient.name %>
+		</p>
+	</div>
+	<div class="report">
+	    <p>
+		    <b> Prescripción Dr./a</b>: <%= report.doctor %>
+		  <br />
+			<b>Fecha de recepción</b>: <%= moment(report.receptionAt).format("DD-MM-YYYY") %>
+		  <br />
+			<b>U.R.</b>: <%= report.lastMenstruationAt %>
+		  <br />
+			<b>D.C.</b>: <%= report.cycleDay %>
+		</p>
+	</div>
+</header>
 
-<p>
-	D.C.: <%= report.cycleDay %>
-</p>
 
-<hr />
 
-<h2>
-ORIENTACIÓN DIAGNOSTICA DEL EXTENDIDO 
-</h2>
+<section class="diagnoses">
 
-<% for (var i in diagnoses) { %> 
-    <% var diagnose = diagnoses[i]; %>      
+	<h2 class="underline">
+		ORIENTACIÓN DIAGNOSTICA DEL EXTENDIDO 
+	</h2>
 
-    <h3>
-    	<%= diagnose.dtype.title %>
-    </h3>
+	<% for (var i in diagnoses) { %> 
+	    <% var diagnose = diagnoses[i]; %>      
 
-    	<%= diagnose.dtresult.title %>
-    	<br />
-    	<%= diagnose.dtresult.description %>
-    	<br />
-    	<%= diagnose.dtroption.title %>
-    	<br />
-    	<%= diagnose.dtroption.description %>
+	    <article>
+		    <h3 class="underline">
+		    	<%= diagnose.dtype.title %>
+		    </h3>
 
-      
-<% } %>
+		    	<p class="dtresult">
+			    	<!-- 
+			    	<%= diagnose.dtresult.title %>
+			    	<br />
+			    	-->
+			    	<%= diagnose.dtresult.description %>
+		    	</p>
+
+		    	<p class="dtroption">
+		    		<!--
+			    	<%= diagnose.dtroption.title %>
+			    	<br />
+			    	-->
+			    	<%= diagnose.dtroption.description %>
+		    	</p>
+	    </article>
+	<% } %>
+
+</section>
 
 <hr />
 
@@ -59,3 +90,7 @@ ORIENTACIÓN DIAGNOSTICA DEL EXTENDIDO
 <a href="<%= redir %>">
 	<button type="button">Volver</button>
 </a>
+
+
+</body> 
+</html>

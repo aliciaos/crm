@@ -269,7 +269,8 @@ exports.print = function(req, res, next) {
 
         req.flash('success', 'Generado informe para imprimir.');
 
-        res.render('reports/print', {   report: req.report,
+        res.render('reports/print', {   layout:false,
+                                        report: req.report,
                                         patient: req.patient,
                                         diagnoses: diagnosesInfo,
                                         moment: moment,
