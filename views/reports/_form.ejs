@@ -3,32 +3,32 @@
 
 
 <p>
-  Nombre: <%= patient.name %>
+  <b>Nombre </b>: <%= patient.name %>
 </p>
 
 <p>
-  Dirección: <%= patient.address %>
+  <b>Dirección </b>: <%= patient.address %>
 </p>
 
 <p>
-  Ciudad: <%= patient.city %>
+  <b>Ciudad </b>: <%= patient.city %>
 </p>
 
 <p>
-  Telefóno: <%= patient.phone %>
+  <b>Telefóno </b>: <%= patient.phone %>
 </p>
 
 <p>
-  Doctor por defecto: <%= patient.doctor %>
+  <b>Doctor por defecto </b>: <%= patient.doctor %>
 </p>
 
 <p>
-	<label>Doctor:</label>
+	<label><b>Doctor </b>:</label>
 	<input type="text" name="doctor" value="<%= report.doctor %>" placeholder="Doctor"  autocomplete="off" />
 </p>
 
 <p>
-	<label>Fecha de recepción (dd-mm-aaaa):</label>
+	<label><b>Fecha de recepción  </b>(dd-mm-aaaa):</label>
 	<input type="text" name="receptionAt" 
 	       value="<%= moment(report.receptionAt).format("DD-MM-YYYY") %>" 
 	       pattern="\d\d-\d\d-\d\d\d\d"
@@ -37,7 +37,7 @@
 </p>
 
 <p>
-	<label>Fecha última menstruación:</label>
+	<label><b>Fecha última menstruación </b>:</label>
 	<input type="text" name="lastMenstruationAt" 
 	       value="<%= report.lastMenstruationAt %>" 
 	       placeholder="Fecha última menstruación" 
@@ -45,7 +45,7 @@
 </p>
 
 <p>
-	<label>Día del ciclo:</label>
+	<label><b>Día del ciclo</b>:</label>
 	<input type="text" name="cycleDay" value="<%= report.cycleDay %>" placeholder="Día del ciclo"  autocomplete="off" />
 </p>
 

@@ -20,17 +20,45 @@
 
 
 <table>
+    <tr>
+        <th>
+            Nombre
+        </th>
+        <th>
+            Doctor
+        </th>
+        <th>
+            Informes
+        </th>
+        <th>
+            
+        </th>
+    </tr> 
+        
     <% for (var i in patients) { %> 
         <% var patient = patients[i]; %>     
 
         <% var redir = url || "/patients"; %>
 
+
+
         <tr>
             <td>
-                <a href="/patients/<%= patient.id %>?redir=<%= redir %>"><%= patient.name %></a>
+                <%= patient.name %>
+            </td>
+            <td>
+                <%= patient.doctor %>
             </td>
 
             <td>
+                <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.svg"></a>
+
+                <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.svg" alt="Ver informes"></a>
+            </td>
+
+            <td>
+                <a href="/patients/<%= patient.id %>"><img width="24px" src="/images/ver.svg"></a>
+
                 <a href="/patients/<%= patient.id %>/edit"><img width="24px" src="/images/edit.svg"></a>
 
                 <a href="/patients/<%= patient.id %>?_method=DELETE" 
@@ -38,9 +66,6 @@
 
                 <% var redir2 = url || "/patients"; %>
 
-                Crear informe: <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.svg"></a>
-
-                Ver informes: <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.svg" alt="Ver informes"></a>
             </td>
         </tr> 
     <% } %>

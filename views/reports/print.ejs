@@ -16,6 +16,16 @@
 
 <body class="page">
 
+
+<div class="example-screen">
+
+	<% var redir = redir || "/" %>
+	<a href="<%= redir %>"><img width="24px" src="/images/back.svg"></a>
+
+	<a href="" onclick="printReport(); return false;"><img width="24px" src="/images/print.svg"></a>
+</div>
+
+
 <header class="header1">
 
 	<div class="logo">
@@ -104,15 +114,6 @@
 
 </section>
 
-
-<div class="example-screen">
-	<hr />
-
-	<% var redir = redir || "/" %>
-	<a href="<%= redir %>"><img width="24px" src="/images/back.svg"></a>
-
-	<a href="" onclick="printReport(); return false;"><img width="24px" src="/images/print.svg"></a>
-</div>
 
 </body> 
 </html>

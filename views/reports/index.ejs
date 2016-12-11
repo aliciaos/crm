@@ -2,6 +2,11 @@
 
 <h2> 
     Informes: 
+
+    <% var redir = redir || "/reports" %>
+    <a href="<%= redir %>">
+        <img width="24px" src="/images/back.svg">
+    </a>
 </h2>
 
 <%  if (locals.paginate_control) { %>
@@ -42,33 +47,50 @@
     <input type="image" width="24px" src="/images/find.svg" border="0" alt="Submit" />
 </form>
 
-<ul>
+
+<table>
+    <tr>
+        <th>
+            Paciente
+        </th>
+        <th>
+            Doctor
+        </th>
+        <th>
+            Fecha
+        </th>
+        <th>
+            
+        </th>
+    </tr> 
+
     <% for (var i in reports) { %> 
         <% var report = reports[i]; %>      
         <% var patient = report.Patient %>
         
         <%  if (!patient) continue; %>
         
-        <li>
-            Paciente: <b> <%= report.Patient.name %> </b>
-            (<%= moment(report.receptionAt).format("DD-MM-YYYY") %>)
-            <%= report.doctor %>
-            <%= moment(report.receptionAt).format("DD-MM-YYYY") %>
-            <%= report.lastMenstruationAt %>
-            <%= report.cycleDay %>
+        <tr>
+            <td>
+                <%= report.Patient.name %>
+            </td>
+            <td>
+                <%= moment(report.receptionAt).format("DD-MM-YYYY") %>
+            </td>
+            <td>
+                <%= report.doctor %>
+            </td>
+            <td>
+                <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= url %>"><img width="24px" src="/images/ver.svg"></a>
 
-            <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= url %>"><img width="24px" src="/images/ver.svg"></a>
+                <a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit?redir=<%= url %>"><img width="24px" src="/images/edit.svg"></a>
 
-            <a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit?redir=<%= url %>"><img width="24px" src="/images/edit.svg"></a>
+                <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= url %>&_method=DELETE" 
+                   onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');"><img width="24px" src="/images/basura.svg"></a>
+            </td>
 
-            <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= url %>&_method=DELETE" 
-               onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');"><img width="24px" src="/images/basura.svg"></a>
-
-        </li> 
+        </tr> 
     <% } %>
-</ul>
+<table>
 
-<% var redir = redir || "/reports" %>
-<a href="<%= redir %>">
-    <img width="24px" src="/images/back.svg">
-</a>
+

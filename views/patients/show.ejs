@@ -3,39 +3,43 @@
     Paciente
 
     <a href="/patients/<%= patient.id %>/edit"><img width="24px" src="/images/edit.svg"></a>
+
+    <a href="/patients"><img width="24px" src="/images/back.svg"></a>
 </h2>
 
-       
-<p>
-  Nombre: <%= patient.name %>
-</p>
 
-<p>
-  Dirección: <%= patient.address %>
-</p>
+<ul>       
+	<li>
+		<b> Nombre </b>: <%= patient.name %>
+	</li>
 
-<p>
-  Ciudad: <%= patient.city %>
-</p>
+	<li>
+		<b> Dirección </b>: <%= patient.address %>
+	</li>
 
-<p>
-  Telefóno: <%= patient.phone %>
-</p>
+	<li>
+		<b> Ciudad </b>: <%= patient.city %>
+	</li>
 
-<p>
-  Doctor: <%= patient.doctor %>
-</p>
+	<li>
+		<b> Telefóno </b>: <%= patient.phone %>
+	</li>
+
+	<li>
+		<b> Doctor </b>: <%= patient.doctor %>
+	</li>
+</ul>
+
 
 
 <% var redir = url || "/patients" %>
 
+<div class="vcenter">
+	Ver informes existentes: <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.svg"></a>
+</div>
 
-Ver informes existentes: <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.svg"></a>
+<div  class="vcenter">
+	Crear informe: <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.svg"></a>
+</div>
 
-<br />
 
-Crear informe: <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.svg"></a>
-
-<br />
-
-<a href="/patients"><img width="24px" src="/images/back.svg"></a>
