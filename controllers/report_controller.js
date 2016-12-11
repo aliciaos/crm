@@ -37,16 +37,52 @@ exports.index = function(req, res, next) {
     var options = {};
     options.order = [['updatedAt','DESC']];
     options.include = [ models.Patient ];
+    options.where = {};
+
 
     if (req.patient) {
-    	options.where = { PatientId: req.patient.id};
+    	options.where.PatientId = req.patient.id;
+    }
+
+    
+    // Busquedas por paciente:
+    var searchpatient = req.query.searchpatient || '';
+    if (searchpatient) {
+        var search_like = "%" + searchpatient.replace(/ +/g,"%") + "%";
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include = [ {   model: models.Patient,
+                                where: { name: { $like: search_like } } 
+                            } 
+                          ];
+    }
+
+    // Busquedas por doctor:
+    var searchdoctor = req.query.searchdoctor || '';
+    if (searchdoctor) {
+        var search_like = "%" + searchdoctor.replace(/ +/g,"%") + "%";
+        options.where.doctor = { $like: search_like };
+    }
+
+     // Busquedas por fecha:
+    var searchdate1 = req.query.searchdate1 || '';
+    var searchdate2 = req.query.searchdate2 || '';
+    if (searchdate1 !== "" && searchdate2 !== "") {
+
+        var searchmoment1 = moment(searchdate1 + " 08:00", "DD-MM-YYYY").toDate();
+        var searchmoment2 = moment(searchdate2 + " 08:00", "DD-MM-YYYY").toDate();
+        options.where.receptionAt = { $between: [ searchmoment1, searchmoment2] };
     }
 
     models.Report.findAll(options)
     .then(function(reports) {
 
-        res.render('reports/index.ejs', { reports: reports,
+        res.render('reports/index.ejs', {   reports: reports,
         									moment: moment,
+                                            searchpatient: searchpatient,
+                                            searchdoctor: searchdoctor,
+                                            searchdate1: searchdate1,
+                                            searchdate2: searchdate2,
                                             redir: redir });
     })
     .catch(function(error) {
