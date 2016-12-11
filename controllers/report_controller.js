@@ -5,6 +5,8 @@ var Sequelize = require('sequelize');
 
 var moment = require('moment');
 
+var paginate = require('./paginate').paginate;
+
 //-----------------------------------------------------------
 
 
@@ -74,7 +76,40 @@ exports.index = function(req, res, next) {
         options.where.receptionAt = { $between: [ searchmoment1, searchmoment2] };
     }
 
-    models.Report.findAll(options)
+
+
+    models.Report.count(options)
+    .then(function(count) {
+
+        // Paginacion:
+
+        var items_per_page = 6;
+
+        // La pagina a mostrar viene en la query
+        var pageno = parseInt(req.query.pageno) || 1;
+
+        // Datos para obtener el rango de datos a buscar en la BBDD.
+        var pagination = {
+            offset: items_per_page * (pageno - 1),
+            limit: items_per_page
+        };
+
+        // Crear un string con el HTML que pinta la botonera de paginacion.
+        // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
+        res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
+
+        return pagination;
+    })
+    .then(function(pagination) {
+
+        options.offset = pagination.offset;
+        options.limit  = pagination.limit;
+
+        options.order = [['updatedAt','DESC']];
+
+        return models.Report.findAll(options);
+
+    })
     .then(function(reports) {
 
         res.render('reports/index.ejs', {   reports: reports,
@@ -89,6 +124,8 @@ exports.index = function(req, res, next) {
         next(error);
     });
 };
+
+
 
 
 // GET /reports/:reportId

@@ -4,6 +4,10 @@
     Informes: 
 </h2>
 
+<%  if (locals.paginate_control) { %>
+  <%- paginate_control %>
+<% } %>
+
 <form method="get" action="<%= url %>"  class="right">
 
     Filtros:
