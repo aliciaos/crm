@@ -3,26 +3,29 @@
 
 <p>
 	<label>Doctor:</label>
-	<input type="text" name="doctor" value="<%= report.doctor %>" placeholder="Doctor" />
+	<input type="text" name="doctor" value="<%= report.doctor %>" placeholder="Doctor"  autocomplete="off" />
 </p>
 
 <p>
 	<label>Fecha de recepción (dd-mm-aaaa):</label>
 	<input type="text" name="receptionAt" 
 	       value="<%= moment(report.receptionAt).format("DD-MM-YYYY") %>" 
-	       placeholder="Fecha de recepción" />
+	       pattern="\d\d-\d\d-\d\d\d\d"
+	       placeholder="Fecha de recepción" 
+	       autocomplete="off" />
 </p>
 
 <p>
 	<label>Fecha última menstruación:</label>
 	<input type="text" name="lastMenstruationAt" 
 	       value="<%= report.lastMenstruationAt %>" 
-	       placeholder="Fecha última menstruación" />
+	       placeholder="Fecha última menstruación" 
+	       autocomplete="off" />
 </p>
 
 <p>
 	<label>Día del ciclo:</label>
-	<input type="text" name="cycleDay" value="<%= report.cycleDay %>" placeholder="Día del ciclo" />
+	<input type="text" name="cycleDay" value="<%= report.cycleDay %>" placeholder="Día del ciclo"  autocomplete="off" />
 </p>
 
 <p>

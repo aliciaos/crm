@@ -151,7 +151,8 @@ exports.edit = function(req, res, next) {
 
     res.render('reports/edit', { report: report,
     							 patient: req.patient,
-    							 moment: moment, redir });
+    							 moment: moment, 
+                                 redir: redir });
 };
 
 
@@ -183,7 +184,7 @@ exports.update = function(req, res, next) {
 		};
 
 		if ( ! momentReceptionAt.isValid() ) {
-  			report.receptionAt = moment().format("DD-MM-YYYY");
+  			req.report.receptionAt = moment().format("DD-MM-YYYY");
   		}
 
 		res.render('reports/edit', { report: req.report,

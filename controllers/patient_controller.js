@@ -30,10 +30,21 @@ exports.index = function(req, res, next) {
 
     var options = {};
     options.order = [['updatedAt','DESC']];
+    options.where = {};
+
+    
+    // Busquedas:
+    var search = req.query.search || '';
+    if (search) {
+      var search_like = "%" + search.replace(/ +/g,"%") + "%";
+      options.where.name = { $like: search_like };
+    }
+
 
     models.Patient.findAll(options)
     .then(function(patients) {
-        res.render('patients/index.ejs', {patients: patients });
+        res.render('patients/index.ejs', {  patients: patients,
+                                            search: search });
     })
     .catch(function(error) {
         next(error);
