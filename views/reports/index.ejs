@@ -4,26 +4,30 @@
     Informes: 
 </h2>
 
-<form method="get" action="<%= url %>">
+<form method="get" action="<%= url %>"  class="right">
 
-    <label>Filtar por nombre de paciente:</label>
+    Filtros:
+
+    <br />
+
+    <label>Paciente:</label>
     <input type="text" name="searchpatient" value="<%= locals.searchpatient || '' %>" placeholder="paciente a buscar" autocomplete="off"/>
 
     <br />
 
-    <label>Filtar por nombre de doctor:</label>
+    <label>Doctor:</label>
     <input type="text" name="searchdoctor" value="<%= locals.searchdoctor || '' %>" placeholder="doctor a buscar" autocomplete="off"/>
 
     <br />
 
-    <label>Filtar por fecha - desde:</label>
+    <label>Desde:</label>
     <input type="text" 
            name="searchdate1" 
            value="<%= locals.searchdate1 || '' %>" 
            placeholder="dd-mm-aaaa" 
            autocomplete="off"/>
 
-    <label>hasta:</label>
+    <label>Hasta:</label>
     <input type="text" 
            name="searchdate2" 
            value="<%= locals.searchdate2 || '' %>" 
