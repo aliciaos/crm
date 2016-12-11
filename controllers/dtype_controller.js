@@ -135,23 +135,24 @@ exports.destroy = function(req, res, next) {
 
     Sequelize.Promise.all(req.dtype.DTResults)
     .each(function(dtresult) {
-
         // Borrar las opciones del resultado:
         return models.DTROption.destroy({where: {DTResultId: dtresult.id}})
         .then( function() {
             req.flash('success', 'Opciones del resultado ' + dtresult.code + ' borradas con éxito.');
-
+        })
+        .then( function() {
             // Borrar el resultado
             return dtresult.destroy()
             .then( function() {
                 req.flash('success', 'Resultado ' + dtresult.code + ' borrado con éxito.');
-
-                // Borrar el tipo:
-                return req.dtype.destroy()
-                .then(function() {
-                    req.flash('success', 'Tipo de diagnóstico borrado con éxito.');
-                });
             });
+        });
+    })
+    .then(function() {
+        // Borrar el tipo:
+        return req.dtype.destroy()
+        .then(function() {
+            req.flash('success', 'Tipo de diagnóstico borrado con éxito.');
         });
     })
     .then(function() {

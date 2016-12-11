@@ -143,23 +143,24 @@ exports.destroy = function(req, res, next) {
 
     Sequelize.Promise.all(req.patient.Reports)
     .each(function(report) {
-
         // Borrar los diagnosticos del informe:
         return models.Diagnose.destroy({where: {ReportId: report.id}})
         .then( function() {
             req.flash('success', 'Diagnosticos de un informe borrados con éxito.');
-
+        })
+        .then(function() {
             // Borrar el informe
             return report.destroy()
             .then( function() {
                 req.flash('success', 'Informe borrado con éxito.');
-
-                // Borrar la paciente:
-                return req.patient.destroy()
-                .then(function() {
-                    req.flash('success', 'Paciente borrada con éxito.');
-                });
             });
+        });
+    })
+    .then(function() {
+        // Borrar la paciente:
+        return req.patient.destroy()
+        .then(function() {
+            req.flash('success', 'Paciente borrada con éxito.');
         });
     })
     .then(function() {
