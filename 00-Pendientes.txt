@@ -1,7 +1,8 @@
 
-Al borrar un tipo de diagnostico, hay que borrar sus resultados y opciones.
 
-Al borrar un resultado de tipo de diagnostico, hay que borrar sus opciones.
+Al borrar un informe, borrar sus diagnosticos.
+
+Al borra una paciente, borrar sus informes, y los diagnosticos de este.
 
 Paginacion de pacientes
 
@@ -15,7 +16,7 @@ Meter un nuevo campo en los informes que indique si el informe se ha imprimido y
 
 meter en los autoloads de parametros dos tipos de parametros en funcion de si se quiere hacer carga ansiosa o no.
 
-no se hace bien el redir al crear diagnosticos
+// no se hace bien el redir al crear diagnosticos
 
 retocar entradas para eliminar espacios en blanco
 

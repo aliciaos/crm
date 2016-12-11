@@ -145,10 +145,17 @@ exports.update = function(req, res, next) {
 // DELETE /dtypes/:dtypeId/dtresults/:dtresultId
 exports.destroy = function(req, res, next) {
 
-    req.dtresult.destroy()
+    // Borrar las opciones del resultado:
+    models.DTROption.destroy({where: {DTResultId: req.dtresult.id}})
     .then( function() {
-        req.flash('success', 'Resultado de tipo de diagnóstico borrado con éxito.');
-        res.redirect("/dtypes/" + req.dtype.id);
+        req.flash('success', 'Opciones del resultado borradas con éxito.');
+
+        // Borrar el resultado
+        return req.dtresult.destroy()
+        .then( function() {
+            req.flash('success', 'Resultado de tipo de diagnóstico borrado con éxito.');
+            res.redirect("/dtypes/" + req.dtype.id);
+        });
     })
     .catch(function(error){
         req.flash('error', 'Error al borrar un resultado de  tipo de diagnóstico: '+error.message);

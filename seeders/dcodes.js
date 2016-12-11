@@ -450,10 +450,6 @@ exports.seed = function(req, res, next) {
 	) 
 	.each(function(dtype) {
 
-console.log("=0=================================================");
-console.log(dtype);
-console.log("=1=================================================");
-
 		return models.DType.create(	dtype,
 							        { include: [ { model: models.DTResult,
 							                       include: [ { model: models.DTROption } ]
@@ -464,9 +460,11 @@ console.log("=1=================================================");
     })
 	.then(function() {
 	 	console.log('Seeder: Creados todos los códigos de diagnósticos.');
+	 	res.redirect('/dtypes');
 	})
 	.catch(function(error) { 
 		console.log("Error:", error);
+		next(error);
 	});	
 
 };
