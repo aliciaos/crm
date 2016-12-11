@@ -202,11 +202,18 @@ exports.destroy = function(req, res, next) {
 
     var redir = req.query.redir || "/patients/" + req.patient.id + "/reports";
 
-    req.report.destroy()
-	.then( function() {
-		req.flash('success', 'Informe borrado con éxito.');
-		res.redirect(redir);
-	})
+    // Borrar los diagnosticos del informe:
+    models.Diagnose.destroy({where: {ReportId: req.report.id}})
+    .then( function() {
+        req.flash('success', 'Diagnosticos borrados con éxito.');
+
+        // Borrar el informe
+        return req.report.destroy()
+        .then( function() {
+            req.flash('success', 'Informe borrado con éxito.');
+            res.redirect(redir);
+        });
+    })
 	.catch(function(error){
 		req.flash('error', 'Error al borrar un informe: ' + error.message);
 		next(error);
