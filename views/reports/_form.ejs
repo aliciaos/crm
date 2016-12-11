@@ -1,6 +1,27 @@
 
 <input type='hidden' name='redir' value='<%= redir %>'>
 
+
+<p>
+  Nombre: <%= patient.name %>
+</p>
+
+<p>
+  Dirección: <%= patient.address %>
+</p>
+
+<p>
+  Ciudad: <%= patient.city %>
+</p>
+
+<p>
+  Telefóno: <%= patient.phone %>
+</p>
+
+<p>
+  Doctor por defecto: <%= patient.doctor %>
+</p>
+
 <p>
 	<label>Doctor:</label>
 	<input type="text" name="doctor" value="<%= report.doctor %>" placeholder="Doctor"  autocomplete="off" />

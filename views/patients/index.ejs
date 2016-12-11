@@ -6,6 +6,12 @@
     <a href="/patients/new"><button type="button">Crear nueva paciente</button></a>
 </h1>
 
+
+<%  if (locals.paginate_control) { %>
+  <%- paginate_control %>
+<% } %>
+
+
 <form method="get" action="/patients" class="right">
     <label>Filtar por nombre:</label>
     <input type="text" name="search" value="<%= locals.search || '' %>" placeholder="texto a buscar" autocomplete="off"/>
