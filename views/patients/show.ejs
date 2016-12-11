@@ -2,7 +2,7 @@
 <h2> 
     Paciente
 
-    <a href="/patients/<%= patient.id %>/edit"><button>editar</button></a>
+    <a href="/patients/<%= patient.id %>/edit"><img width="24px" src="/images/edit.svg"></a>
 </h2>
 
        
@@ -30,12 +30,12 @@
 <% var redir = url || "/patients" %>
 
 
-<a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><button>Ver informes existentes</button></a>
+Ver informes existentes: <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.svg"></a>
 
 <br />
 
-<a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><button>Crear nuevo informe</button></a>
+Crear informe: <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.svg"></a>
 
 <br />
 
-<a href="/patients"><button type="button">Volver</button></a>
+<a href="/patients"><img width="24px" src="/images/back.svg"></a>

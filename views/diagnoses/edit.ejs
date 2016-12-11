@@ -5,9 +5,9 @@
 	<h1>
 		Editar Diagnóstico
 
-		<a href="/patients/<%= report.Patient.id %>/reports/<%= report.id %>/edit"><button type="button">Cancelar</button></a>
+		<a href="/patients/<%= report.Patient.id %>/reports/<%= report.id %>/edit"><img width="24px" src="/images/cancel.svg"></a>
 
-    	<input type="submit" value="Salvar" >
+    	<input type="image" width="24px" src="/images/save.svg" border="0" alt="Submit" />
 	</h1>
 
      <% include _form.ejs %>

@@ -31,23 +31,16 @@
 
 <% var redir = redir || "/reports" %>
 <a href="<%= redir %>">
-	<button type="button">Volver</button>
+	<img width="24px" src="/images/back.svg">
 </a>
 
-<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit?redir=<%= redir %>">
-    <button>editar</button>
-</a>
+<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit?redir=<%= redir %>"><img width="24px" src="/images/edit.svg"></a>
 
 <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= redir %>&_method=DELETE" 
-   onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');">
-       <button>borrar</button>
-</a>
+   onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');"><img width="24px" src="/images/basura.svg"></a>
 
 
-
-<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/print?redir=<%= redir %>">
-    <button>imprimir</button>
-</a>
+<a href="/patients/<%= patient.id %>/reports/<%= report.id %>/print?redir=<%= redir %>"><img width="24px" src="/images/print.svg"></a>
 
 
 

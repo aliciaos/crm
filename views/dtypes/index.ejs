@@ -3,7 +3,7 @@
 <h1> 
     Diagnósticos: 
 
-    <a href="/dtypes/new"><button type="button">Crear nuevo tipo</button></a>
+    <a href="/dtypes/new"><img width="24px" src="/images/add.svg"></a>
 </h1>
 
 <ul>
@@ -13,12 +13,10 @@
      <li>
           <a href="/dtypes/<%= dtype.id %>"> <%= dtype.code %> - <%= dtype.title %> </a>
 
-          <a href="/dtypes/<%= dtype.id %>/edit"><button>editar</button></a>
+          <a href="/dtypes/<%= dtype.id %>/edit"><img width="24px" src="/images/edit.svg"></a>
 
           <a href="/dtypes/<%= dtype.id %>?_method=DELETE" 
-               onClick="return confirm('¿Seguro que quiere borrar el diagnóstico: <%= dtype.code %>?');">
-               <button>borrar</button>
-          </a>
+               onClick="return confirm('¿Seguro que quiere borrar el diagnóstico: <%= dtype.code %>?');"><img width="24px" src="/images/basura.svg"></a>
      </li> 
   <% } %>
 </ul>

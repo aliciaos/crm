@@ -39,7 +39,7 @@
            autocomplete="off"/>
 
     <br />
-    <input type="submit" value="Buscar">
+    <input type="image" width="24px" src="/images/find.svg" border="0" alt="Submit" />
 </form>
 
 <ul>
@@ -57,14 +57,12 @@
             <%= report.lastMenstruationAt %>
             <%= report.cycleDay %>
 
-            <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= url %>"><button>Ver</button></a>
+            <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= url %>"><img width="24px" src="/images/ver.svg"></a>
 
-            <a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit?redir=<%= url %>"><button>editar</button></a>
+            <a href="/patients/<%= patient.id %>/reports/<%= report.id %>/edit?redir=<%= url %>"><img width="24px" src="/images/edit.svg"></a>
 
             <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= url %>&_method=DELETE" 
-               onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');">
-                   <button>borrar</button>
-            </a>
+               onClick="return confirm('¿Seguro que desea borrar el informe de <%= patient.name %>?');"><img width="24px" src="/images/basura.svg"></a>
 
         </li> 
     <% } %>
@@ -72,5 +70,5 @@
 
 <% var redir = redir || "/reports" %>
 <a href="<%= redir %>">
-    <button type="button">Volver</button>
+    <img width="24px" src="/images/back.svg">
 </a>

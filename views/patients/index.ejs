@@ -3,7 +3,7 @@
 <h1> 
     Pacientes 
 
-    <a href="/patients/new"><button type="button">Crear nueva paciente</button></a>
+    <a href="/patients/new"><img width="24px" src="/images/add.svg"></a>
 </h1>
 
 
@@ -15,7 +15,7 @@
 <form method="get" action="/patients" class="right">
     <label>Filtar por nombre:</label>
     <input type="text" name="search" value="<%= locals.search || '' %>" placeholder="texto a buscar" autocomplete="off"/>
-    <input type="submit" value="Buscar">
+    <input type="image" width="24px" src="/images/find.svg" border="0" alt="Submit" />
 </form>
 
 
@@ -31,18 +31,16 @@
             </td>
 
             <td>
-                <a href="/patients/<%= patient.id %>/edit"><button>editar</button></a>
+                <a href="/patients/<%= patient.id %>/edit"><img width="24px" src="/images/edit.svg"></a>
 
                 <a href="/patients/<%= patient.id %>?_method=DELETE" 
-                   onClick="return confirm('¿Seguro que desea borrar la paciente <%= patient.name %> y sus informes?');">
-                   <button>borrar</button>
-                </a>
+                   onClick="return confirm('¿Seguro que desea borrar la paciente <%= patient.name %> y sus informes?');"><img width="24px" src="/images/basura.svg"></a>
 
                 <% var redir2 = url || "/patients"; %>
 
-                <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><button>Crear nuevo informe</button></a>
+                Crear informe: <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.svg"></a>
 
-                <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><button>Ver informes existentes</button></a>
+                Ver informes: <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.svg" alt="Ver informes"></a>
             </td>
         </tr> 
     <% } %>
