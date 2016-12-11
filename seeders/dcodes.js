@@ -462,9 +462,17 @@ exports.seed = function(req, res, next) {
 	 	console.log('Seeder: Creados todos los códigos de diagnósticos.');
 	 	res.redirect('/dtypes');
 	})
+	.catch(Sequelize.ValidationError, function(error) {
+		req.flash('error', 'Se han producido errores al meter los codigos de diagnósticos.');
+		for (var i in error.errors) {
+            req.flash('error', error.errors[i].value);
+        };
+  
+	 	res.redirect('/');
+    })
 	.catch(function(error) { 
 		console.log("Error:", error);
-		next(error);
+	 	next(error);
 	});	
 
 };
