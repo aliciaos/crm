@@ -5,14 +5,21 @@
     <meta name="referrer" content="always" />
     <title> PAP-TEST </title>
     <link rel='stylesheet' href='/stylesheets/print.css' />
+
+    <script>
+  		function printReport() {
+			window.print();
+		}
+	</script>
+
 </head> 
 
-<body>
+<body class="page">
 
 <header class="header1">
 
 	<div class="logo">
-	    <img width="160px" height="99px" src="/images/paplogo.png" />
+	    <img width="160px" height="95px" src="/images/paplogo.png" />
 	</div>
 
 	<div class="perea">
@@ -38,11 +45,11 @@
 	<div class="report">
 	    <p>
 		    <b> Prescripción Dr./a</b>: <%= report.doctor %>
-		  <br />
+		  	<br />
 			<b>Fecha de recepción</b>: <%= moment(report.receptionAt).format("DD-MM-YYYY") %>
-		  <br />
+		  	<br />
 			<b>U.R.</b>: <%= report.lastMenstruationAt %>
-		  <br />
+		  	<br />
 			<b>D.C.</b>: <%= report.cycleDay %>
 		</p>
 	</div>
@@ -64,33 +71,50 @@
 		    	<%= diagnose.dtype.title %>
 		    </h3>
 
-		    	<p class="dtresult">
-			    	<!-- 
-			    	<%= diagnose.dtresult.title %>
-			    	<br />
-			    	-->
-			    	<%= diagnose.dtresult.description %>
-		    	</p>
+	    	<p class="dtresult">
+		    	<!-- 
+		    	<%= diagnose.dtresult.title %>
+		    	<br />
+		    	-->
+		    	<%= diagnose.dtresult.description %>
+	    	</p>
 
-		    	<p class="dtroption">
-		    		<!--
-			    	<%= diagnose.dtroption.title %>
-			    	<br />
-			    	-->
-			    	<%= diagnose.dtroption.description %>
-		    	</p>
+	    	<% if (diagnose.resultNotes) { %>
+	    		<p class="resultnotes">
+		    		<%= diagnose.resultNotes %>
+	    		</p>
+	    	<% } %>
+
+	    	<p class="dtroption">
+	    		<!--
+		    	<%= diagnose.dtroption.title %>
+		    	<br />
+		    	-->
+		    	<%= diagnose.dtroption.description %>
+	    	</p>
+
+	    	<% if (diagnose.optionNotes) { %>
+	    		<p class="optionnotes">
+		    		<%= diagnose.optionNotes %>
+	    		</p>
+	    	<% } %>
+	    	
 	    </article>
 	<% } %>
 
 </section>
 
-<hr />
 
-<% var redir = redir || "/" %>
-<a href="<%= redir %>">
-	<button type="button">Volver</button>
-</a>
+<div class="example-screen">
+	<hr />
 
+	<% var redir = redir || "/" %>
+	<a href="<%= redir %>"><button type="button">Volver</button></a>
+
+	<a href="" onclick="printReport(); return false;"><button type="button">Imprimir</button></a>
+</div>
 
 </body> 
 </html>
+
+

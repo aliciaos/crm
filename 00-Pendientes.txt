@@ -14,3 +14,9 @@ Filtro para listar informes
 Meter un nuevo campo en los informes que indique si el informe se ha imprimido ya o no.
 
 meter en los autoloads de parametros dos tipos de parametros en funcion de si se quiere hacer carga ansiosa o no.
+
+no se hace bien el redir al crear diagnosticos
+
+retocar entradas para eliminar espacios en blanco
+
+formato de fechas dd-mm-aaaa

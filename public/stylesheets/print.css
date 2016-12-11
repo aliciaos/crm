@@ -1,11 +1,16 @@
 
+body {
+    font-family: "Clear Sans",Arial,Arial,sans-serif,helvetica;
+}
+
 .header1 {
     text-align: center;
     border: 2px solid;
     border-bottom: 1px solid;
     height: 100px;
-	margin: 20px 20px 0px 20px;
+	margin: 1.5cm 1.5cm 0px 1.5cm;
 	xxxbackground-color: yellow;
+    font-family: "PT Serif Bold",Georgia,serif,times;
 }
 
 .logo {
@@ -23,6 +28,7 @@
 
 .perea h1 {
     font-size: 18px;
+    font-weight: normal;
     padding-top: 20px;
 }
 
@@ -34,14 +40,15 @@
     border-left: 2px solid;
 }
 
-.paptext h1 {
+.paptest h1 {
+    padding-top: 20px;
     font-size: 24px;
 }
 
 .header2 {
     border: 2px solid;
     border-top: 1px solid;
-    margin: 0px 20px 0px 20px;
+    margin: 0px 1.5cm 0px 1.5cm;
     font-size: 14px;
 }
 
@@ -58,7 +65,7 @@
 }
 
 .diagnoses {
-    margin: 0px 20px 20px 20px;
+    margin: 0px 1.5cm 1.5cm 1.5cm;
     padding: 0cm 0.5cm;
     font-weight: normal;
 }
@@ -84,22 +91,33 @@
     padding-left: 0.5cm;
 }
 
+.resultnotes {
+    padding-left: 0.5cm;
+}
+
 .dtroption {
       padding-left: 1cm;
-  
+}
+
+.optionnotes {
+      padding-left: 1cm;
 }
 
 .underline {
     text-decoration: underline;
 }
 
+
 .example-print {
     display: none;
+}
 
 
 
 @media print {
-  @page { margin: 0; }
+    @page { 
+        margin: 0; 
+    }
   
    .example-screen {
        display: none;

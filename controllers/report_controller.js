@@ -229,7 +229,9 @@ exports.print = function(req, res, next) {
 
         var diagnoseInfo = { dtype: { title: "" },
                              dtresult: { title: "", description: "" },
-                             dtroption: { title: "", description: "" }
+                             resultNotes: diagnose.resultNotes,
+                             dtroption: { title: "", description: "" },
+                             optionNotes: diagnose.optionNotes
                            };
 
         return models.DType.findOne({where: {code: { $like: "%"+diagnose.dtypeCode+"%"}}})
