@@ -53,10 +53,13 @@
             Paciente
         </th>
         <th>
+            Fecha
+        </th>
+        <th>
             Doctor
         </th>
         <th>
-            Fecha
+            Impreso
         </th>
         <th>
             
@@ -78,6 +81,9 @@
             </td>
             <td>
                 <%= report.doctor %>
+            </td>
+            <td>
+                <%= report.printed ? "Si" : "No" %>
             </td>
             <td>
                 <a href="/patients/<%= patient.id %>/reports/<%= report.id %>?redir=<%= url %>"><img width="24px" src="/images/ver.png"></a>

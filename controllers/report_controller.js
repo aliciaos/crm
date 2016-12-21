@@ -299,7 +299,7 @@ exports.destroy = function(req, res, next) {
 //-----------------------------------------------------------
 
 
-// GET /patients/:patientId/reports/:reportId
+// GET /patients/:patientId/reports/:reportId/print
 exports.print = function(req, res, next) {
 
     var redir = req.query.redir || "/";
@@ -369,7 +369,24 @@ exports.print = function(req, res, next) {
 
 
 
+// PUT /patients/:patientId/reports/:reportId/printed
+exports.printed = function(req, res, next) {
 
+    if ( ! req.xhr) {
+        next(new Error("Error interno marcando un informe como impreso."));
+        return;
+    }
 
+    req.report.printed = true;
 
+    req.report.save({fields: ["printed"]})
+    .then(function(report) {
+        req.flash('success', 'Informe marcado como imprimido.'); 
+        res.sendStatus(200);
+    })
+    .catch(function(error) {
+      req.flash('error', 'Error al marcar un informe como imprimido: ' + error.message);
+      res.sendStatus(500);
+    });
+};
 

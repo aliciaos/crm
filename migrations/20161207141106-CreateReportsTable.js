@@ -24,6 +24,10 @@ module.exports = {
                 cycleDay: { 
                     type: Sequelize.INTEGER 
                 },
+                printed: { 
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false 
+                },
                 createdAt: { type: Sequelize.DATE,     allowNull: false },
                 updatedAt: { type: Sequelize.DATE,     allowNull: false }
            },

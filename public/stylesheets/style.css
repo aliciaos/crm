@@ -35,6 +35,25 @@ a:active {
     float: right;
 }
 
+:focus { 
+    background-color: yellow;
+    color: blue;
+}
+
+
+input[type=text] {
+    background-color: white;
+    height: 15px;
+
+    transition: ease-in-out,  background-color .4s ease-in-out, height  .4s ease-in-out;
+}
+
+input[type=text]:focus {
+    background-color: yellow;
+    height: 30px;
+}
+
+
 table {
     width: 90%;
     border: 1px solid black;
@@ -59,6 +78,7 @@ td {
 nav {
     background-color: blue;
     padding: 3px 20px;
+    margin: 5px 0px;
 }
 
 nav a {

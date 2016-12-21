@@ -52,6 +52,7 @@ router.put('/patients/:patientId(\\d+)/reports/:reportId(\\d+)',		reportControll
 router.delete('/patients/:patientId(\\d+)/reports/:reportId(\\d+)',		reportController.destroy);
 
 router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/print',  reportController.print);
+router.put('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/printed',reportController.printed);
 
 
 

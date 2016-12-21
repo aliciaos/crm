@@ -21,6 +21,10 @@ module.exports = function(sequelize, DataTypes) {
             },
             cycleDay: { 
                 type: DataTypes.INTEGER 
+            },
+            printed: { 
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
             }
         });
 };
