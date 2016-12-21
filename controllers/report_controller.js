@@ -120,6 +120,7 @@ exports.index = function(req, res, next) {
     .then(function(reports) {
 
         res.render('reports/index.ejs', {   reports: reports,
+                                            patientId: req.patient && req.patient.id || "",
         									moment: moment,
                                             searchpatient: searchpatient,
                                             searchdoctor: searchdoctor,
@@ -308,13 +309,13 @@ exports.destroy = function(req, res, next) {
 
 
 // GET /patients/:patientId/reports/:reportId/print
-exports.print = function(req, res, next) {
+exports.printReport = function(req, res, next) {
 
     var redir = req.query.redir || "/";
 
     req.report.diagnosesInfo = [];
 
-    Sequelize.Promise.all(req.report.Diagnoses)
+    Sequelize.Promise.all(req.report.Diagnoses || [])
     .each(function(diagnose) {
 
         var diagnoseInfo = { dtype: { title: "" },
@@ -362,7 +363,7 @@ exports.print = function(req, res, next) {
         req.flash('success', 'Generado informe para imprimir.');
 
         res.render('reports/print', {   layout:false,
-                                        report: req.report,
+                                        reports: [req.report],
                                         moment: moment,
                                         redir: redir });
     })
@@ -375,8 +376,138 @@ exports.print = function(req, res, next) {
 
 
 
+// GET /reports/print
+// GET /patients/:patientId/reports/print
+exports.printIndex = function(req, res, next) {
+
+    var redir = req.query.redir || "/";
+
+    var options = {};
+    options.order = [['updatedAt','DESC']];
+    options.include = [ models.Diagnose,
+                        models.Patient ];
+    options.where = {};
+
+
+    if (req.patient) {
+        options.where.PatientId = req.patient.id;
+    }
+
+    
+    // Busquedas por paciente:
+    var searchpatient = req.query.searchpatient || '';
+    if (searchpatient) {
+        var search_like = "%" + searchpatient.replace(/ +/g,"%") + "%";
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include = [ {   model: models.Patient,
+                                where: { name: { $like: search_like } } 
+                            } 
+                          ];
+    }
+
+    // Busquedas por doctor:
+    var searchdoctor = req.query.searchdoctor || '';
+    if (searchdoctor) {
+        var search_like = "%" + searchdoctor.replace(/ +/g,"%") + "%";
+        options.where.doctor = { $like: search_like };
+    }
+
+     // Busquedas por fecha:
+    var searchdate1 = req.query.searchdate1 || '';
+    var searchdate2 = req.query.searchdate2 || '';
+    if (searchdate1 !== "" && searchdate2 !== "") {
+
+        var searchmoment1 = moment(searchdate1 + " 08:00", "DD-MM-YYYY").toDate();
+        var searchmoment2 = moment(searchdate2 + " 08:00", "DD-MM-YYYY").toDate();
+        options.where.receptionAt = { $between: [ searchmoment1, searchmoment2] };
+    }
+
+    // Busquedas por imprimido:
+    var searchprinted = req.query.searchprinted || 'todos';
+    if (searchprinted == "si") {
+        options.where.printed = true;
+    } else if (searchprinted == "no") {
+        options.where.printed = false;
+    }
+
+
+    models.Report.findAll(options)
+    .each(function(report) {
+
+        report.diagnosesInfo = [];
+
+        return Sequelize.Promise.all(report.Diagnoses || [])
+        .each(function(diagnose) {
+
+            var diagnoseInfo = { dtype: { title: "" },
+                                 dtresult: { title: "", description: "" },
+                                 resultNotes: diagnose.resultNotes,
+                                 dtroption: { title: "", description: "" },
+                                 optionNotes: diagnose.optionNotes
+                               };
+
+            return models.DType.findOne({where: {code: diagnose.dtypeCode}})
+            .then(function(dtype) {
+
+                if (!dtype) return;
+
+                diagnoseInfo.dtype = { title: dtype.title };
+
+                return models.DTResult.findOne({where: {DTypeId: dtype.id,
+                                                        code: diagnose.dtresultCode}})
+                .then(function(dtresult) {
+
+                    if (!dtresult) return;
+
+                    diagnoseInfo.dtresult = { title: dtresult.title,
+                                               description: dtresult.description
+                                            };
+
+                    return models.DTROption.findOne({where: {DTResultId: dtresult.id,
+                                                             code: diagnose.dtroptionCode}})
+                    .then(function(dtroption) {
+
+                        if (!dtroption) return;
+
+                        diagnoseInfo.dtroption = { title: dtroption.title,
+                                                   description: dtroption.description 
+                                                 };
+                    });
+                });
+            })
+            .then(function() {
+                report.diagnosesInfo.push(diagnoseInfo);
+            });
+        });
+    })
+    .then(function(reports) {
+
+        req.flash('success', 'Generados los informes para imprimir.');
+
+        res.render('reports/print', {   layout:false,
+                                        reports: reports,
+                                        patientId: req.patient && req.patient.id || "",
+                                        searchpatient: searchpatient,
+                                        searchdoctor: searchdoctor,
+                                        searchdate1: searchdate1,
+                                        searchdate2: searchdate2,
+                                        searchprinted: searchprinted,
+                                        moment: moment,
+                                        redir: redir });
+    })
+    .catch(function(error){
+        req.flash('error', 'Error crear los informes para imprimir: ' + error.message);
+        next(error);
+    });
+};
+
+
+
+
+
 // PUT /patients/:patientId/reports/:reportId/printed
-exports.printed = function(req, res, next) {
+exports.setAsPrinted = function(req, res, next) {
 
     if ( ! req.xhr) {
         next(new Error("Error interno marcando un informe como impreso."));

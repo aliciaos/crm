@@ -51,8 +51,11 @@ router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/edit',	reportCont
 router.put('/patients/:patientId(\\d+)/reports/:reportId(\\d+)',		reportController.update);
 router.delete('/patients/:patientId(\\d+)/reports/:reportId(\\d+)',		reportController.destroy);
 
-router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/print',  reportController.print);
-router.put('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/printed',reportController.printed);
+// Impresion de informes
+router.get('/reports/print',  											reportController.printIndex);
+router.get('/patients/:patientId(\\d+)/reports/print',  				reportController.printIndex);
+router.get('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/print',  reportController.printReport);
+router.put('/patients/:patientId(\\d+)/reports/:reportId(\\d+)/printed',reportController.setAsPrinted);
 
 
 

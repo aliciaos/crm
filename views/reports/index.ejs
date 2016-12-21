@@ -49,6 +49,23 @@
     <a href="<%= redir %>">
         <img width="24px" src="/images/back.png">
     </a>
+
+    <% 
+        var urlPrint = ""; 
+        if (locals.patientId) { 
+            urlPrint = "/patients/" + locals.patientId;
+        } 
+        urlPrint += "/reports/print?";        
+        urlPrint += "searchpatient=" + (locals.searchpatient || '') + "&";
+        urlPrint += "searchdoctor=" + (locals.searchdoctor || '') + "&";
+        urlPrint += "searchdate1=" + (locals.searchdate1 || '') + "&";
+        urlPrint += "searchdate2=" + (locals.searchdate2 || '') + "&";
+        urlPrint += "searchprinted=" + (locals.searchprinted || 'todos') + "&";
+        urlPrint += "redir=" + redir;
+    %>
+    <a href="<%= urlPrint %>">
+        <img width="24px" src="/images/print.png">
+    </a>
 </h2>
 
 <%  if (locals.paginate_control) { %>
