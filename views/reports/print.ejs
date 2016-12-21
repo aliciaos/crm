@@ -10,7 +10,7 @@
         function printReport() {
 
             var request = new XMLHttpRequest();
-            var url = "/patients/<%= patient.id %>/reports/<%= report.id %>/printed?_method=PUT";
+            var url = "/patients/<%= report.Patient.id %>/reports/<%= report.id %>/printed?_method=PUT";
             request.open("POST", url); 
             request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             request.onreadystatechange = function() {
@@ -64,7 +64,7 @@
 <header class="header2">
     <div class="patient">
         <p>
-            Dª. <%= patient.name %>
+            Dª. <%= report.Patient.name %>
         </p>
     </div>
     <div class="report">
@@ -88,8 +88,8 @@
         ORIENTACIÓN DIAGNOSTICA DEL EXTENDIDO 
     </h2>
 
-    <% for (var i in diagnoses) { %> 
-        <% var diagnose = diagnoses[i]; %>      
+    <% for (var i in report.diagnosesInfo) { %> 
+        <% var diagnose = report.diagnosesInfo[i]; %>      
 
         <article>
             <h3 class="underline">

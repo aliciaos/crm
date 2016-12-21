@@ -76,6 +76,13 @@ exports.index = function(req, res, next) {
         options.where.receptionAt = { $between: [ searchmoment1, searchmoment2] };
     }
 
+    // Busquedas por imprimido:
+    var searchprinted = req.query.searchprinted || 'todos';
+    if (searchprinted == "si") {
+        options.where.printed = true;
+    } else if (searchprinted == "no") {
+        options.where.printed = false;
+    }
 
 
     models.Report.count(options)
@@ -118,6 +125,7 @@ exports.index = function(req, res, next) {
                                             searchdoctor: searchdoctor,
                                             searchdate1: searchdate1,
                                             searchdate2: searchdate2,
+                                            searchprinted: searchprinted,
                                             redir: redir });
     })
     .catch(function(error) {
@@ -304,7 +312,7 @@ exports.print = function(req, res, next) {
 
     var redir = req.query.redir || "/";
 
-    var diagnosesInfo = [];
+    req.report.diagnosesInfo = [];
 
     Sequelize.Promise.all(req.report.Diagnoses)
     .each(function(diagnose) {
@@ -346,7 +354,7 @@ exports.print = function(req, res, next) {
             });
         })
         .then(function() {
-            diagnosesInfo.push(diagnoseInfo);
+            req.report.diagnosesInfo.push(diagnoseInfo);
         });
     })
     .then(function() {
@@ -355,8 +363,6 @@ exports.print = function(req, res, next) {
 
         res.render('reports/print', {   layout:false,
                                         report: req.report,
-                                        patient: req.patient,
-                                        diagnoses: diagnosesInfo,
                                         moment: moment,
                                         redir: redir });
     })

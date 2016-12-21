@@ -30,7 +30,16 @@
            value="<%= locals.searchdate2 || '' %>" 
            placeholder="dd-mm-aaaa" 
            autocomplete="off"/>
+
     <br />
+
+    <label>Imprimido:</label>
+    Todos: <input type="radio" name="searchprinted" value="todos" <%= locals.searchprinted == "todos" ? "checked" : "" %> >  
+    Si: <input type="radio" name="searchprinted" value="si" <%= locals.searchprinted == "si" ? "checked" : "" %> > 
+    No: <input type="radio" name="searchprinted" value="no" <%= locals.searchprinted == "no" ? "checked" : "" %> > 
+
+    <br />
+
 </form>
 
 <h2> 
