@@ -117,7 +117,7 @@ exports.create = function(req, res, next) {
     .then(function(patient) {
         req.flash('success', 'Paciente creada con éxito.');   
 
-        res.redirect("/patients/" + patient.id);
+        res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -162,7 +162,7 @@ exports.update = function(req, res, next) {
 
         req.flash('success', 'Paciente editada con éxito.'); 
 
-        res.redirect("/patients");
+        res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function(error) {
 
@@ -206,7 +206,7 @@ exports.destroy = function(req, res, next) {
         });
     })
     .then(function() {
-        res.redirect("/patients");
+        res.redirect("/reload");
     })
     .catch(function(error){
         req.flash('error', 'Error al borrar una paciente: '+error.message);

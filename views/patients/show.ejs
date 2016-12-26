@@ -4,7 +4,9 @@
 
     <a href="/patients/<%= patient.id %>/edit"><img width="24px" src="/images/edit.png"></a>
 
-    <a href="/patients"><img width="24px" src="/images/back.png"></a>
+    <!-- a href="/patients"><img width="24px" src="/images/back.png"></a -->
+
+    <a href="/goback"><img width="24px" src="/images/back.png"></a>
 </h2>
 
 
@@ -32,14 +34,12 @@
 
 
 
-<% var redir = url || "/patients" %>
-
 <div class="vcenter">
-	Ver informes existentes: <a href="/patients/<%= patient.id %>/reports?redir=<%= redir %>"><img width="24px" src="/images/reports.png"></a>
+	Ver informes existentes: <a href="/patients/<%= patient.id %>/reports"><img width="24px" src="/images/reports.png"></a>
 </div>
 
 <div  class="vcenter">
-	Crear informe: <a href="/patients/<%= patient.id %>/reports/auto?redir=<%= redir %>&_method=POST"><img width="24px" src="/images/add.png"></a>
+	Crear informe: <a href="/patients/<%= patient.id %>/reports/auto?_method=POST"><img width="24px" src="/images/add.png"></a>
 </div>
 
 

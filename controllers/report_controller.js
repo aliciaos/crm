@@ -34,8 +34,6 @@ exports.load = function(req, res, next, reportId) {
 // GET /patients/:patientId/reports
 exports.index = function(req, res, next) {
 
-    var redir = req.query.redir || "/";
-
     var options = {};
     options.order = [['updatedAt','DESC']];
     options.include = [ models.Patient ];
@@ -126,8 +124,7 @@ exports.index = function(req, res, next) {
                                             searchdoctor: searchdoctor,
                                             searchdate1: searchdate1,
                                             searchdate2: searchdate2,
-                                            searchprinted: searchprinted,
-                                            redir: redir });
+                                            searchprinted: searchprinted });
     })
     .catch(function(error) {
         next(error);
@@ -140,19 +137,14 @@ exports.index = function(req, res, next) {
 // GET /reports/:reportId
 exports.show = function(req, res, next) {
 
-    var redir = req.query.redir || "/reports";
-
     res.render('reports/show', { report: req.report,
     							 patient: req.patient,
-    							 moment: moment,
-                                 redir: redir });
+    							 moment: moment });
 };
 
 
 // GET /patients/:patientId/reports/new
 exports.new = function(req, res, next) {
-
-    var redir = req.query.redir || "/patients/" + req.patient.id + "/reports/";
 
     var report = models.Report.build({ 	doctor: req.patient.doctor, 
                                        	receptionAt: moment().format("DD-MM-YYYY"),
@@ -161,15 +153,26 @@ exports.new = function(req, res, next) {
 
     res.render('reports/new', { report: report,
     							patient: req.patient,
-    							moment: moment,
-                                redir: redir });
+    							moment: moment });
+};
+
+
+// POST /patients/:patientId/reports/auto
+exports.autocreate = function(req, res, next) {
+
+    req.body = {    doctor:             req.patient.doctor, 
+                    receptionAt:        moment().format("DD-MM-YYYY"),
+                    lastMenstruationAt: "",
+                    cycleDay:           "",
+                    PatientId:          req.patient.id 
+                };
+
+    exports.create(req, res, next);
 };
 
 
 // POST /patients/:patientId/reports/create
 exports.create = function(req, res, next) {
-
-    var redir = req.body.redir || "/patients/" + req.patient.id + "/reports/";
 
 	var momentReceptionAt = moment(req.body.receptionAt + " 08:00", "DD-MM-YYYY");
 
@@ -184,7 +187,7 @@ exports.create = function(req, res, next) {
     .then(function(report) {
         req.flash('success', 'Informe creado con éxito.');   
 
-        res.redirect("/patients/" + req.patient.id + "/reports/" + report.id + "/edit?redir=" + redir);
+        res.redirect("/patients/" + req.patient.id + "/reports/" + report.id + "/edit");
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -198,8 +201,7 @@ exports.create = function(req, res, next) {
 
         res.render('reports/new', { report: report,
     							    patient: req.patient,
-    								moment: moment,
-                                    redir: redir });
+    								moment: moment });
     })
     .catch(function(error) {
         req.flash('error', 'Error al crear un informe: ' + error.message);
@@ -208,20 +210,6 @@ exports.create = function(req, res, next) {
 };
 
 
-// POST /patients/:patientId/reports/auto
-exports.autocreate = function(req, res, next) {
-
-    req.body = {    redir: req.query.redir || "/patients/" + req.patient.id + "/reports/",
-                    doctor:             req.patient.doctor, 
-                    receptionAt:        moment().format("DD-MM-YYYY"),
-                    lastMenstruationAt: "",
-                    cycleDay:           "",
-                    PatientId:          req.patient.id 
-                };
-
-    exports.create(req, res, next);
-};
-
 
 
 // GET /patients/:patientId/reports/:reportId/edit
@@ -229,20 +217,15 @@ exports.edit = function(req, res, next) {
 
     var report = req.report;  // autoload
 
-    var redir = req.query.redir || "/patients/" + req.patient.id + "/reports/" + report.id;
-
     res.render('reports/edit', { report: report,
     							 patient: req.patient,
-    							 moment: moment, 
-                                 redir: redir });
+    							 moment: moment });
 };
 
 
 
 // PUT /patients/:patientId/reports/:reportId
 exports.update = function(req, res, next) {
-
-    var redir = req.body.redir || "/patients/" + req.patient.id + "/reports/" + req.report.id
 
 	var momentReceptionAt = moment(req.body.receptionAt + " 08:00", "DD-MM-YYYY");
 
@@ -256,7 +239,7 @@ exports.update = function(req, res, next) {
 
         req.flash('success', 'Informe editado con éxito.'); 
 
-        res.redirect(redir);
+        res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function(error) {
 
@@ -271,8 +254,7 @@ exports.update = function(req, res, next) {
 
 		res.render('reports/edit', { report: req.report,
     							     patient: req.patient,
-    								 moment: moment,
-                                     redir: redir });
+    								 moment: moment });
     })
     .catch(function(error) {
       req.flash('error', 'Error al editar un informe: ' + error.message);
@@ -284,8 +266,6 @@ exports.update = function(req, res, next) {
 // DELETE /patients/:patientId/reports/:reportId
 exports.destroy = function(req, res, next) {
 
-    var redir = req.query.redir || "/patients/" + req.patient.id + "/reports";
-
     // Borrar los diagnosticos del informe:
     models.Diagnose.destroy({where: {ReportId: req.report.id}})
     .then( function() {
@@ -295,7 +275,7 @@ exports.destroy = function(req, res, next) {
         return req.report.destroy()
         .then( function() {
             req.flash('success', 'Informe borrado con éxito.');
-            res.redirect(redir);
+            res.redirect("/reload");
         });
     })
 	.catch(function(error){
@@ -310,8 +290,6 @@ exports.destroy = function(req, res, next) {
 
 // GET /patients/:patientId/reports/:reportId/print
 exports.printReport = function(req, res, next) {
-
-    var redir = req.query.redir || "/";
 
     req.report.diagnosesInfo = [];
 
@@ -364,8 +342,7 @@ exports.printReport = function(req, res, next) {
 
         res.render('reports/print', {   layout:false,
                                         reports: [req.report],
-                                        moment: moment,
-                                        redir: redir });
+                                        moment: moment });
     })
     .catch(function(error){
         req.flash('error', 'Error crear un informe para imprimir: ' + error.message);
@@ -379,8 +356,6 @@ exports.printReport = function(req, res, next) {
 // GET /reports/print
 // GET /patients/:patientId/reports/print
 exports.printIndex = function(req, res, next) {
-
-    var redir = req.query.redir || "/";
 
     var options = {};
     options.order = [['updatedAt','DESC']];
@@ -493,8 +468,7 @@ exports.printIndex = function(req, res, next) {
                                         searchdate1: searchdate1,
                                         searchdate2: searchdate2,
                                         searchprinted: searchprinted,
-                                        moment: moment,
-                                        redir: redir });
+                                        moment: moment });
     })
     .catch(function(error){
         req.flash('error', 'Error crear los informes para imprimir: ' + error.message);

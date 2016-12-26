@@ -72,7 +72,7 @@ exports.create = function(req, res, next) {
     .then(function(dtype) {
         req.flash('success', 'Tipo de diagnóstico creado con éxito.');   
 
-        res.redirect("/dtypes");
+        res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -112,7 +112,7 @@ exports.update = function(req, res, next) {
 
         req.flash('success', 'Tipo de diagnóstico editado con éxito.'); 
 
-        res.redirect("/dtypes");
+        res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function(error) {
 
@@ -156,7 +156,7 @@ exports.destroy = function(req, res, next) {
         });
     })
     .then(function() {
-        res.redirect("/dtypes");
+        res.redirect("/reload");
     })
     .catch(function(error){
         req.flash('error', 'Error al borrar un tipo de diagnóstico: '+error.message);

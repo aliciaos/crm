@@ -86,8 +86,10 @@ nav a {
 }
 
 .version {
-    position: absolute;
-    bottom: 10px;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    font: 8px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 .vcenter {

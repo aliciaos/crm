@@ -85,7 +85,7 @@ exports.create = function(req, res, next) {
         req.flash('success', 'Diagnóstico creado con éxito.');   
 
         var patient = req.report.Patient;
-        res.redirect("/patients/" + patient.id + "/reports/"+ req.report.id + "/edit");
+        res.redirect("/goback/");
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -134,7 +134,7 @@ exports.update = function(req, res, next) {
         req.flash('success', 'Diagnóstico editado con éxito.'); 
 
         var patient = req.report.Patient;
-        res.redirect("/patients/" + patient.id + "/reports/"+ req.report.id + "/edit");
+        res.redirect("/goback/");
     })
     .catch(Sequelize.ValidationError, function(error) {
 
@@ -162,7 +162,7 @@ exports.destroy = function(req, res, next) {
         req.flash('success', 'Diagnóstico borrado con éxito.');
 
         var patient = req.report.Patient;
-        res.redirect("/patients/" + patient.id + "/reports/"+ req.report.id + "/edit");
+        res.redirect("/reload");
     })
     .catch(function(error){
         req.flash('error', 'Error al borrar un diagnóstico: '+error.message);

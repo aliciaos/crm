@@ -80,7 +80,7 @@ exports.create = function(req, res, next) {
     .then(function(dtroption) {
         req.flash('success', 'Opcion de resultado de tipo de diagnóstico creada con éxito.');   
 
-        res.redirect("/dtypes/" + req.dtype.id);
+        res.redirect("/gaback");
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -129,7 +129,7 @@ exports.update = function(req, res, next) {
 
         req.flash('success', 'Opción de resultado de tipo de diagnóstico editada con éxito.'); 
 
-        res.redirect("/dtypes/" + req.dtype.id);
+        res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function(error) {
 
@@ -156,7 +156,7 @@ exports.destroy = function(req, res, next) {
     req.dtroption.destroy()
     .then( function() {
         req.flash('success', 'Opción de resultado de tipo de diagnóstico borrada con éxito.');
-        res.redirect("/dtypes/" + req.dtype.id);
+        res.redirect("/reload");
     })
     .catch(function(error){
         req.flash('error', 'Error al borrar una opción de resultado de  tipo de diagnóstico: '+error.message);
