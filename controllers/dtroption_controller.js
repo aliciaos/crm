@@ -80,7 +80,7 @@ exports.create = function(req, res, next) {
     .then(function(dtroption) {
         req.flash('success', 'Opcion de resultado de tipo de diagnóstico creada con éxito.');   
 
-        res.redirect("/gaback");
+        res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
