@@ -2,17 +2,22 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
 
+var naturalCompare = require('string-natural-compare');
+
 
 //-----------------------------------------------------------
 
 
 // Autoload el tipo de diagnostico asociado a :dtypeId
 exports.load = function(req, res, next, dtypeId) {
+
     models.DType.findById(dtypeId, 
                           { include: [ { model: models.DTResult,
                                          include: [ models.DTROption ] 
                                        } 
-                                     ] 
+                                     ],
+                            order: [[models.DTResult, models.DTROption, 'code', 'DESC']],
+                            order: [[ models.DTResult, 'code' ]]
                           })
     .then(function(dtype) {
         if (dtype) {
@@ -47,6 +52,21 @@ exports.index = function(req, res, next) {
 
 // GET /dtypes/:dtypeId
 exports.show = function(req, res, next) {
+
+    // Ordenar Results por code
+    var sortedResults = req.dtype.DTResults.sort(function(r1,r2) {
+        return naturalCompare(r1.code, r2.code);
+    });
+    req.dtype.DTResults = sortedResults;
+
+    // Ordenar Options code
+    sortedResults.forEach(function(result) {
+
+        var sortedOptions = result.DTROptions.sort(function(o1,o2) {
+            return naturalCompare(o1.code, o2.code);
+        });
+        result.DTROptions = sortedOptions;
+    });
 
     res.render('dtypes/show', {dtype: req.dtype});
 };
