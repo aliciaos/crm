@@ -70,6 +70,7 @@ exports.index = function(req, res, next) {
         options.limit  = pagination.limit;
 
         options.order = [['updatedAt','DESC']];
+        options.include = [ models.Report ];
 
         return models.Patient.findAll(options);
     })   

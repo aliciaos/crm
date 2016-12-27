@@ -29,7 +29,7 @@
         <th>
             Doctor
         </th>
-        <th>
+        <th colspan=2>
             Informes
         </th>
         <th>
@@ -52,6 +52,10 @@
                 <a href="/patients/<%= patient.id %>/reports/auto?_method=POST"><img width="24px" src="/images/add.png"></a>
 
                 <a href="/patients/<%= patient.id %>/reports"><img width="24px" src="/images/reports.png" alt="Ver informes"></a>
+            </td>
+
+            <td>
+                <%= patient.Reports.length %>
             </td>
 
             <td>
