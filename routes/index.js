@@ -113,7 +113,7 @@ router.delete('/dtypes/:dtypeId(\\d+)',    	dtypeController.destroy);
 
 
 // Seed códigos de diagnosticos
-router.post('/dtypes/seed',                    	dtypeSeeder.seed);
+router.post('/seed',                    	dtypeSeeder.seed);
 
 
 
