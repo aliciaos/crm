@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "migrate": "./node_modules/.bin/sequelize db:migrate --url sqlite:///Users/santiago/tmp/citolo.sqlite"
+    "migrate": "./node_modules/.bin/sequelize db:migrate --url sqlite://$(pwd)/citolo.sqlite"
   },
   "dependencies": {
     "body-parser": "~1.15.2",
