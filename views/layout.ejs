@@ -13,25 +13,36 @@
         </h1>
     </header>
 
-        <div class="right">
-          <% if (!session.user) { %>
-              <a href="/users/new">Registrarse</a> 
-              <a href="/session">Login</a>
-          <% } else { %>
-              <%= session.user.username %> 
-              <a href="/users/<%= session.user.id %>">Perfil</a>
-              <a href="/session?_method=DELETE">Logout</a>
-          <% } %>
+    <nav> 
+        .       
+        <% if (session.user) { %>
+            <a href="/companies">Fábricas</a>
+            <a href="/customers">Clientes</a>
+            <a href="/salesmen">Vendedores</a>
+            <a href="/targets">Objetivos</a>
+            <a href="/visits">Visitas</a>
+            <a href="/statistics">Estadísticas</a>
+
+            <% if (session.user.login === "admin") { %>
+                <a href="/users">Usuarios</a>
+            <% } %>
+        <% } %>
+
+
+        <div class="login right">
+            <% if (!session.user) { %>
+                <a href="/session">Login</a>
+            <% } else { %>
+                <%= session.user.username %> 
+                <a href="/users/<%= session.user.id %>">Perfil</a>
+                <a href="/session?_method=DELETE">Logout</a>
+
+                <% if (session.user.login === "admin") { %>
+                    <a href="/users/new">Registrar</a> 
+                <% } %>
+
+            <% } %>
         </div>
-        
-    <nav>
-        <a href="/companies">Fábricas</a>
-        <a href="/customers">Clientes</a>
-        <a href="/salesmen">Vendedores</a>
-        <a href="/targets">Objetivos</a>
-        <a href="/visits">Visitas</a>
-        <a href="/statistics">Estadísticas</a>
-        <a href="/users">Usuarios</a>
     </nav>
 
     <section>
