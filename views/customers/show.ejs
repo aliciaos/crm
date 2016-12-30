@@ -1,0 +1,34 @@
+
+<h1> 
+    Cliente: 
+
+    <%= customer.name %>
+
+    <a href="/goback"><img width="24px" src="/images/back.png"></a>
+
+    <a href="/customers/<%= customer.id %>/edit"><img width="24px" src="/images/edit.png"></a> 
+</h1>
+
+<ul>
+	<li>
+		<b>Código</b>: <%= customer.code %>
+	</li>
+	<li>
+		<b>Nombre</b>: <%= customer.name %>
+	</li>
+	<li>
+		<b>CIF</b>: <%= customer.cif %>
+	</li>
+	<li>
+		<b>Dirección</b>: <%= customer.address1 %> <%= customer.address2 %> <%= customer.city %> <%= customer.postalCode %>
+	</li>
+	<li>
+		<b>Teléfonos</b>: <%= customer.phone1 %> <%= customer.phone2 %> <%= customer.phone3 %> <%= customer.phone4 %>
+	</li>
+	<li>
+		<b>Correos</b>: <%= customer.email1 %> <%= customer.email2 %>
+	</li>
+	<li>
+		<b>Web</b>: <%= customer.web %>
+	</li>
+</ul>

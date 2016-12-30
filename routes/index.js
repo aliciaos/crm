@@ -6,6 +6,7 @@ var sessionController = require('../controllers/session_controller');
 
 var companyController = require('../controllers/company_controller');
 var salesmanController = require('../controllers/salesman_controller');
+var customerController = require('../controllers/customer_controller');
 
 // var reportController = require('../controllers/report_controller');
 // var diagnoseController = require('../controllers/diagnose_controller');
@@ -23,6 +24,7 @@ var hc = require('../controllers/history_controller');
 router.param('userId', userController.load);
 router.param('companyId', companyController.load);  
 router.param('salesmanId', salesmanController.load);  
+router.param('customerId', customerController.load);  
 
 
 // router.param('reportId', 	reportController.load);  
@@ -78,7 +80,6 @@ router.put(   '/companies/:companyId(\\d+)',      	companyController.update);
 router.delete('/companies/:companyId(\\d+)',   		companyController.destroy);
 
 
-
 // Definicion de rutas para los vendedores
 router.get(   '/salesmen',                     		hc.push, salesmanController.index);
 router.get(   '/salesmen/:salesmanId(\\d+)',       	hc.push, salesmanController.show);
@@ -87,6 +88,16 @@ router.post(  '/salesmen',                    		salesmanController.create);
 router.get(   '/salesmen/:salesmanId(\\d+)/edit', 	hc.push, salesmanController.edit);
 router.put(   '/salesmen/:salesmanId(\\d+)',      	salesmanController.update);
 router.delete('/salesmen/:salesmanId(\\d+)',   		salesmanController.destroy);
+
+
+// Definicion de rutas para los clientes
+router.get(   '/customers',                     	hc.push, customerController.index);
+router.get(   '/customers/:customerId(\\d+)',       hc.push, customerController.show);
+router.get(   '/customers/new',                 	hc.push, customerController.new);
+router.post(  '/customers',                    		customerController.create);
+router.get(   '/customers/:customerId(\\d+)/edit', 	hc.push, customerController.edit);
+router.put(   '/customers/:customerId(\\d+)',      	customerController.update);
+router.delete('/customers/:customerId(\\d+)',   	customerController.destroy);
 
 
 
