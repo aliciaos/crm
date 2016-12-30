@@ -7,8 +7,11 @@
     "supervisor": "./node_modules/.bin/supervisor ./bin/www",
     "migrate_local": "./node_modules/.bin/sequelize db:migrate --url sqlite://$(pwd)/crm.sqlite",
     "seed_local": "./node_modules/.bin/sequelize db:seed:all --url sqlite://$(pwd)/crm.sqlite",
+    "seed_heroku": "heroku run ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
     "migrate_heroku": "heroku run ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
-    "reset_heroku": "heroku pg:reset DATABASE"
+    "reset_heroku": "heroku pg:reset DATABASE",
+    "mon": "heroku maintenance:on", 
+    "moff": "heroku maintenance:off"
   },
   "engines": {
     "node": "7.3.x",

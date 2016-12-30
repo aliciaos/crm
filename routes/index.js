@@ -55,10 +55,14 @@ router.delete('/session', sessionController.destroy); // destruir sesión
 
 
 // Definición de rutas de cuenta
-router.get('/users',                    userController.index);   // listado usuarios
-router.get('/users/:userId(\\d+)',      userController.show);    // ver un usuario
-router.get('/users/new',                userController.new);     // formulario sign un
-router.post('/users',                   userController.create);     // registrar usuario
+router.get('/users',                    sessionController.loginRequired, 
+										userController.index);   // listado usuarios
+router.get('/users/:userId(\\d+)',      sessionController.loginRequired, 
+										userController.show);    // ver un usuario
+router.get('/users/new',                sessionController.loginRequired, 
+										userController.new);     // formulario sign un
+router.post('/users',                   sessionController.loginRequired, 
+										userController.create);     // registrar usuario
 router.get('/users/:userId(\\d+)/edit', sessionController.loginRequired, 
 										sessionController.adminOrMyselfRequired, 
 										userController.edit);     // editar información de cuenta
@@ -71,33 +75,66 @@ router.delete('/users/:userId(\\d+)',   sessionController.loginRequired,
 
 
 // Definicion de rutas para las fabricas
-router.get(   '/companies',                     	hc.push, companyController.index);
-router.get(   '/companies/:companyId(\\d+)',       	hc.push, companyController.show);
-router.get(   '/companies/new',                 	hc.push, companyController.new);
-router.post(  '/companies',                    		companyController.create);
-router.get(   '/companies/:companyId(\\d+)/edit', 	hc.push, companyController.edit);
-router.put(   '/companies/:companyId(\\d+)',      	companyController.update);
-router.delete('/companies/:companyId(\\d+)',   		companyController.destroy);
+router.get(   '/companies',                     	hc.push, 
+													sessionController.loginRequired, 
+													companyController.index);
+router.get(   '/companies/:companyId(\\d+)',       	hc.push, 
+													sessionController.loginRequired, 
+													companyController.show);
+router.get(   '/companies/new',                 	hc.push, 
+													sessionController.loginRequired, 
+													companyController.new);
+router.post(  '/companies',                    		sessionController.loginRequired, 
+													companyController.create);
+router.get(   '/companies/:companyId(\\d+)/edit', 	hc.push, 
+													sessionController.loginRequired, 
+													companyController.edit);
+router.put(   '/companies/:companyId(\\d+)',      	sessionController.loginRequired, 
+													companyController.update);
+router.delete('/companies/:companyId(\\d+)',   		sessionController.loginRequired, 
+													companyController.destroy);
 
 
 // Definicion de rutas para los vendedores
-router.get(   '/salesmen',                     		hc.push, salesmanController.index);
-router.get(   '/salesmen/:salesmanId(\\d+)',       	hc.push, salesmanController.show);
-router.get(   '/salesmen/new',                 		hc.push, salesmanController.new);
-router.post(  '/salesmen',                    		salesmanController.create);
-router.get(   '/salesmen/:salesmanId(\\d+)/edit', 	hc.push, salesmanController.edit);
-router.put(   '/salesmen/:salesmanId(\\d+)',      	salesmanController.update);
-router.delete('/salesmen/:salesmanId(\\d+)',   		salesmanController.destroy);
+router.get(   '/salesmen',                     		hc.push, 
+													sessionController.loginRequired, 
+													salesmanController.index);
+router.get(   '/salesmen/:salesmanId(\\d+)',       	hc.push, 
+													sessionController.loginRequired, 
+													salesmanController.show);
+router.get(   '/salesmen/new',                 		hc.push, 
+													sessionController.loginRequired, 
+													salesmanController.new);
+router.post(  '/salesmen',                    		sessionController.loginRequired, 
+													salesmanController.create);
+router.get(   '/salesmen/:salesmanId(\\d+)/edit', 	hc.push, 
+													sessionController.loginRequired, 
+													salesmanController.edit);
+router.put(   '/salesmen/:salesmanId(\\d+)',      	sessionController.loginRequired, 
+													salesmanController.update);
+router.delete('/salesmen/:salesmanId(\\d+)',   		sessionController.loginRequired, 
+													salesmanController.destroy);
 
 
 // Definicion de rutas para los clientes
-router.get(   '/customers',                     	hc.push, customerController.index);
-router.get(   '/customers/:customerId(\\d+)',       hc.push, customerController.show);
-router.get(   '/customers/new',                 	hc.push, customerController.new);
-router.post(  '/customers',                    		customerController.create);
-router.get(   '/customers/:customerId(\\d+)/edit', 	hc.push, customerController.edit);
-router.put(   '/customers/:customerId(\\d+)',      	customerController.update);
-router.delete('/customers/:customerId(\\d+)',   	customerController.destroy);
+router.get(   '/customers',                     	hc.push, 
+													sessionController.loginRequired, 
+													customerController.index);
+router.get(   '/customers/:customerId(\\d+)',       hc.push, 
+													sessionController.loginRequired, 
+													customerController.show);
+router.get(   '/customers/new',                 	hc.push, 
+													sessionController.loginRequired, 
+													customerController.new);
+router.post(  '/customers',                    		sessionController.loginRequired, 
+													customerController.create);
+router.get(   '/customers/:customerId(\\d+)/edit', 	hc.push, 
+													sessionController.loginRequired, 
+													customerController.edit);
+router.put(   '/customers/:customerId(\\d+)',      	sessionController.loginRequired, 
+													customerController.update);
+router.delete('/customers/:customerId(\\d+)',   	sessionController.loginRequired, 
+													customerController.destroy);
 
 
 
