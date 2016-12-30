@@ -1,24 +1,18 @@
 'use strict';
 
-
 module.exports = {
-    up: function (queryInterface, Sequelize) {
+  up: function (queryInterface, Sequelize) {
         return queryInterface.createTable(
-            'DTROptions', 
+            'Companies', 
             {   id: { 
                     type: Sequelize.INTEGER,  allowNull: false,
                     primaryKey: true,         autoIncrement: true,  
                     unique: true 
                 },
-                DTResultId: { type: Sequelize.INTEGER },
-                code:  { 
-                    type: Sequelize.STRING
-                },
-                title: { 
-                    type: Sequelize.STRING
-                },
-                description: { 
-                    type: Sequelize.TEXT
+                name:  { 
+                    type: Sequelize.STRING,
+                    unique: true,
+                    validate: { notEmpty: {msg: "Falta el nombre de la fábrica."}}
                 },
                 createdAt: { type: Sequelize.DATE, allowNull: false },
                 updatedAt: { type: Sequelize.DATE, allowNull: false }
@@ -26,9 +20,9 @@ module.exports = {
            {    sync: {force: true}
            }
         );
-    },
+  },
 
-    down: function (queryInterface, Sequelize) {
-        return queryInterface.dropTable('DTROptions');
-    }
+  down: function (queryInterface, Sequelize) {
+        return queryInterface.dropTable('Companies');
+  }
 };

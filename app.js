@@ -24,7 +24,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session({secret: "Citolo 2016",
+app.use(session({secret: "Decoversia 2016",
                  resave: false,
                  saveUninitialized: true}));
 app.use(methodOverride('_method', {methods: ["POST", "GET"]}));
@@ -34,6 +34,9 @@ app.use(flash());
 
 // Helper dinamico:
 app.use(function(req, res, next) {
+
+    // Hacer visible req.session en las vistas
+    res.locals.session = req.session;
 
     // Hacer visible req.url en las vistas
     res.locals.url = req.url;

@@ -1,23 +1,18 @@
 'use strict';
 
-
 module.exports = {
-    up: function (queryInterface, Sequelize) {
+  up: function (queryInterface, Sequelize) {
         return queryInterface.createTable(
-            'DTypes', 
+            'TargetTypes', 
             {   id: { 
                     type: Sequelize.INTEGER,  allowNull: false,
                     primaryKey: true,         autoIncrement: true,  
                     unique: true 
                 },
-                code:  { 
+                name:  { 
                     type: Sequelize.STRING,
                     unique: true,
-                    validate: { notEmpty: {msg: "Falta el código del tipo de diagnóstico."}}
-                },
-                title: { 
-                    type: Sequelize.STRING,
-                    validate: { notEmpty: {msg: "Falta el título del tipo de diagnóstico."}}
+                    validate: { notEmpty: {msg: "Falta el nombre del tipo de objetivo."}}
                 },
                 createdAt: { type: Sequelize.DATE, allowNull: false },
                 updatedAt: { type: Sequelize.DATE, allowNull: false }
@@ -25,9 +20,9 @@ module.exports = {
            {    sync: {force: true}
            }
         );
-    },
+  },
 
-    down: function (queryInterface, Sequelize) {
-        return queryInterface.dropTable('DTypes');
-    }
+  down: function (queryInterface, Sequelize) {
+        return queryInterface.dropTable('TargetTypes');
+  }
 };

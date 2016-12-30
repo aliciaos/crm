@@ -14,7 +14,7 @@ var url, storage;
 
 if (!process.env.DATABASE_URL) {
     url = "sqlite:///";
-    storage = "citolo.sqlite";
+    storage = "crm.sqlite";
 } else {
     url = process.env.DATABASE_URL;
     storage = process.env.DATABASE_STORAGE || "";
@@ -26,44 +26,52 @@ var sequelize = new Sequelize(url,
 				              });
 
 
-// Importar la definicion de Patient de patient.js
-var Patient = sequelize.import(path.join(__dirname,'patient'));
 
-// Importar la definicion de Report de report.js
-var Report = sequelize.import(path.join(__dirname,'report'));
+// Importar la definicion de Company de company.js
+var Company = sequelize.import(path.join(__dirname,'company'));
 
-// Importar la definicion de DType de diagnose_type.js
-var DType = sequelize.import(path.join(__dirname,'d_type'));
+// Importar la definicion de Customer de customer.js
+var Customer = sequelize.import(path.join(__dirname,'customer'));
 
-// Importar la definicion de DTResult de dt_result.js
-var DTResult = sequelize.import(path.join(__dirname,'dt_result'));
+// Importar la definicion de Salesman de salesman.js
+var Salesman = sequelize.import(path.join(__dirname,'salesman'));
 
-// Importar la definicion de DTROption de dtr_option.js
-var DTROption = sequelize.import(path.join(__dirname,'dtr_option'));
+// Importar la definicion de TargetType de target_type.js
+var TargetType = sequelize.import(path.join(__dirname,'target_type'));
 
-// Importar la definicion de Diagnose de diagnose.js
-var Diagnose = sequelize.import(path.join(__dirname,'diagnose'));
+// Importar la definicion de Target de target.js
+var Target = sequelize.import(path.join(__dirname,'target'));
+
+// Importar la definicion de Visit de visit.js
+var Visit = sequelize.import(path.join(__dirname,'visit'));
+
+// Importar la definicion de User de user.js
+var User = sequelize.import(path.join(__dirname,'user'));
 
 
 // Relaciones entre modelos
-Report.belongsTo(Patient);
-Patient.hasMany(Report);
+Visit.belongsTo(Customer);
+Customer.hasMany(Visit);
 
-DTResult.belongsTo(DType);
-DType.hasMany(DTResult);
+Visit.belongsTo(Salesman);
+Salesman.hasMany(Visit);
 
-DTROption.belongsTo(DTResult);
-DTResult.hasMany(DTROption);
+Target.belongsTo(Company);
+Company.hasMany(Target);
 
-Diagnose.belongsTo(Report);
-Report.hasMany(Diagnose);
+Target.belongsTo(Visit);
+Visit.hasMany(Target);
+
+Target.belongsTo(TargetType);
+TargetType.hasMany(Target);
 
 // Exportar:
 
-exports.Patient   = Patient;
-exports.Report    = Report;
-exports.DType     = DType;
-exports.DTResult  = DTResult;
-exports.DTROption = DTROption;
-exports.Diagnose  = Diagnose;
+exports.Company		= Company;
+exports.Customer    = Customer;
+exports.Salesman	= Salesman;
+exports.TargetType	= TargetType;
+exports.Target 		= Target;
+exports.Visit		= Visit;
+exports.User 		= User;
 
