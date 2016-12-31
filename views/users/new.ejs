@@ -1,10 +1,14 @@
 
-<p>
-  Crear usuario:
-</p>
+<form method="post" action="/users" >      
 
-<p>
-    <form method="post" action="/users" >      
-        <% include _form.ejs %>
-    </form>
-</p>
+
+	<h1>
+  		Crear Usuario
+
+    	<input type="image" class="icon" src="/images/save.png" border="0" alt="Submit" />
+		<a href="/goback"><img class="icon" src="/images/cancel.png"></a>
+	</h1>
+
+	<% include _form.ejs %>
+
+</form>

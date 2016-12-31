@@ -1,11 +1,15 @@
 
-<p>
-    Editar usuario:
-</p>
 
-<p>
-    <form method="post" action="/users/<%= user.id %>?_method=PUT" >      
-        <% include _form.ejs %>
-    </form>
-</p>
+<form method="post" action="/users/<%= user.id %>?_method=PUT" >      
 
+	<h1>
+    	Editar Usuario
+
+		<input type="image" class="icon" src="/images/save.png" border="0" alt="Submit" />
+		<a href="/goback"><img class="icon" src="/images/cancel.png"></a>
+	</h1>
+
+      
+    <% include _form.ejs %>
+
+</form>
