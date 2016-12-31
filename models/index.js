@@ -52,7 +52,7 @@ var User = sequelize.import(path.join(__dirname,'user'));
 Visit.belongsTo(Customer);
 Customer.hasMany(Visit);
 
-Visit.belongsTo(Salesman, {as: "Salesman"});
+Visit.belongsTo(Salesman, {as: "Salesman", foreignKey: 'SalesmanId'});
 Salesman.hasMany(Visit);
 
 Target.belongsTo(Company);

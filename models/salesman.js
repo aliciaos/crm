@@ -11,8 +11,8 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         {	name: {
-        		singular: "salesman",
-        		plural: "salesmen"
+        		singular: "Salesman",
+        		plural: "Salesmen"
         	},
         	tableName: "Salesmen"
         });
