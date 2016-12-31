@@ -5,7 +5,7 @@
 
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
 
-    <a href="/visits/new"><img width="24px" src="/images/add.png"></a>
+    <a href="/visits/new"><img class="icon" src="/images/add.png"></a>
 </h1>
 
 <table>
@@ -59,12 +59,12 @@
                 <%= visit.notes === "" ? "No" : "Si" %>
             </td>
             <td>
-                <a href="/visits/<%= visit.id %>"><img width="24px" src="/images/ver.png"></a>
+                <a href="/visits/<%= visit.id %>"><img class="icon" src="/images/ver.png"></a>
 
-                <a href="/visits/<%= visit.id %>/edit"><img width="24px" src="/images/edit.png"></a>
+                <a href="/visits/<%= visit.id %>/edit"><img class="icon" src="/images/edit.png"></a>
 
                 <a href="/visits/<%= visit.id %>?_method=DELETE" 
-                   onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img width="24px" src="/images/basura.png"></a>
+                   onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img class="icon" src="/images/basura.png"></a>
             </td>
          </tr> 
     <% } %>
