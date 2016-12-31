@@ -96,6 +96,7 @@ table {
     border-collapse: collapse;
     margin: 10px 0px;
 
+    table-layout: fixed;
 }
 
 th {

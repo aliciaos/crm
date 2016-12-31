@@ -139,3 +139,68 @@ exports.destroy = function(req, res, next) {
     });
 };
 
+
+//-----------------------------------------------------------
+
+
+
+// GET /companies/:companyId/statistics
+exports.statistics = function(req, res, next) {
+
+    var company = req.company;  // autoload
+
+    Sequelize.Promise.all([
+
+        models.Target.findAll({ where: { CompanyId: company.id },
+                                include: [ { model: models.Visit,
+                                             include: [ models.Target,
+                                                        { model: models.Salesman, as: "Salesman" } ] } ] })
+        .then(function(targets) {
+            var counters = {};
+            targets.forEach(function(target) {
+
+                var salesmanId = target.Visit.SalesmanId || 0;
+                var customerId = target.Visit.CustomerId || 0;
+
+                counters[salesmanId] = counters[salesmanId] || {};
+                counters[salesmanId][customerId] = counters[salesmanId][customerId] || {total: 0, pending: 0, done: 0, fail:0};
+
+                if (target.success === null) {
+                    counters[salesmanId][customerId].pending++;
+                } else if (target.success === true) {
+                    counters[salesmanId][customerId].done++;
+                } else {
+                    counters[salesmanId][customerId].fail++;
+                } 
+                counters[salesmanId][customerId].total++;
+
+            });
+            return counters;
+        }),
+
+        models.Customer.findAll()
+        .then(function(customers) {
+            return customers.map(function(customer) { return {id: customer.id, name: customer.name};});
+        }),
+
+        models.Salesman.findAll()
+        .then(function(salesmen) {
+            return salesmen.map(function(salesman) { return {id: salesman.id, name: salesman.name};});
+        })
+    ])
+    .spread(function(counters, customers, salesmen) {
+
+        res.render('companies/statistics', { customers: customers,
+                                             salesmen: salesmen,
+                                             counters: counters,
+                                             company: company });
+    })
+    .catch(function(error) { 
+        req.flash('error', 'Error al calcular las estadísticas de una fábrica: ' + error.message);
+
+        next(error); 
+    });
+};
+
+
+

@@ -12,6 +12,9 @@
             Nombre
         </th>
         <th>
+            Estadísticas
+        </th>
+        <th>
             
         </th>
     </tr> 
@@ -22,6 +25,10 @@
         <tr>
             <td>
                 <%= company.name %>
+            </td>
+
+            <td>
+                <a href="/companies/<%= company.id %>/statistics"><img class="icon" src="/images/reports.png"></a>
             </td>
             <td>
                 <a href="/companies/<%= company.id %>"><img class="icon" src="/images/ver.png"></a>

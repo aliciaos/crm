@@ -87,6 +87,11 @@ router.put(   '/companies/:companyId(\\d+)',      	sessionController.loginRequir
 router.delete('/companies/:companyId(\\d+)',   		sessionController.loginRequired, 
 													companyController.destroy);
 
+router.get('/companies/:companyId(\\d+)/statistics',	hc.push, 
+													    sessionController.loginRequired, 
+														companyController.statistics);
+
+
 
 // Definicion de rutas para los vendedores
 router.get(   '/salesmen',                     		hc.set, 
