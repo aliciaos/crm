@@ -1,0 +1,55 @@
+
+<ul>
+
+	<li>
+		<b>Fábrica</b>:
+		<select name="companyId">
+
+		    <option value="0"  <%= target.CompanyId === 0 ? "selected" : "" %> > 
+    				Seleccione una fábrica
+    		</option>
+
+			<% for (var i in companies) { %>
+				<% var company = companies[i]; %>
+    			<option value="<%= company.id %>"  <%= company.id === target.CompanyId ? "selected" : "" %> > 
+    				<%= company.name %>  
+    			</option>
+    		<% } %>
+		</select>
+	</li>
+
+
+	<li>
+		<b>Tipo de Objetivo</b>:
+		<select name="targettypeId">
+
+		    <option value="0"  <%= target.TargetTypeId === 0 ? "selected" : "" %> > 
+    				Seleccione un tipo
+    		</option>
+
+			<% for (var i in targettypes) { %>
+				<% var targettype = targettypes[i]; %>
+    			<option value="<%= targettype.id %>"  <%= targettype.id === target.TargetTypeId ? "selected" : "" %> > 
+    				<%= targettype.name %>  
+    			</option>
+    		<% } %>
+		</select>
+	</li>
+
+
+	<li>
+		<label><b>Imprimir Cabecera PAP-TEST</b>:</label>
+
+		Pendiente: <input type="radio" name="success" value="nulo" <%= target.success === null ? "checked" : "" %> >  
+    	Cumplido:  <input type="radio" name="success" value="si"   <%= target.success === true   ? "checked" : "" %> > 
+    	Fallido:   <input type="radio" name="success" value="no"   <%= target.success === false   ? "checked" : "" %> > 
+	</li>
+
+
+	<li>
+		<label>Observaciones:</label>
+		<br />
+		<textarea type="text" name="notes" placeholder="Observaciones" rows="5" cols="80"><%= target.notes %></textarea>
+	</li>
+
+</ul>

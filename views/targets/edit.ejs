@@ -1,27 +1,18 @@
 
 
-
-<form method="post" action="/visits/<%= visit.id %>?_method=PUT" >
+<form method="post" action="/visits/<%= visit.id %>/targets/<%= target.id %>?_method=PUT" >
 
 	<h1>
-		Editar Visita
+		Editar Objetivo
 
     	<input type="image" width="24px" src="/images/save.png" border="0" alt="Submit" />
 		<a href="/goback"><img width="24px" src="/images/cancel.png"></a>
 	</h1>
 
-    <% include _form.ejs %>
+     <% include _form.ejs %>
 
    	<input type="image" width="24px" src="/images/save.png" border="0" alt="Submit" />
 	<a href="/goback"><img width="24px" src="/images/cancel.png"></a>
 
 </form>
 
-
-<%  var targets = visit.Targets; %>
-
-<%  locals.readwrite = false; %>
-
-<hr />
-	<%- include ../targets/index.ejs %>
-<hr />

@@ -9,6 +9,9 @@ module.exports = {
                     primaryKey: true,         autoIncrement: true,  
                     unique: true 
                 },
+                VisitId: { type: Sequelize.INTEGER },
+                TargetTypeId: { type: Sequelize.INTEGER },
+                CompanyId: { type: Sequelize.INTEGER },
                 success: { 
                     type: Sequelize.BOOLEAN
                 },

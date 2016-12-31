@@ -3,6 +3,8 @@
 <h1> 
     Visitas: 
 
+    <a href="/goback"><img class="icon" src="/images/back.png"></a>
+
     <a href="/visits/new"><img width="24px" src="/images/add.png"></a>
 </h1>
 
@@ -34,12 +36,15 @@
     <% for (var i in visits) { %> 
         <% var visit = visits[i]; %>      
 
+        <% var salesmanName = visit.Salesman ? visit.Salesman.name : "SIN VENDEDOR"; %>
+        <% var customerCode = visit.Customer ? visit.Customer.code : "SIN CLIENTE" %>
+
         <tr>
             <td>
-                <%= visit.Customer ? visit.Customer.code : "SIN CLIENTE" %>
+                <%= customerCode %>
             </td>
             <td>
-                <%= visit.Salesman ? visit.Salesman.name : "SIN VENDEDOR" %>
+                <%= salesmanName %>
             </td>
             <td>
                 <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
@@ -48,7 +53,7 @@
             <%= !!visit.fulfilledAt ? moment(visit.fulfilledAt).format("DD-MM-YYYY") : "PENDIENTE" %>
             </td>
             <td>
-                666
+                <%= visit.Targets.length %>
             </td>
             <td>
                 <%= visit.notes === "" ? "No" : "Si" %>
@@ -59,7 +64,7 @@
                 <a href="/visits/<%= visit.id %>/edit"><img width="24px" src="/images/edit.png"></a>
 
                 <a href="/visits/<%= visit.id %>?_method=DELETE" 
-                   onClick="return confirm('¿Seguro que quiere borrar la visita de <%= visit.Salesman.name %> a <%= visit.Customer.code %>?');"><img width="24px" src="/images/basura.png"></a>
+                   onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img width="24px" src="/images/basura.png"></a>
             </td>
          </tr> 
     <% } %>

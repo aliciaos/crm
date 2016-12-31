@@ -13,7 +13,12 @@ var paginate = require('./paginate').paginate;
 exports.load = function(req, res, next, visitId) {
 
     models.Visit.findById(visitId, 
-                            { include: [ models.Customer,
+                            { include: [ { model: models.Target,
+                                           include: [ models.Company,
+                                                      models.TargetType
+                                                    ] 
+                                         },
+                                         models.Customer,
                                          { model: models.Salesman, as: "Salesman" } ],
                               order: [[ 'plannedFor', 'DESC' ]]
                             })
@@ -63,7 +68,8 @@ exports.index = function(req, res, next) {
         options.offset = pagination.offset;
         options.limit  = pagination.limit;
 
-        options.include = [ models.Customer,
+        options.include = [ models.Target,
+                            models.Customer,
                             { model: models.Salesman, as: "Salesman" } ];
         options.order = [[ 'plannedFor', 'DESC' ]];
 
@@ -118,12 +124,11 @@ function infoOfSalesmenCustomers() {
 // GET /visits/new
 exports.new = function(req, res, next) {
 
-    var visit = models.Customer.build({ 
-        plannedFor:     moment(),
-        fulfilledAt:    null,
-        notes:          "",
-        CustomerId:     0,
-        SalesmanId:     0 });
+    var visit = models.Customer.build({ plannedFor:     moment(),
+                                        fulfilledAt:    null,
+                                        notes:          "",
+                                        CustomerId:     0,
+                                        SalesmanId:     0 });
 
     infoOfSalesmenCustomers()
     .spread(function(salesmen, customers) {
@@ -151,12 +156,11 @@ exports.create = function(req, res, next) {
         momentFulfilledAt = moment(req.body.fulfilledAt + " 08:00", "DD-MM-YYYY");
     }
 
-    var visit = { 
-        plannedFor:     momentPlannedFor,
-        fulfilledAt:    momentFulfilledAt,
-        notes:          req.body.notes.trim(),
-        CustomerId:     req.body.customerId,
-        SalesmanId:     req.body.salesmanId
+    var visit = {   plannedFor:     momentPlannedFor,
+                    fulfilledAt:    momentFulfilledAt,
+                    notes:          req.body.notes.trim(),
+                    CustomerId:     req.body.customerId,
+                    SalesmanId:     req.body.salesmanId
     };
 
     // Guarda en la tabla Visits la nueva visita.
@@ -178,7 +182,7 @@ exports.create = function(req, res, next) {
                                         customers:      customers,
                                         salesmen:       salesmen,
                                         moment:         moment });
-        })
+        });
     })
     .catch(function(error) {
         req.flash('error', 'Error al crear una visita: ' + error.message);

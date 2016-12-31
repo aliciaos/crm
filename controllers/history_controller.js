@@ -29,11 +29,11 @@ exports.pop = function() {
 };
 */
 
-/*
+
 exports.skip = function(req, res, next) {
 	next();
 }
-*/
+
 
 exports.push = function(req, res, next) {
 
