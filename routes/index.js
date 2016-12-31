@@ -8,6 +8,7 @@ var companyController = require('../controllers/company_controller');
 var salesmanController = require('../controllers/salesman_controller');
 var customerController = require('../controllers/customer_controller');
 var targettypeController = require('../controllers/targettype_controller');
+var visitController = require('../controllers/visit_controller');
 
 var hc = require('../controllers/history_controller');
 
@@ -18,6 +19,7 @@ router.param('companyId', companyController.load);
 router.param('salesmanId', salesmanController.load);  
 router.param('customerId', customerController.load);    
 router.param('targettypeId', targettypeController.load);    
+router.param('visitId', visitController.load);    
 
 
 router.get('/goback', hc.goBack);
@@ -137,10 +139,31 @@ router.post(  '/targettypes',                    		sessionController.loginRequir
 router.get(   '/targettypes/:targettypeId(\\d+)/edit', 	hc.push, 
 														sessionController.loginRequired, 
 														targettypeController.edit);
-router.put(   '/targettypes/:targettypeId(\\d+)',      sessionController.loginRequired, 
+router.put(   '/targettypes/:targettypeId(\\d+)',       sessionController.loginRequired, 
 														targettypeController.update);
 router.delete('/targettypes/:targettypeId(\\d+)',   	sessionController.loginRequired, 
 														targettypeController.destroy);
+
+
+// Definicion de rutas para las visitas
+router.get(   '/visits',                    	hc.push, 
+												sessionController.loginRequired, 
+												visitController.index);
+router.get(   '/visits/:visitId(\\d+)',   		hc.push, 
+												sessionController.loginRequired, 
+												visitController.show);
+router.get(   '/visits/new',                 	hc.push, 
+												sessionController.loginRequired, 
+												visitController.new);
+router.post(  '/visits',                    	sessionController.loginRequired, 
+												visitController.create);
+router.get(   '/visits/:visitId(\\d+)/edit', 	hc.push, 
+												sessionController.loginRequired, 
+												visitController.edit);
+router.put(   '/visits/:visitId(\\d+)',     	sessionController.loginRequired, 
+												visitController.update);
+router.delete('/visits/:visitId(\\d+)',   		sessionController.loginRequired, 
+												visitController.destroy);
 
 
 /*

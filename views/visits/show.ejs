@@ -1,0 +1,31 @@
+
+<h1> 
+    Visita: 
+
+    <a href="/goback"><img width="24px" src="/images/back.png"></a>
+
+    <a href="/visits/<%= visit.id %>/edit"><img width="24px" src="/images/edit.png"></a> 
+</h1>
+
+<ul>
+	<li>
+		<b>Cliente</b>: <%= visit.Customer ? visit.Customer.code : "SIN CLIENTE" %>
+	</li>
+	<li>
+		<b>Vendedor</b>: <%= visit.Salesman ? visit.Salesman.name : "SIN VENDEDOR" %>
+	</li>
+	<li>
+		<b>Fecha planificación</b>: <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
+	</li>
+	<li>
+		<b>Fecha realización</b>: <%= !!visit.fulfilledAt ? moment(visit.fulfilledAt).format("DD-MM-YYYY") : "PENDIENTE" %>
+	</li>
+	<li>
+		<b>Observaciones</b>:  <%- escapeText(visit.notes) %>
+	</li>
+
+	<hr />
+
+    <h2>Objetivos</h2>
+
+</ul>

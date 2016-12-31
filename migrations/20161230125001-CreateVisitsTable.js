@@ -9,12 +9,15 @@ module.exports = {
                     primaryKey: true,         autoIncrement: true,  
                     unique: true 
                 },
+                CustomerId: { type: Sequelize.INTEGER },
+                SalesmanId: { type: Sequelize.INTEGER },
                 plannedFor: { 
                     type: Sequelize.DATE,
                     validate: { notEmpty: {msg: "La fecha planificada no es una fecha válida."}}
                 },
                 fulfilledAt: { 
                     type: Sequelize.DATE,
+                    allowNull: true,
                     validate: { notEmpty: {msg: "La fecha de realización no es una fecha válida."}}
                 },
                 notes: { 

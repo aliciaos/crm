@@ -21,8 +21,7 @@ if (!process.env.DATABASE_URL) {
 }
 
 var sequelize = new Sequelize(url, 
-	 						  { storage: storage,
-				              	omitNull: true 
+	 						  { storage: storage
 				              });
 
 
@@ -53,7 +52,7 @@ var User = sequelize.import(path.join(__dirname,'user'));
 Visit.belongsTo(Customer);
 Customer.hasMany(Visit);
 
-Visit.belongsTo(Salesman);
+Visit.belongsTo(Salesman, {as: "Salesman"});
 Salesman.hasMany(Visit);
 
 Target.belongsTo(Company);

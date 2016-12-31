@@ -14,6 +14,7 @@ module.exports = function(sequelize, DataTypes) {
             },
             fulfilledAt: { 
                 type: DataTypes.DATE,
+                allowNull: true,
                 validate: {
                     isDate: {
                         msg: "La fecha de realización no es una fecha válida."
