@@ -37,7 +37,7 @@ var Customer = sequelize.import(path.join(__dirname,'customer'));
 var Salesman = sequelize.import(path.join(__dirname,'salesman'));
 
 // Importar la definicion de TargetType de target_type.js
-var TargetType = sequelize.import(path.join(__dirname,'target_type'));
+var TargetType = sequelize.import(path.join(__dirname,'targettype'));
 
 // Importar la definicion de Target de target.js
 var Target = sequelize.import(path.join(__dirname,'target'));

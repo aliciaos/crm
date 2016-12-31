@@ -7,32 +7,17 @@ var sessionController = require('../controllers/session_controller');
 var companyController = require('../controllers/company_controller');
 var salesmanController = require('../controllers/salesman_controller');
 var customerController = require('../controllers/customer_controller');
-
-// var reportController = require('../controllers/report_controller');
-// var diagnoseController = require('../controllers/diagnose_controller');
-// var patientController = require('../controllers/patient_controller');
-// var dtypeController = require('../controllers/dtype_controller');
-// var dtresultController = require('../controllers/dtresult_controller');
-// var dtroptionController = require('../controllers/dtroption_controller');
+var targettypeController = require('../controllers/targettype_controller');
 
 var hc = require('../controllers/history_controller');
-
-// var dtypeSeeder = require('../seeders/dcodes');
 
 
 // Autoload de parametros
 router.param('userId', userController.load);
 router.param('companyId', companyController.load);  
 router.param('salesmanId', salesmanController.load);  
-router.param('customerId', customerController.load);  
-
-
-// router.param('reportId', 	reportController.load);  
-// router.param('diagnoseId', 	diagnoseController.load);  
-// router.param('patientId', 	patientController.load);  
-// router.param('dtypeId',		dtypeController.load);  
-// router.param('dtresultId',	dtresultController.load);  
-// router.param('dtroptionId',	dtroptionController.load);  
+router.param('customerId', customerController.load);    
+router.param('targettypeId', targettypeController.load);    
 
 
 router.get('/goback', hc.goBack);
@@ -136,6 +121,26 @@ router.put(   '/customers/:customerId(\\d+)',      	sessionController.loginRequi
 router.delete('/customers/:customerId(\\d+)',   	sessionController.loginRequired, 
 													customerController.destroy);
 
+
+// Definicion de rutas para los tipos de objetivos
+router.get(   '/targettypes',                     		hc.push, 
+														sessionController.loginRequired, 
+														targettypeController.index);
+router.get(   '/targettypes/:targettypeId(\\d+)',   	hc.push, 
+														sessionController.loginRequired, 
+														targettypeController.show);
+router.get(   '/targettypes/new',                 		hc.push, 
+														sessionController.loginRequired, 
+														targettypeController.new);
+router.post(  '/targettypes',                    		sessionController.loginRequired, 
+														targettypeController.create);
+router.get(   '/targettypes/:targettypeId(\\d+)/edit', 	hc.push, 
+														sessionController.loginRequired, 
+														targettypeController.edit);
+router.put(   '/targettypes/:targettypeId(\\d+)',      sessionController.loginRequired, 
+														targettypeController.update);
+router.delete('/targettypes/:targettypeId(\\d+)',   	sessionController.loginRequired, 
+														targettypeController.destroy);
 
 
 /*

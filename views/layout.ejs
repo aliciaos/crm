@@ -16,12 +16,13 @@
     <nav> 
         .       
         <% if (session.user) { %>
+            <a href="/visits">Visitas</a>
+            <a href="/statistics">Estadísticas</a>
             <a href="/companies">Fábricas</a>
             <a href="/customers">Clientes</a>
             <a href="/salesmen">Vendedores</a>
-            <a href="/targets">Objetivos</a>
-            <a href="/visits">Visitas</a>
-            <a href="/statistics">Estadísticas</a>
+            <a href="/targettypes">Tipos_Objetivos</a>
+            <a href="/targets">(X-Objetivos-X)</a>
 
             <% if (session.user.login === "admin") { %>
                 <a href="/users">Usuarios</a>
