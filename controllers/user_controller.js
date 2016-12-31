@@ -158,7 +158,7 @@ exports.destroy = function(req, res, next) {
             }
 
             req.flash('success', 'Usuario eliminado con éxito.');
-            res.redirect('/');
+            res.redirect('reload');
         })
         .catch(function(error){ 
             next(error); 
