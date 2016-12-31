@@ -1,33 +1,14 @@
 
 var URL = require('url');
 
-var history = [];
-
 // Middlewares
-
-
-/*
-exports.clear = function(req, res, next) {
-	history = [];
-	dump();
-	next();
-};
-*/
 
 exports.set = function(req, res, next) {
 
-	history = [req.url];
-	dump();
+	req.session.history = [req.url];
+	dump(req.session.history);
 	next();
 };
-
-
-/*
-exports.pop = function() {
-
-	return history.pop();
-};
-*/
 
 
 exports.skip = function(req, res, next) {
@@ -37,18 +18,20 @@ exports.skip = function(req, res, next) {
 
 exports.push = function(req, res, next) {
 
-	var url0 = history.slice(-1)[0] || "";
+	req.session.history = req.session.history || [];
+
+	var url0 = req.session.history.slice(-1)[0] || "";
 	var path0 = URL.parse(url0).pathname;
 
 	var path1 = URL.parse(req.url).pathname;
 
 	if (path0 === path1) {
-		history.pop()
+		req.session.history.pop()
 	}
 
-	history.push(req.url);
+	req.session.history.push(req.url);
 
-	dump();
+	dump(req.session.history);
 
 	next();
 };
@@ -57,8 +40,10 @@ exports.push = function(req, res, next) {
 
 exports.goBack = function(req, res, next) {
 
-	history.pop();
-	var url = history.pop() || "/";
+	req.session.history = req.session.history || [];
+
+	req.session.history.pop();
+	var url = req.session.history.pop() || "/";
 	res.redirect(url);
 };
 
@@ -66,28 +51,14 @@ exports.goBack = function(req, res, next) {
 
 exports.reload = function(req, res, next) {
 
-	var url = history.pop() || "/";
+	req.session.history = req.session.history || [];
+
+	var url = req.session.history.pop() || "/";
 	res.redirect(url);
 };
 
-/*
-// Consultas:
 
-
-exports.top = function() {
-
-	return history.slice(-1);
-};
-
-
-
-exports.isThereBack = function() {
-
-	return history.slice(-2)[0] || "";
-};
-*/
-
-function dump() {
+function dump(history) {
 
 	console.log("-->> HISTORY");
 
