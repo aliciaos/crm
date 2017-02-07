@@ -46,7 +46,7 @@
             <a href="/users/<%= users[i].id %>" ><img class="icon" src="/images/ver.png"></a>
 
             <% if (session.user.isAdmin || session.user.id === users[i].id) { %>
-                <a href="/users/<%= users[i].id %>/edit"><img class="icon" src="/images/edit.png"></a>
+                <!-- a href="/users/<%= users[i].id %>/edit"><img class="icon" src="/images/edit.png"></a -->
             <% } %>
 
           <% if (session.user.isAdmin && session.user.id !== users[i].id) { %>
