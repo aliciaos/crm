@@ -4,7 +4,12 @@
     Clientes: 
 
     <a href="/customers/new"><img class="icon" src="/images/add.png"></a>
+    <a href="/customers/import"><img class="icon" src="/images/csv2.png"></a>
 </h1>
+
+<%  if (locals.paginate_control) { %>
+<%- paginate_control %>
+<% } %>
 
 <table>
     <tr>

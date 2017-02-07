@@ -1,6 +1,10 @@
 
 var models = require('../models');
 var Sequelize = require('sequelize');
+var fs = require('fs');
+const readline = require('readline');
+
+var paginate = require('./paginate').paginate;
 
 //-----------------------------------------------------------
 
@@ -29,9 +33,37 @@ exports.load = function(req, res, next, customerId) {
 exports.index = function(req, res, next) {
 
     var options = {};
-    options.order = [['name']];
 
-    models.Customer.findAll(options)
+    models.Customer.count(options)
+    .then(function(count) {
+
+        // Paginacion:
+        var items_per_page = 25;
+
+        // La pagina a mostrar viene en la query
+        var pageno = parseInt(req.query.pageno) || 1;
+
+        // Datos para obtener el rango de datos a buscar en la BBDD.
+        var pagination = {
+            offset: items_per_page * (pageno - 1),
+            limit: items_per_page
+        };
+
+        // Crear un string con el HTML que pinta la botonera de paginacion.
+        // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
+        res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
+
+        return pagination;
+    })
+    .then(function(pagination) {
+
+        options.offset = pagination.offset;
+        options.limit = pagination.limit;
+
+        options.order = [['name']];
+
+        return models.Customer.findAll(options);
+    })
     .then(function(customers) {
         res.render('customers/index.ejs', {customers: customers});
     })
@@ -185,3 +217,90 @@ exports.destroy = function(req, res, next) {
     });
 };
 
+//-----------------------------------------------------------
+
+
+// GET /customers/importGet
+exports.importForm = function(req, res, next) {
+
+    res.render('customers/import');
+};
+
+
+// POST /customers/importPost
+exports.importPost = function(req, res, next) {
+
+    if (!req.file) {
+        req.flash('error', 'No se han importado clientes porque falta el fichero CSV de clientes.');
+        res.redirect("/reload");
+        return;
+    }
+
+
+    if (req.file.mimetype !== "text/csv") {
+        req.flash('error', 'El fichero de clientes ' + req.file.originalname + ' no es un CSV.');
+        fs.unlinkSync(req.file.path);
+        res.redirect("/reload");
+        return;
+    }
+
+    var customers = [];
+
+    var isHeadersLine = true;
+
+    const rl = readline.createInterface({
+        input: fs.createReadStream(req.file.path)
+    });
+
+    rl.on('line', function(line) {
+        console.log('Line from file: ' + line);
+
+        if (isHeadersLine) {
+            isHeadersLine = false;
+            return;
+        }
+
+        var fields = line.split(';');
+
+        var customer = {
+            code:       (fields[ 0] || "").trim(),
+            name:       (fields[ 1] || "").trim(),
+            cif:        (fields[ 2] || "").trim(),
+            address1:   (fields[ 3] || "").trim(),
+            address2:   (fields[ 4] || "").trim(),
+            postalCode: (fields[ 5] || "").trim(),
+            city:       (fields[ 6] || "").trim(),
+            phone1:     (fields[ 7] || "").trim(),
+            phone2:     (fields[ 8] || "").trim(),
+            phone3:     (fields[ 9] || "").trim(),
+            phone4:     (fields[10] || "").trim(),
+            email1:     (fields[11] || "").trim(),
+            email2:     (fields[12] || "").trim(),
+            web:        (fields[13] || "").trim()
+        };
+
+        console.log(customer);
+
+        customers.push(customer);
+    });
+
+    rl.on('close', function() {
+
+        fs.unlinkSync(req.file.path);
+
+        models.Customer.bulkCreate(customers, {
+            hooks: false,
+            validate: true,
+            individualHooks: true
+        }).then(function() {
+            req.flash('success', 'El fichero de clientes ' + req.file.originalname + ' se ha cargado con éxito.');
+            res.redirect('/reload');
+        }).catch(function(errors) {
+            console.log(errors);
+            req.flash('error', 'Hay campos incorrectos en ' + req.file.originalname + '.');
+            req.flash('error', 'No se ha importado ningún cliente');
+            res.render('customers/import');
+        });
+    });
+
+};

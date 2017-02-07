@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var multer  = require('multer');
+var upload = multer({ dest: './uploads/' });
+
 var userController = require('../controllers/user_controller');
 var sessionController = require('../controllers/session_controller');
 
@@ -43,7 +46,7 @@ router.post('/session',   sessionController.create);  // crear sesión
 router.delete('/session', sessionController.destroy); // destruir sesión
 
 
-// Definición de rutas de cuenta
+// Definición de rutas de cuentas
 router.get('/users',                    hc.set, 
 										sessionController.loginRequired, 
 										userController.index);   // listado usuarios
@@ -133,6 +136,12 @@ router.put(   '/customers/:customerId(\\d+)',      	sessionController.loginRequi
 													customerController.update);
 router.delete('/customers/:customerId(\\d+)',   	sessionController.loginRequired, 
 													customerController.destroy);
+
+router.get( '/customers/import', 					sessionController.loginRequired,
+    												customerController.importForm);
+router.post('/customers/import', 					sessionController.loginRequired,
+    												upload.single('csv'),
+    												customerController.importPost);
 
 
 // Definicion de rutas para los tipos de objetivos
