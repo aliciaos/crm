@@ -3,7 +3,6 @@ Filtros de busqueda
 
 Roles y permisos de cosas que solo las pueda hacer un administrador.
 
-Que el codigo de cliente sea unico.
 
 Otro estado de los objetivos de una visita: Cancelado.
     - Esto me fastidia porque tengo un booleano (null, true, false)

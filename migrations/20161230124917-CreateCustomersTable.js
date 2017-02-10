@@ -11,6 +11,7 @@ module.exports = {
                 },
                 code: {
                     type: Sequelize.STRING,
+                    unique: true,
                     validate: { notEmpty: {msg: "Falta el código del vendedor."}}
                 },
                 name: {
