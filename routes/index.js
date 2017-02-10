@@ -71,98 +71,156 @@ router.delete('/users/:userId(\\d+)',   sessionController.loginRequired,
 
 
 // Definicion de rutas para las fabricas
-router.get(   '/companies',                     	hc.set, 
-													sessionController.loginRequired, 
-													companyController.index);
-router.get(   '/companies/:companyId(\\d+)',       	hc.push, 
-													sessionController.loginRequired, 
-													companyController.show);
-router.get(   '/companies/new',                 	hc.push, 
-													sessionController.loginRequired, 
-													companyController.new);
-router.post(  '/companies',                    		sessionController.loginRequired, 
-													companyController.create);
-router.get(   '/companies/:companyId(\\d+)/edit', 	hc.push, 
-													sessionController.loginRequired, 
-													companyController.edit);
-router.put(   '/companies/:companyId(\\d+)',      	sessionController.loginRequired, 
-													companyController.update);
-router.delete('/companies/:companyId(\\d+)',   		sessionController.loginRequired, 
-													companyController.destroy);
+router.get('/companies',
+    hc.set,
+    sessionController.loginRequired,
+    companyController.index);
+router.get('/companies/:companyId(\\d+)',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    companyController.show);
+router.get('/companies/new',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    companyController.new);
+router.post('/companies',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    companyController.create);
+router.get('/companies/:companyId(\\d+)/edit',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    companyController.edit);
+router.put('/companies/:companyId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    companyController.update);
+router.delete('/companies/:companyId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    companyController.destroy);
 
-router.get('/companies/:companyId(\\d+)/statistics',	hc.push, 
-													    sessionController.loginRequired, 
-														companyController.statistics);
+router.get('/companies/:companyId(\\d+)/statistics',
+    hc.push,
+    sessionController.loginRequired,
+    companyController.statistics);
 
 
 
 // Definicion de rutas para los vendedores
-router.get(   '/salesmen',                     		hc.set, 
-													sessionController.loginRequired, 
-													salesmanController.index);
-router.get(   '/salesmen/:salesmanId(\\d+)',       	hc.push, 
-													sessionController.loginRequired, 
-													salesmanController.show);
-router.get(   '/salesmen/new',                 		hc.push, 
-													sessionController.loginRequired, 
-													salesmanController.new);
-router.post(  '/salesmen',                    		sessionController.loginRequired, 
-													salesmanController.create);
-router.get(   '/salesmen/:salesmanId(\\d+)/edit', 	hc.push, 
-													sessionController.loginRequired, 
-													salesmanController.edit);
-router.put(   '/salesmen/:salesmanId(\\d+)',      	sessionController.loginRequired, 
-													salesmanController.update);
-router.delete('/salesmen/:salesmanId(\\d+)',   		sessionController.loginRequired, 
-													salesmanController.destroy);
+router.get('/salesmen',
+    hc.set,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    salesmanController.index);
+router.get('/salesmen/:salesmanId(\\d+)',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    salesmanController.show);
+router.get('/salesmen/new',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    salesmanController.new);
+router.post('/salesmen',
+	sessionController.loginRequired,
+    sessionController.adminRequired,
+    salesmanController.create);
+router.get('/salesmen/:salesmanId(\\d+)/edit',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    salesmanController.edit);
+router.put('/salesmen/:salesmanId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    salesmanController.update);
+router.delete('/salesmen/:salesmanId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    salesmanController.destroy);
 
 
 // Definicion de rutas para los clientes
-router.get(   '/customers',                     	hc.set, 
-													sessionController.loginRequired, 
-													customerController.index);
-router.get(   '/customers/:customerId(\\d+)',       hc.push, 
-													sessionController.loginRequired, 
-													customerController.show);
-router.get(   '/customers/new',                 	hc.push, 
-													sessionController.loginRequired, 
-													customerController.new);
-router.post(  '/customers',                    		sessionController.loginRequired, 
-													customerController.create);
-router.get(   '/customers/:customerId(\\d+)/edit', 	hc.push, 
-													sessionController.loginRequired, 
-													customerController.edit);
-router.put(   '/customers/:customerId(\\d+)',      	sessionController.loginRequired, 
-													customerController.update);
-router.delete('/customers/:customerId(\\d+)',   	sessionController.loginRequired, 
-													customerController.destroy);
+router.get('/customers',
+    hc.set,
+    sessionController.loginRequired,
+    customerController.index);
+router.get('/customers/:customerId(\\d+)',
+    hc.push,
+    sessionController.loginRequired,
+    customerController.show);
+router.get('/customers/new',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    customerController.new);
+router.post('/customers',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    customerController.create);
+router.get('/customers/:customerId(\\d+)/edit',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    customerController.edit);
+router.put('/customers/:customerId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    customerController.update);
+router.delete('/customers/:customerId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    customerController.destroy);
 
-router.get( '/customers/import', 					sessionController.loginRequired,
-    												customerController.importForm);
-router.post('/customers/import', 					sessionController.loginRequired,
-    												upload.single('csv'),
-    												customerController.importPost);
+router.get('/customers/import',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    customerController.importForm);
+router.post('/customers/import',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    upload.single('csv'),
+    customerController.importPost);
 
 
 // Definicion de rutas para los tipos de objetivos
-router.get(   '/targettypes',                     		hc.set, 
-														sessionController.loginRequired, 
-														targettypeController.index);
-router.get(   '/targettypes/:targettypeId(\\d+)',   	hc.push, 
-														sessionController.loginRequired, 
-														targettypeController.show);
-router.get(   '/targettypes/new',                 		hc.push, 
-														sessionController.loginRequired, 
-														targettypeController.new);
-router.post(  '/targettypes',                    		sessionController.loginRequired, 
-														targettypeController.create);
-router.get(   '/targettypes/:targettypeId(\\d+)/edit', 	hc.push, 
-														sessionController.loginRequired, 
-														targettypeController.edit);
-router.put(   '/targettypes/:targettypeId(\\d+)',       sessionController.loginRequired, 
-														targettypeController.update);
-router.delete('/targettypes/:targettypeId(\\d+)',   	sessionController.loginRequired, 
-														targettypeController.destroy);
+router.get('/targettypes',
+    hc.set,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    targettypeController.index);
+router.get('/targettypes/:targettypeId(\\d+)',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    targettypeController.show);
+router.get('/targettypes/new',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    targettypeController.new);
+router.post('/targettypes',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    targettypeController.create);
+router.get('/targettypes/:targettypeId(\\d+)/edit',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    targettypeController.edit);
+router.put('/targettypes/:targettypeId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    targettypeController.update);
+router.delete('/targettypes/:targettypeId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    targettypeController.destroy);
 
 
 
@@ -188,23 +246,34 @@ router.delete('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',   		sessionContr
 
 
 // Definicion de rutas para las visitas
-router.get(   '/visits',                    	hc.set, 
-												sessionController.loginRequired, 
-												visitController.index);
-router.get(   '/visits/:visitId(\\d+)',   		hc.push, 
-												sessionController.loginRequired, 
-												visitController.show);
-router.get(   '/visits/new',                 	hc.skip, 
-												sessionController.loginRequired, 
-												visitController.new);
-router.post(  '/visits',                    	sessionController.loginRequired, 
-												visitController.create);
-router.get(   '/visits/:visitId(\\d+)/edit', 	hc.skip, 
-												sessionController.loginRequired, 
-												visitController.edit);
-router.put(   '/visits/:visitId(\\d+)',     	sessionController.loginRequired, 
-												visitController.update);
-router.delete('/visits/:visitId(\\d+)',   		sessionController.loginRequired, 
-												visitController.destroy);
+router.get('/visits',
+	hc.set,
+    sessionController.loginRequired,
+    visitController.index);
+router.get('/visits/:visitId(\\d+)',
+	hc.push,
+    sessionController.loginRequired,
+    visitController.show);
+router.get('/visits/new',
+	hc.skip,
+    sessionController.loginRequired,
+    visitController.new);
+router.post('/visits',
+	sessionController.loginRequired,
+    visitController.create);
+router.get('/visits/:visitId(\\d+)/edit',
+	hc.skip,
+    sessionController.loginRequired,
+    visitController.edit);
+router.put('/visits/:visitId(\\d+)',
+	sessionController.loginRequired,
+    visitController.update);
+router.delete('/visits/:visitId(\\d+)',
+	sessionController.loginRequired,
+    sessionController.adminRequired,
+    visitController.destroy);
+
+
+
 
 module.exports = router;

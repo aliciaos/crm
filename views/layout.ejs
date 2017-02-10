@@ -19,8 +19,11 @@
             <a href="/visits">Visitas</a>
             <a href="/companies">Fábricas</a>
             <a href="/customers">Clientes</a>
-            <a href="/salesmen">Vendedores</a>
-            <a href="/targettypes">Objetivos</a>
+
+            <% if (session.user.isAdmin) { %>
+                <a href="/salesmen">Vendedores</a>
+                <a href="/targettypes">Objetivos</a>
+            <% } %>
 
             <% if (session.user.username === "admin") { %>
                 <a href="/users">Usuarios</a>
@@ -85,7 +88,7 @@
   </section>
 
   <footer class="version">
-        <small>Versión: 1</small>
+        <small>Versión: 10 Febrero 2017</small>
   </footer>
 
   </body>

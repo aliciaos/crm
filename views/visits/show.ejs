@@ -10,10 +10,12 @@
 
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
 
-    <a href="/visits/<%= visit.id %>/edit"><img class="icon" src="/images/edit.png"></a> 
+    <a href="/visits/<%= visit.id %>/edit"><img class="icon" src="/images/edit.png"></a>
 
-    <a href="/visits/<%= visit.id %>?_method=DELETE" 
-	   onClick="return confirm('¿Seguro que desea borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img class="icon" src="/images/basura.png"></a>
+    <% if (session.user && session.user.isAdmin) { %>
+		<a href="/visits/<%= visit.id %>?_method=DELETE"
+		   onClick="return confirm('¿Seguro que desea borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img class="icon" src="/images/basura.png"></a>
+    <% } %>
 
 </h1>
 

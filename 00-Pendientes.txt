@@ -1,5 +1,24 @@
 
 Filtros de busqueda
 
-Roles y permisos
+Roles y permisos de cosas que solo las pueda hacer un administrador.
+
+Que el codigo de cliente sea unico.
+
+Otro estado de los objetivos de una visita: Cancelado.
+    - Esto me fastidia porque tengo un booleano (null, true, false)
+
+Poder ordenar los listados (index.ejs) por varios criterios.
+
+Una entrada en la barra de navegacion para todas las estadisticas
+
+Desde la seccion de clientes poder crear una nueva visita.
+
+En el login que no autocomplete los text fileds.
+
+Pensar cuales son los campos de una visita que puede editar un vendedor.
+
+Pensar cuales son los campos de un objetivo que puede editar un vendedor.
+
+Puede un vendedor borrar un objetivo en una visita?
 

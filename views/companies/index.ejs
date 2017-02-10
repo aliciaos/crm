@@ -1,9 +1,12 @@
 
 
 <h1> 
-    Fábricas: 
+    Fábricas:
 
-    <a href="/companies/new"><img class="icon" src="/images/add.png"></a>
+    <% if (session.user && session.user.isAdmin) { %>
+        <a href="/companies/new"><img class="icon" src="/images/add.png"></a>
+    <% } %>
+
 </h1>
 
 <table>
@@ -14,9 +17,11 @@
         <th>
             Estadísticas
         </th>
-        <th>
-            
-        </th>
+
+        <% if (session.user && session.user.isAdmin) { %>
+           <th>
+           </th>
+        <% } %>
     </tr> 
 
     <% for (var i in companies) { %> 
@@ -30,15 +35,17 @@
             <td>
                 <a href="/companies/<%= company.id %>/statistics"><img class="icon" src="/images/reports.png"></a>
             </td>
-            <td>
-                <a href="/companies/<%= company.id %>"><img class="icon" src="/images/ver.png"></a>
 
-                <!-- a href="/companies/<%= company.id %>/edit"><img class="icon" src="/images/edit.png"></a -->
+            <% if (session.user && session.user.isAdmin) { %>
+                <td>
+                    <a href="/companies/<%= company.id %>"><img class="icon" src="/images/ver.png"></a>
 
-                <a href="/companies/<%= company.id %>?_method=DELETE" 
-                   onClick="return confirm('¿Seguro que quiere borrar la fábrica: <%= company.name %>?');"><img class="icon" src="/images/basura.png"></a>
-            </td>
-         </tr> 
+                    <a href="/companies/<%= company.id %>?_method=DELETE"
+                       onClick="return confirm('¿Seguro que quiere borrar la fábrica: <%= company.name %>?');"><img class="icon" src="/images/basura.png"></a>
+                </td>
+            <% } %>
+
+        </tr>
     <% } %>
 
 </table>

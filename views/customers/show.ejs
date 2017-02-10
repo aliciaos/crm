@@ -6,7 +6,9 @@
 
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
 
-    <a href="/customers/<%= customer.id %>/edit"><img class="icon" src="/images/edit.png"></a> 
+    <% if (session.user && session.user.isAdmin) { %>
+		<a href="/customers/<%= customer.id %>/edit"><img class="icon" src="/images/edit.png"></a>
+    <% } %>
 </h1>
 
 <ul>
