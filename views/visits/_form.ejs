@@ -3,6 +3,7 @@
 <ul>
 	<li>
 		<b>Cliente</b>:
+
 		<select name="customerId">
 
 		    <option value="0"  <%= visit.CustomerId === 0 ? "selected" : "" %> > 
@@ -11,8 +12,11 @@
 
 			<% for (var i in customers) { %>
 				<% var customer = customers[i]; %>
-    			<option value="<%= customer.id %>"  <%= customer.id === visit.CustomerId ? "selected" : "" %> > 
-    				<%= customer.code %> - <%= customer.name %>  
+
+
+
+			<option value="<%= customer.id %>"  <%= customer.id === visit.CustomerId ? "selected" : "" %> >
+    				<%= customer.code %> - <%= customer.name %>
     			</option>
     		<% } %>
 		</select>

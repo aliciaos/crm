@@ -124,10 +124,13 @@ function infoOfSalesmenCustomers() {
 // GET /visits/new
 exports.new = function(req, res, next) {
 
-    var visit = models.Customer.build({ plannedFor:     moment(),
+    // En la query me pueden sugerir un cliente a usar.
+    var customerId = Number(req.query.customerId) || 0;
+
+    var visit = models.Visit.build({ plannedFor:     moment(),
                                         fulfilledAt:    null,
                                         notes:          "",
-                                        CustomerId:     0,
+                                        CustomerId:     customerId,
                                         SalesmanId:     0 });
 
     infoOfSalesmenCustomers()

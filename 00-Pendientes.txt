@@ -21,3 +21,7 @@ Pensar cuales son los campos de un objetivo que puede editar un vendedor.
 
 Puede un vendedor borrar un objetivo en una visita?
 
+Pensar en la relacion entre users y salesmen. Ahora no estan relacionados.
+Se puede crear una relacion 1-a-1 para que el usuario logeado sea el vendedor al
+crear una visita.
+
