@@ -97,8 +97,11 @@ exports.show = function(req, res, next) {
 
 
 // Auxiliar
-// Devuelve una promesa que al cumplirse devuelve un array con la informacion 
-// sobre vendedores y clientes necesaria para construir un formulario de seleccion.
+// Devuelve una promesa que al cumplirse devuelve un array con la siguiente informacion:
+//   - vendedores: id y nombre de todos los vendedores.
+//   - clientes:  id, codigo y nombre de todos los clientes.
+// Esta informacion se usa para construir formularios de seleccion, y seleccionar un valor
+// en ellos.
 function infoOfSalesmenCustomers() {
 
     return Sequelize.Promise.all([
@@ -127,20 +130,42 @@ exports.new = function(req, res, next) {
     // En la query me pueden sugerir un cliente a usar.
     var customerId = Number(req.query.customerId) || 0;
 
-    var visit = models.Visit.build({ plannedFor:     moment(),
-                                        fulfilledAt:    null,
-                                        notes:          "",
-                                        CustomerId:     customerId,
-                                        SalesmanId:     0 });
+    // Proponer al usuario logeado como vendedor.
+    // No siempre puede hacerse esto.
+    var salesmanId = 0;
 
-    infoOfSalesmenCustomers()
-    .spread(function(salesmen, customers) {
-        res.render('visits/new', {  visit:        visit,
-                                    customers:    customers,
-                                    salesmen:     salesmen,
-                                    moment:       moment });
+    // Uso una promesa para buscar el vendedor asociado al usuario logeado.
+    new Sequelize.Promise(function (resolve, reject) {
+
+        // Nota que si estoy aqui, estoy logeado.
+
+        return models.Salesman.findOne({where: {UserId: req.session.user.id}})
+        .then(function (salesman) {
+            salesmanId = salesman && salesman.id || 0;
+            resolve();
+        });
     })
-    .catch(function(error) {
+    .then(function () {
+        return infoOfSalesmenCustomers();
+    })
+    .spread(function (salesmen, customers) {
+
+        var visit = models.Visit.build({
+            plannedFor: moment(),
+            fulfilledAt: null,
+            notes: "",
+            CustomerId: customerId,
+            SalesmanId: salesmanId
+        });
+
+        res.render('visits/new', {
+            visit: visit,
+            customers: customers,
+            salesmen: salesmen,
+            moment: moment
+        });
+    })
+    .catch(function (error) {
         req.flash('error', 'Error al crear una visita: ' + error.message);
         next(error);
     });
