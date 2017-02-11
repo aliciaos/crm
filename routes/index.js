@@ -47,27 +47,41 @@ router.delete('/session', sessionController.destroy); // destruir sesión
 
 
 // Definición de rutas de cuentas
-router.get('/users',                    hc.set, 
-										sessionController.loginRequired, 
-										userController.index);   // listado usuarios
-router.get('/users/:userId(\\d+)',      hc.push, 
-													sessionController.loginRequired, 
-										userController.show);    // ver un usuario
-router.get('/users/new',                hc.push, 
-										sessionController.loginRequired, 
-										userController.new);     // formulario sign un
-router.post('/users',                   sessionController.loginRequired, 
-										userController.create);     // registrar usuario
-router.get('/users/:userId(\\d+)/edit', hc.push, 
-										sessionController.loginRequired, 
-										sessionController.adminOrMyselfRequired, 
-										userController.edit);     // editar información de cuenta
-router.put('/users/:userId(\\d+)',      sessionController.loginRequired, 
-										sessionController.adminOrMyselfRequired, 
-										userController.update);   // actualizar información de cuenta
-router.delete('/users/:userId(\\d+)',   sessionController.loginRequired, 
-										sessionController.adminAndNotMyselfRequired, 
-										userController.destroy);  // borrar cuenta
+router.get('/users',
+    hc.set,
+    sessionController.loginRequired,
+    userController.index);   // listado usuarios
+router.get('/users/:userId(\\d+)',
+    hc.push,
+    sessionController.loginRequired,
+    userController.show);    // ver un usuario
+
+router.get('/users/new',
+    hc.push,
+    sessionController.loginRequired,
+    userController.new);     // formulario crear usuario
+
+router.get('/users/register',
+    hc.set,
+    sessionController.loginRequired,
+    userController.new);     // formulario para registrar nuevo usuario
+
+router.post('/users',
+    sessionController.loginRequired,
+    userController.create);     // registrar usuario
+router.get('/users/:userId(\\d+)/edit',
+    hc.push,
+    sessionController.loginRequired,
+    sessionController.adminOrMyselfRequired,
+    userController.edit);     // editar información de cuenta
+router.put('/users/:userId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminOrMyselfRequired,
+    userController.update);   // actualizar información de cuenta
+router.delete('/users/:userId(\\d+)',
+    sessionController.loginRequired,
+    sessionController.adminAndNotMyselfRequired,
+    userController.destroy);  // borrar cuenta
 
 
 // Definicion de rutas para las fabricas
