@@ -4,6 +4,8 @@ var Sequelize = require('sequelize');
 var fs = require('fs');
 const readline = require('readline');
 
+var moment = require('moment');
+
 var paginate = require('./paginate').paginate;
 
 //-----------------------------------------------------------
@@ -73,13 +75,21 @@ exports.index = function(req, res, next) {
         options.offset = pagination.offset;
         options.limit = pagination.limit;
 
-        options.order = [['name']];
+        options.include = [ models.Visit ];
+
+        // options.order = [['name']];
+        options.order = [
+            ['name'],
+            [ models.Visit, 'plannedFor', 'DESC' ]
+        ];
+
 
         return models.Customer.findAll(options);
     })
     .then(function (customers) {
         res.render('customers/index.ejs', {
                 customers: customers,
+                moment: moment,
                 search: search
             });
     })

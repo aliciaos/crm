@@ -34,6 +34,9 @@
         <th>
             Dirección
         </th>
+        <th colspan=2>
+            Visitas
+        </th>
         <th>
             
         </th>
@@ -52,6 +55,15 @@
             <td>
                 <%= customer.address1 %>
             </td>
+
+            <td>
+                <%= customer.Visits.length %>
+            </td>
+
+            <td>
+                <%= customer.Visits[0] &&  moment(customer.Visits[0].plannedFor).format("DD-MM-YYYY") %>
+            </td>
+
             <td>
                 <a href="/customers/<%= customer.id %>"><img class="icon" src="/images/ver.png"></a>
 
