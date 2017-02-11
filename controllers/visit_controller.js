@@ -40,6 +40,38 @@ exports.load = function(req, res, next, visitId) {
 exports.index = function(req, res, next) {
 
     var options = {};
+    options.where = {};
+
+
+    // Busquedas por fecha de planificacion: entre dos fechas
+    var searchdateafter = req.query.searchdateafter || '';
+    var searchdatebefore = req.query.searchdatebefore || '';
+
+    var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
+    if (searchdateafter && !momentafter.isValid()) {
+        req.flash("error", "La fecha " + searchdateafter + " no es válida.");
+        momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
+    }
+    var searchmomentafter = momentafter.toDate();
+
+    var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
+    if (searchdatebefore && !momentbefore.isValid()) {
+        req.flash("error", "La fecha " + searchdatebefore + " no es válida.");
+        var momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
+    }
+    var searchmomentbefore = momentbefore.toDate();
+
+    if (searchdateafter !== "") {
+        if (searchdatebefore !== "") {
+            options.where.plannedFor = { $between: [ searchmomentafter, searchmomentbefore] };
+        } else {
+            options.where.plannedFor = { $gte: searchmomentafter };
+        }
+    } else {
+        if (searchdatebefore !== "") {
+            options.where.plannedFor = { $lte: searchmomentbefore };
+        }
+    }
 
     models.Visit.count(options)
     .then(function(count) {
@@ -75,9 +107,12 @@ exports.index = function(req, res, next) {
 
         return models.Visit.findAll(options)
     })
-    .then(function(visits) {
-        res.render('visits/index.ejs', { visits: visits,
-                                         moment: moment });
+    .then(function (visits) {
+        res.render('visits/index.ejs', {
+            visits: visits,
+            moment: moment,
+            searchdateafter: searchdateafter,
+            searchdatebefore: searchdatebefore,});
     })
     .catch(function(error) {
         next(error);

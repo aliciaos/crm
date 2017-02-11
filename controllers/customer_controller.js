@@ -33,6 +33,19 @@ exports.load = function(req, res, next, customerId) {
 exports.index = function(req, res, next) {
 
     var options = {};
+    options.where = {};
+
+    // Busquedas por varios campos: codigo y nombre.
+    var search = req.query.search || '';
+    if (search) {
+        var search_like = "%" + search.replace(/ +/g, "%") + "%";
+        options.where = {
+            $or: [
+                {code: {$like: search_like}},
+                {name: {$like: search_like}}
+            ]
+        };
+    }
 
     models.Customer.count(options)
     .then(function(count) {
@@ -64,8 +77,11 @@ exports.index = function(req, res, next) {
 
         return models.Customer.findAll(options);
     })
-    .then(function(customers) {
-        res.render('customers/index.ejs', {customers: customers});
+    .then(function (customers) {
+        res.render('customers/index.ejs', {
+                customers: customers,
+                search: search
+            });
     })
     .catch(function(error) {
         next(error);

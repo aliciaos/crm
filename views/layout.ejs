@@ -8,7 +8,7 @@
 
     <header class="vcenter">
         <h1>
-            <img src="/images/dvr.jpg" width="200px" class="left" /> 
+            <img src="/images/dvr.png" width="200px" class="left" />
             CRM
         </h1>
     </header>
@@ -35,7 +35,7 @@
             <% if (!session.user) { %>
                 <a href="/session">Login</a>
             <% } else { %>
-                <%= session.user.username %> 
+            <span id="loginname"><%= session.user.username %></span>
                 <a href="/users/<%= session.user.id %>">Perfil</a>
                 <a href="/session?_method=DELETE">Logout</a>
 

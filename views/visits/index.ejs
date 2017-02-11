@@ -1,5 +1,34 @@
 
 
+<form method="get" action="<%= url %>"  class="right filters">
+
+    <div class="vcenter">
+        Filtros:
+        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit" />
+    </div>
+
+    <label>Desde:</label>
+    <input type="text"
+           name="searchdateafter"
+           value="<%= locals.searchdateafter || '' %>"
+           placeholder="dd-mm-aaaa"
+           pattern="\d\d-\d\d-\d\d\d\d"
+           autocomplete="off" />
+
+    <label>Hasta:</label>
+    <input type="text"
+           name="searchdatebefore"
+           value="<%= locals.searchdatebefore || '' %>"
+           placeholder="dd-mm-aaaa"
+           pattern="\d\d-\d\d-\d\d\d\d"
+           autocomplete="off" />
+
+    <br />
+
+</form>
+
+
+
 <h1> 
     Visitas: 
 

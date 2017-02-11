@@ -1,4 +1,13 @@
 
+<form method="get" action="<%= url %>" class="right filters">
+    <div class="vcenter">
+        <label>Código/Nombre:</label>
+        <input type="text" name="search" value="<%= locals.search || '' %>" placeholder="código o nombre a buscar"
+               size="30" autocomplete="off"/>
+
+        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit"/>
+    </div>
+</form>
 
 <h1> 
     Clientes:
