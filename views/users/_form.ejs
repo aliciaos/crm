@@ -25,7 +25,7 @@
 <li>
 	<% if ( ! user.id) { %>
 		<label for="preg" class="rem"><b>Nombre</b>:</label>
-		<input type="text" id="username" name="user[username]" value="<%= user.username %>"/><p>
+		<input type="text" id="username" name="user[username]" value="<%= user.username %>"  autocomplete="off"  /><p>
 	<% } else { %>
 		<b>Nombre</b>: <%= user.username %>
 	<% } %>

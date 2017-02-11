@@ -1,8 +1,25 @@
 
-	<label>Nombre:</label>
-	<input type="text" name="name" value="<%= salesman.name %>" placeholder="Nombre"  autocomplete="off" autofocus /> <p>
+<ul>
+	<li>
+		<label><b>Nombre del Vendedor:</b></label>
+		<input type="text" name="name" value="<%= salesman.name %>" placeholder="Nombre"  autocomplete="off" autofocus /> <p>
+	</li>
 
+	<li>
+		<b>Login Asociado</b>:
 
+		<select name="userId">
 
+			<option value="0"  <%= salesman.UserId === 0 ? "selected" : "" %> >
+				Sin login
+			</option>
 
-
+			<% for (var i in users) { %>
+				<% var user = users[i]; %>
+				<option value="<%= user.id %>"  <%= user.id === salesman.UserId ? "selected" : "" %> >
+					<%= user.name %>
+				</option>
+			<% } %>
+		</select>
+	</li>
+</ul>

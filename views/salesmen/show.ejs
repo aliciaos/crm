@@ -2,10 +2,19 @@
 <h1> 
     Vendedor: 
 
-    <%= salesman.name %>
-
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
 
     <a href="/salesmen/<%= salesman.id %>/edit"><img class="icon" src="/images/edit.png"></a> 
 </h1>
 
+<ul>
+    <li>
+        <b>Nombre</b>: <%= salesman.name %>
+    </li>
+    <li>
+        <% var username = salesman.User ? salesman.User.username : "NO ESTA ASOCIASO A NINGÚN LOGIN"; %>
+
+        <b>Login Asociado</b>: <%= username  %>
+
+    </li>
+</ul>

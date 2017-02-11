@@ -12,10 +12,7 @@
 
 			<% for (var i in customers) { %>
 				<% var customer = customers[i]; %>
-
-
-
-			<option value="<%= customer.id %>"  <%= customer.id === visit.CustomerId ? "selected" : "" %> >
+			    <option value="<%= customer.id %>"  <%= customer.id === visit.CustomerId ? "selected" : "" %> >
     				<%= customer.code %> - <%= customer.name %>
     			</option>
     		<% } %>

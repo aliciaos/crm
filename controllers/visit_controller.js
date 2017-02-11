@@ -162,8 +162,8 @@ exports.create = function(req, res, next) {
     var visit = {   plannedFor:     momentPlannedFor,
                     fulfilledAt:    momentFulfilledAt,
                     notes:          req.body.notes.trim(),
-                    CustomerId:     req.body.customerId,
-                    SalesmanId:     req.body.salesmanId
+                    CustomerId:     Number(req.body.customerId) || 0,
+                    SalesmanId:     Number(req.body.salesmanId) || 0
     };
 
     // Guarda en la tabla Visits la nueva visita.
@@ -229,8 +229,8 @@ exports.update = function(req, res, next) {
     req.visit.plannedFor  = momentPlannedFor,
     req.visit.fulfilledAt = momentFulfilledAt,
     req.visit.notes       = req.body.notes.trim(),
-    req.visit.CustomerId  = req.body.customerId,
-    req.visit.SalesmanId  = req.body.salesmanId
+    req.visit.CustomerId  = Number(req.body.customerId) || 0,
+    req.visit.SalesmanId  = Number(req.body.salesmanId) || 0
 
     req.visit.save({fields: ["plannedFor", "fulfilledAt", "notes", "CustomerId", "SalesmanId"]})
     .then(function(visit) {
@@ -241,10 +241,10 @@ exports.update = function(req, res, next) {
     })
     .catch(Sequelize.ValidationError, function(error) {
 
-      req.flash('error', 'Errores en el formulario:');
-      for (var i in error.errors) {
-          req.flash('error', error.errors[i].value);
-      };
+        req.flash('error', 'Errores en el formulario:');
+        for (var i in error.errors) {
+            req.flash('error', error.errors[i].value);
+        };
 
         return infoOfSalesmenCustomers()
         .spread(function(salesmen, customers) {

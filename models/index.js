@@ -64,6 +64,9 @@ Visit.hasMany(Target);
 Target.belongsTo(TargetType);
 TargetType.hasMany(Target);
 
+Salesman.belongsTo(User);
+User.hasOne(Salesman);
+
 // Exportar:
 
 exports.Company		= Company;

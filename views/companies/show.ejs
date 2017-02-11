@@ -2,10 +2,13 @@
 <h1> 
     Fábrica: 
 
-    <%= company.name %>
-
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
 
     <a href="/companies/<%= company.id %>/edit"><img class="icon" src="/images/edit.png"></a> 
 </h1>
 
+<ul>
+    <li>
+        <b>Nombre</b>: <%= company.name %>
+    </li>
+</ul>
