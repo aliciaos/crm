@@ -191,6 +191,13 @@ router.delete('/customers/:customerId(\\d+)',
     sessionController.adminRequired,
     customerController.destroy);
 
+
+router.get('/customers/:customerId(\\d+)/visits',
+    hc.push,
+    sessionController.loginRequired,
+    visitController.index);
+
+
 router.get('/customers/import',
     sessionController.loginRequired,
     sessionController.adminRequired,

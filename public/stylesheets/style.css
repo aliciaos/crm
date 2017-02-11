@@ -127,6 +127,7 @@ nav {
 
 nav a {
     color: white;
+    margin: 5px 5px;
 }
 
 #loginname {

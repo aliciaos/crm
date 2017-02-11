@@ -3,6 +3,8 @@
 
 <form method="get" action="<%= url %>" id="filterForm" class="right filters">
 
+    <input type="hidden" name="forceCustomerId" value=<%= locals.forceCustomerId %> >
+
     <div class="vcenter">
         Filtros:
         <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit" />
@@ -32,22 +34,39 @@
 
     <br />
 
-    <label>Cliente:</label>
-    <input type="text" name="searchcustomer" value="<%= locals.searchcustomer || '' %>" placeholder="Cliente a buscar" size="40" autocomplete="off" />
+    <% if (!locals.customer) { %>
+        <label>Cliente:</label>
+        <input type="text" name="searchcustomer" value="<%= locals.searchcustomer || '' %>" placeholder="Cliente a buscar" size="40" autocomplete="off" />
 
-    <br />
+        <br />
+    <% } %>
 
-    <label>Vendedor:</label>
-    <input type="text" name="searchsalesman" value="<%= locals.searchsalesman || '' %>" placeholder="Vendedor a buscar" size="40" autocomplete="off" />
+    <% if (!locals.forceSalesmanId) { %>
+        <label>Vendedor:</label>
+        <input type="text" name="searchsalesman" value="<%= locals.searchsalesman || '' %>" placeholder="Vendedor a buscar" size="40" autocomplete="off" />
 
-    <br />
+        <br />
+    <% } %>
 
 </form>
 
 
 
-<h1> 
-    Visitas: 
+<h1>
+    <% if (locals.customer) { %>
+        <% if (locals.forceSalesmanId) { %>
+            Mis visitas a <em><%= locals.customer.name %></em>:
+        <% } else { %>
+            Visitas a <em><%= locals.customer.name %></em>:
+        <% } %>
+    <% } else { %>
+        <% if (locals.forceSalesmanId) { %>
+            Mis visitas:
+        <% } else { %>
+            Todas las visitas:
+        <% } %>
+    <% } %>
+
 
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
 

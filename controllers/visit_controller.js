@@ -47,6 +47,15 @@ exports.index = function(req, res, next) {
         models.Target
     ];
 
+    //----------------
+
+    // Query: En la query pueden pasarnos el campo forceSalesmanId para mostrar solo las
+    // visitas de un vendedor.
+    var forceSalesmanId = req.query.forceSalesmanId || 0;
+
+    //----------------
+
+
     // Busquedas por fecha de planificacion: entre dos fechas
     var searchdateafter = req.query.searchdateafter || '';
     var searchdatebefore = req.query.searchdatebefore || '';
@@ -78,43 +87,62 @@ exports.index = function(req, res, next) {
     }
 
 
-    // Busquedas por cliente:
-    var searchcustomer = req.query.searchcustomer || '';
-    if (searchcustomer) {
-        var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
+    if (!req.customer) {
+        // Busquedas por cliente:
+        var searchcustomer = req.query.searchcustomer || '';
+        if (searchcustomer) {
+            var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
 
+            // CUIDADO: Estoy retocando el include existente.
+            options.include.push({
+                model: models.Customer,
+                where: {
+                    $or: [
+                        {code: {$like: search_like}},
+                        {name: {$like: search_like}}
+                    ]
+                }
+            });
+        } else {
+            // CUIDADO: Estoy retocando el include existente.
+            options.include.push(models.Customer);
+        }
+    } else {
         // CUIDADO: Estoy retocando el include existente.
         options.include.push({
             model: models.Customer,
-            where: {
-                $or: [
-                    {code: {$like: search_like}},
-                    {name: {$like: search_like}}
-                ]
-            }
+            where: {id: req.customer.id}
         });
-    } else {
-        // CUIDADO: Estoy retocando el include existente.
-        options.include.push(models.Customer);
     }
 
 
+    if (!forceSalesmanId) {
+        // Busquedas por vendedor:
+        var searchsalesman = req.query.searchsalesman || '';
+        if (searchsalesman) {
+            var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
 
-    // Busquedas por vendedor:
-    var searchsalesman = req.query.searchsalesman || '';
-    if (searchsalesman) {
-        var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
-
+            // CUIDADO: Estoy retocando el include existente.
+            options.include.push({
+                model: models.Salesman,
+                as: "Salesman",
+                where: {name: {$like: search_like}}
+            });
+        } else {
+            // CUIDADO: Estoy retocando el include existente.
+            options.include.push({model: models.Salesman, as: "Salesman"});
+        }
+    } else {
         // CUIDADO: Estoy retocando el include existente.
         options.include.push({
             model: models.Salesman,
             as: "Salesman",
-            where: {name: {$like: search_like}}
+            where: {id: forceSalesmanId}
         });
-    } else {
-        // CUIDADO: Estoy retocando el include existente.
-        options.include.push({model: models.Salesman, as: "Salesman"});
     }
+
+
+    //----------------
 
 
     models.Visit.count(options)
@@ -155,7 +183,9 @@ exports.index = function(req, res, next) {
             searchdateafter: searchdateafter,
             searchdatebefore: searchdatebefore,
             searchcustomer: searchcustomer,
-            searchsalesman: searchsalesman
+            searchsalesman: searchsalesman,
+            customer: req.customer,
+            forceSalesmanId: forceSalesmanId
         });
     })
     .catch(function (error) {

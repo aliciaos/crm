@@ -38,6 +38,9 @@ Visitas:
 </h2>
 
 <ul>
-	<li> <a href="/visits/new?customerId=<%= customer.id %>"><img class="icon" src="/images/add.png"> Crear una visita nueva</a> </li>
+	<li> <a href="/visits/new?customerId=<%= customer.id %>"><img class="icon" src="/images/add.png"> Crear una visita nueva a este cliente</a> </li>
+	<li> <a href="/customers/<%= customer.id %>/visits"><img class="icon" src="/images/ver.png"> Ver todas las visitas a este cliente</a> </li>
+	<li> <a href="/customers/<%= customer.id %>/visits?forceSalesmanId=<%= session.user.id %>"><img class="icon" src="/images/ver.png"> Ver mis visitas a este cliente</a> </li>
+
 </ul>
 
