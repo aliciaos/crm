@@ -84,7 +84,7 @@ input[type=text], input[type=password] {
 
 input[type=text]:focus, input[type=password]:focus {
     background-color: yellow;
-    height: 30px;
+    height: 24px;
 }
 
 .filters {
@@ -99,7 +99,7 @@ table {
     border-collapse: collapse;
     margin: 10px 0px;
 
-    table-layout: fixed;
+    /*table-layout: fixed;*/
 }
 
 th {

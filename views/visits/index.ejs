@@ -1,18 +1,24 @@
 
+<script src="javascripts/misc_form.js"></script>
 
-<form method="get" action="<%= url %>"  class="right filters">
+<form method="get" action="<%= url %>" id="filterForm" class="right filters">
 
     <div class="vcenter">
         Filtros:
         <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit" />
+
+        <input type="image" class="icon right" src="/images/cancel.png" border="0"
+                onClick="cleanupForm('filterForm')" />
+
     </div>
 
-    <label>Desde:</label>
+    <label>Planificado desde:</label>
     <input type="text"
            name="searchdateafter"
            value="<%= locals.searchdateafter || '' %>"
            placeholder="dd-mm-aaaa"
            pattern="\d\d-\d\d-\d\d\d\d"
+           size="10"
            autocomplete="off" />
 
     <label>Hasta:</label>
@@ -21,6 +27,7 @@
            value="<%= locals.searchdatebefore || '' %>"
            placeholder="dd-mm-aaaa"
            pattern="\d\d-\d\d-\d\d\d\d"
+           size="10"
            autocomplete="off" />
 
     <br />
