@@ -25,6 +25,16 @@
 
     <br />
 
+    <label>Cliente:</label>
+    <input type="text" name="searchcustomer" value="<%= locals.searchcustomer || '' %>" placeholder="Cliente a buscar" size="40" autocomplete="off" />
+
+    <br />
+
+    <label>Vendedor:</label>
+    <input type="text" name="searchsalesman" value="<%= locals.searchsalesman || '' %>" placeholder="Vendedor a buscar" size="40" autocomplete="off" />
+
+    <br />
+
 </form>
 
 
@@ -56,7 +66,7 @@
             Realizado
         </th>
         <th>
-            Num.Obj.
+            Objetivos
         </th>
         <th>
             Observaciones
@@ -67,17 +77,27 @@
     </tr> 
 
     <% for (var i in visits) { %> 
-        <% var visit = visits[i]; %>      
+        <% var visit = visits[i]; %>
 
-        <% var salesmanName = visit.Salesman ? visit.Salesman.name : "SIN VENDEDOR"; %>
-        <% var customerCode = visit.Customer ? visit.Customer.code : "SIN CLIENTE" %>
+    <% var customerCode = visit.Customer && visit.Customer.code || ""; %>
+    <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
 
         <tr>
             <td>
-                <%= customerCode %>
+                <% if (customerCode) { %>
+                    <%= customerCode %>
+                <% } else { %>
+                    <% customerCode = "SIN CLIENTE"; %>
+                    <span class='toberepared'><%= customerCode %></span>
+                <% } %>
             </td>
             <td>
-                <%= salesmanName %>
+                <% if (salesmanName) { %>
+                    <%= salesmanName %>
+                <% } else { %>
+                    <% salesmanName = "SIN VENDEDOR"; %>
+                    <span class='toberepared'><%= salesmanName %></span>
+                <% } %>
             </td>
             <td>
                 <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>

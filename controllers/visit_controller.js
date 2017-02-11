@@ -42,6 +42,10 @@ exports.index = function(req, res, next) {
     var options = {};
     options.where = {};
 
+    // Nota Mas abajo (en searchcustomer) se hace un include de clientes.
+    options.include = [
+        models.Target
+    ];
 
     // Busquedas por fecha de planificacion: entre dos fechas
     var searchdateafter = req.query.searchdateafter || '';
@@ -73,6 +77,46 @@ exports.index = function(req, res, next) {
         }
     }
 
+
+    // Busquedas por cliente:
+    var searchcustomer = req.query.searchcustomer || '';
+    if (searchcustomer) {
+        var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.Customer,
+            where: {
+                $or: [
+                    {code: {$like: search_like}},
+                    {name: {$like: search_like}}
+                ]
+            }
+        });
+    } else {
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push(models.Customer);
+    }
+
+
+
+    // Busquedas por vendedor:
+    var searchsalesman = req.query.searchsalesman || '';
+    if (searchsalesman) {
+        var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.Salesman,
+            as: "Salesman",
+            where: {name: {$like: search_like}}
+        });
+    } else {
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({model: models.Salesman, as: "Salesman"});
+    }
+
+
     models.Visit.count(options)
     .then(function(count) {
 
@@ -98,12 +142,9 @@ exports.index = function(req, res, next) {
     .then(function(pagination) {
 
         options.offset = pagination.offset;
-        options.limit  = pagination.limit;
+        options.limit = pagination.limit;
 
-        options.include = [ models.Target,
-                            models.Customer,
-                            { model: models.Salesman, as: "Salesman" } ];
-        options.order = [[ 'plannedFor', 'DESC' ]];
+        options.order = [['plannedFor', 'DESC']];
 
         return models.Visit.findAll(options)
     })
@@ -112,9 +153,12 @@ exports.index = function(req, res, next) {
             visits: visits,
             moment: moment,
             searchdateafter: searchdateafter,
-            searchdatebefore: searchdatebefore,});
+            searchdatebefore: searchdatebefore,
+            searchcustomer: searchcustomer,
+            searchsalesman: searchsalesman
+        });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         next(error);
     });
 };

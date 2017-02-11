@@ -71,6 +71,9 @@ a:active {
     color: blue;
 }
 
+.toberepared {
+    color: red;
+}
 
 input[type=text], input[type=password] {
     background-color: white;
