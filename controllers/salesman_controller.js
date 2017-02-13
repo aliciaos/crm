@@ -1,5 +1,21 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
+var cloudinary = require('cloudinary');
+var fs = require('fs');
+
+//-----------------------------------------------------------
+
+// Opciones para imagenes subidas a Cloudinary
+var cloudinary_image_options = {
+    async: true,
+    folder: "/crm/decoversia",
+    crop: 'limit',
+    width: 200,
+    height: 200,
+    radius: 5,
+    border: "3px_solid_blue",
+    tags: ['core', 'decoversia', 'crm']
+};
 
 //-----------------------------------------------------------
 
@@ -8,7 +24,11 @@ var Sequelize = require('sequelize');
 exports.load = function (req, res, next, salesmanId) {
 
     models.Salesman.findById(salesmanId,
-        {   include: [ models.User ],
+        {
+            include: [
+                models.User,
+                {model: models.Attachment, as: 'Photo'}
+            ],
             order: [['name']]
         }
     )
@@ -33,7 +53,10 @@ exports.index = function (req, res, next) {
 
     var options = {};
     options.order = [['name']];
-    options.include = [ models.User ];
+    options.include = [
+        models.User,
+        {model: models.Attachment, as: 'Photo'}
+    ];
 
     models.Salesman.findAll(options)
     .then(function (salesmen) {
@@ -103,6 +126,19 @@ exports.create = function (req, res, next) {
     .then(function (salesman) {
         req.flash('success', 'Vendedor creado con éxito.');
 
+        if (!req.file) {
+            req.flash('info', 'Es un Vendedor sin fotografía.');
+            return;
+        }
+
+        // Salvar la imagen en Cloudinary
+        return uploadResourceToCloudinary(req)
+        .then(function(uploadResult) {
+            // Crear nuevo attachment en la BBDD.
+            return createAttachment(req, uploadResult, salesman);
+        });
+    })
+    .then(function() {
         res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function (error) {
@@ -154,6 +190,25 @@ exports.update = function (req, res, next) {
 
         req.flash('success', 'Vendedor editado con éxito.');
 
+        // Sin imagen: Eliminar attachment e imagen viejos.
+        if (!req.file) {
+            req.flash('info', 'Tenemos un vendedor sin fotografía.');
+            if (salesman.Photo) {
+                cloudinary.api.delete_resources(salesman.Photo.public_id);
+                return salesman.Photo.destroy();
+            }
+            return;
+        }
+
+        // Salvar la foto nueva en Cloudinary
+        return uploadResourceToCloudinary(req)
+        .then(function(uploadResult) {
+            // Actualizar el attachment en la BBDD.
+            return updateAttachment(req, uploadResult, salesman);
+        });
+    })
+    .then(function() {
+
         res.redirect("/goback");
     })
     .catch(Sequelize.ValidationError, function (error) {
@@ -193,4 +248,104 @@ exports.destroy = function (req, res, next) {
         next(error);
     });
 };
+
+//------------------------------------------------
+
+
+// FUNCIONES AUXILIARES - Cloudinary
+
+/**
+ * Crea una promesa para crear un attachment en la tabla Attachments.
+ */
+function createAttachment(req, uploadResult, salesman) {
+    if (!uploadResult) {
+        return Promise.resolve();
+    }
+
+    return models.Attachment.create({
+        public_id: uploadResult.public_id,
+        url: uploadResult.url,
+        filename: req.file.originalname,
+        mime: req.file.mimetype
+    })
+    .then(function(attachment) {
+        return salesman.setPhoto(attachment);
+    })
+    .then(function() {
+        req.flash('success', 'Fotografía guardada con éxito.');
+    })
+    .catch(function(error) { // Ignoro errores de validacion en imagenes
+        req.flash('error', 'No se ha podido salvar la fotografía: '+error.message);
+        cloudinary.api.delete_resources(uploadResult.public_id);
+    });
+}
+
+
+/**
+ * Crea una promesa para actualizar un attachment en la tabla Attachments.
+ */
+function updateAttachment(req, uploadResult, salesman) {
+    if (!uploadResult) {
+        return Promise.resolve();
+    }
+
+    // Recordar public_id de la foto antigua.
+    var old_public_id = salesman.Photo ? salesman.Photo.public_id : null;
+
+    return salesman.getPhoto()
+    .then(function(attachment) {
+        if (!attachment) {
+            attachment = models.Attachment.build({});
+        }
+        attachment.public_id = uploadResult.public_id;
+        attachment.url = uploadResult.url;
+        attachment.filename = req.file.originalname;
+        attachment.mime = req.file.mimetype;
+        return attachment.save();
+    })
+    .then(function(attachment) {
+        return salesman.setPhoto(attachment);
+    })
+    .then(function(attachment) {
+        req.flash('success', 'Imagen nueva guardada con éxito.');
+        if (old_public_id) {
+            cloudinary.api.delete_resources(old_public_id);
+        }
+    })
+    .catch(function(error) { // Ignoro errores de validacion en imagenes
+        req.flash('error', 'No se ha podido salvar la nueva imagen: '+error.message);
+        cloudinary.api.delete_resources(uploadResult.public_id);
+    });
+}
+
+
+/**
+ * Crea una promesa para subir una imagen nueva a Cloudinary.
+ * Tambien borra la imagen original.
+ *
+ * Si puede subir la imagen la promesa se satisface y devuelve el public_id y
+ * la url del recurso subido.
+ * Si no puede subir la imagen, la promesa tambien se cumple pero devuelve null.
+ *
+ * @return Devuelve una Promesa.
+ */
+function uploadResourceToCloudinary(req) {
+    return new Promise(function (resolve, reject) {
+        var path = req.file.path;
+        cloudinary.uploader.upload(
+            path,
+            function (result) {
+                fs.unlink(path); // borrar la imagen subida a ./uploads
+                if (!result.error) {
+                    resolve({public_id: result.public_id, url: result.secure_url});
+                } else {
+                    req.flash('error', 'No se ha podido salvar la fotografía: ' + result.error.message);
+                    resolve(null);
+                }
+            },
+            cloudinary_image_options
+        );
+    })
+}
+
 

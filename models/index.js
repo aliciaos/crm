@@ -47,6 +47,9 @@ var Visit = sequelize.import(path.join(__dirname,'visit'));
 // Importar la definicion de User de user.js
 var User = sequelize.import(path.join(__dirname,'user'));
 
+// Importar la definicion de Attachments de attachment.js
+var Attachment = sequelize.import(path.join(__dirname,'attachment'));
+
 
 // Relaciones entre modelos
 Visit.belongsTo(Customer);
@@ -67,6 +70,9 @@ TargetType.hasMany(Target);
 Salesman.belongsTo(User);
 User.hasOne(Salesman);
 
+Salesman.belongsTo(Attachment, {as: "Photo", foreignKey: 'PhotoId'});
+Attachment.hasOne(Salesman, {foreignKey: 'PhotoId'});
+
 // Exportar:
 
 exports.Company		= Company;
@@ -76,4 +82,5 @@ exports.TargetType	= TargetType;
 exports.Target 		= Target;
 exports.Visit		= Visit;
 exports.User 		= User;
+exports.Attachment 	= Attachment;
 

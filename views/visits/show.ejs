@@ -24,7 +24,10 @@
 		<b>Cliente</b>: <%= customerCode %> <%= customerName %>
 	</li>
 	<li>
-		<b>Vendedor</b>: <%= salesmanName %>
+		<div class="vcenter">
+			<b>Vendedor</b>: <%= salesmanName %>
+			<img src="/images/face.png" width="60px" />
+		</div>
 	</li>
 	<li>
 		<b>Fecha planificación</b>: <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>

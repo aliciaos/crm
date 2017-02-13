@@ -24,7 +24,16 @@
 
         <tr>
             <td>
-                <%= salesman.name %>
+                <div class="vcenter">
+
+                    <% if (salesman.Photo) { %>
+                    <img src="<%= salesman.Photo.url %>" width="30px" />
+                    <% } else { %>
+                    <img src="/images/face.png" width="30px" />
+                    <% } %>
+
+                    <%= salesman.name %>
+                </div>
             </td>
 
             <td>

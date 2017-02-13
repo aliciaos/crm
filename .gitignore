@@ -3,3 +3,4 @@ npm-debug.log
 node_modules
 crm.sqlite
 .env
+.idea/workspace.xml
