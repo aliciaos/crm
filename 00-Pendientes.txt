@@ -17,3 +17,6 @@ Puede un vendedor borrar un objetivo en una visita?
 Adaptar la aplicacion para comercializarla, que no sea solo para decoversia.
 
 
+Poder marcar visitas como favoritas.
+
+Hiperenlacen en los nombre de clientes, vendedores, etc...
