@@ -38,11 +38,11 @@
 
         <div class="login right">
             <% if (!session.user) { %>
-                <a href="/session">Login</a>
+                <a href="/session">Entrar</a>
             <% } else { %>
             <span id="loginname"><%= session.user.username %></span>
                 <a href="/users/<%= session.user.id %>">Perfil</a>
-                <a href="/session?_method=DELETE">Logout</a>
+                <a href="/session?_method=DELETE">Salir</a>
 
                 <% if (session.user.username === "admin") { %>
                     <a href="/users/register">Registrar</a>
