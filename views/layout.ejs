@@ -16,7 +16,11 @@
     <nav> 
         .       
         <% if (session.user) { %>
-            <a href="/visits?forceSalesmanId=<%= session.user.id %>">Mis visitas</a>
+
+            <% if (!session.user.isAdmin) { %>
+                <a href="/visits?forceSalesmanId=<%= session.user.id %>">Mis visitas</a>
+            <% } %>
+
             <a href="/customers">Clientes</a>
             <a href="/companies">Fábricas</a>
             <a href="/visits">Visitas</a>

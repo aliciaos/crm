@@ -1,8 +1,19 @@
 
 
 <% var salesmanName = visit.Salesman ? visit.Salesman.name : "SIN VENDEDOR"; %>
+<% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
+
 <% var customerCode = visit.Customer ? visit.Customer.code : "SIN CLIENTE" %>
 <% var customerName = visit.Customer ? visit.Customer.name : "" %>
+
+
+<div class="right">
+    <% if (salesmanPhotoUrl) { %>
+	<img src="<%= salesmanPhotoUrl %>" width="100px" />
+    <% } else { %>
+	<img src="/images/face.png" width="100px" />
+    <% } %>
+</div>
 
 
 <h1> 
@@ -19,15 +30,13 @@
 
 </h1>
 
+
 <ul>
 	<li>
 		<b>Cliente</b>: <%= customerCode %> <%= customerName %>
 	</li>
 	<li>
-		<div class="vcenter">
-			<b>Vendedor</b>: <%= salesmanName %>
-			<img src="/images/face.png" width="60px" />
-		</div>
+		<b>Vendedor</b>: <%= salesmanName %>
 	</li>
 	<li>
 		<b>Fecha planificación</b>: <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>

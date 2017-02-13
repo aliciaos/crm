@@ -12,16 +12,25 @@ var paginate = require('./paginate').paginate;
 // Autoload la visita asociada a :visitId
 exports.load = function(req, res, next, visitId) {
 
-    models.Visit.findById(visitId, 
-                            { include: [ { model: models.Target,
-                                           include: [ models.Company,
-                                                      models.TargetType
-                                                    ] 
-                                         },
-                                         models.Customer,
-                                         { model: models.Salesman, as: "Salesman" } ],
-                              order: [[ 'plannedFor', 'DESC' ]]
-                            })
+    models.Visit.findById(visitId,
+        {
+            include: [
+                {
+                    model: models.Target,
+                    include: [
+                        models.Company,
+                        models.TargetType
+                    ]
+                },
+                models.Customer,
+                {
+                    model: models.Salesman,
+                    as: "Salesman",
+                    include: [{model: models.Attachment, as: 'Photo'}]
+                }
+            ],
+            order: [['plannedFor', 'DESC']]
+        })
     .then(function(visit) {
         if (visit) {
             req.visit = visit;
@@ -126,18 +135,24 @@ exports.index = function(req, res, next) {
             options.include.push({
                 model: models.Salesman,
                 as: "Salesman",
-                where: {name: {$like: search_like}}
+                where: {name: {$like: search_like}},
+                include: [{ model: models.Attachment, as: 'Photo'}]
             });
         } else {
             // CUIDADO: Estoy retocando el include existente.
-            options.include.push({model: models.Salesman, as: "Salesman"});
+            options.include.push({
+                model: models.Salesman,
+                as: "Salesman",
+                include: [{ model: models.Attachment, as: 'Photo'}]
+            });
         }
     } else {
         // CUIDADO: Estoy retocando el include existente.
         options.include.push({
             model: models.Salesman,
             as: "Salesman",
-            where: {id: forceSalesmanId}
+            where: {id: forceSalesmanId},
+            include: [{ model: models.Attachment, as: 'Photo'}]
         });
     }
 
