@@ -3,8 +3,9 @@
 <% var salesmanName = visit.Salesman ? visit.Salesman.name : "SIN VENDEDOR"; %>
 <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 
-<% var customerCode = visit.Customer ? visit.Customer.code : "SIN CLIENTE" %>
+<% var customerCode = visit.Customer ? visit.Customer.code : "" %>
 <% var customerName = visit.Customer ? visit.Customer.name : "" %>
+<% var customerId   = visit.Customer && visit.Customer.id || 0; %>
 
 
 <div class="right">
@@ -33,7 +34,14 @@
 
 <ul>
 	<li>
-		<b>Cliente</b>: <%= customerCode %> <%= customerName %>
+		<b>Cliente</b>:
+
+        <% if (customerCode) { %>
+			<a href="/customers/<%= customerId %>"> <%= customerCode %> <%= customerName %> </a>
+        <% } else { %>
+        	<% customerCode = "SIN CLIENTE"; %>
+			<span class='toberepared'><%= customerCode %></span>
+        <% } %>
 	</li>
 	<li>
 		<b>Vendedor</b>: <%= salesmanName %>

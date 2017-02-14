@@ -105,14 +105,16 @@
     <% for (var i in visits) { %> 
         <% var visit = visits[i]; %>
 
-    <% var customerCode = visit.Customer && visit.Customer.code || ""; %>
-    <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
-    <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
+        <% var customerCode = visit.Customer && visit.Customer.code || ""; %>
+        <% var customerId = visit.Customer && visit.Customer.id || 0; %>
+
+        <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
+        <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 
         <tr>
             <td>
                 <% if (customerCode) { %>
-                    <%= customerCode %>
+                    <a href="/customers/<%= customerId %>"> <%= customerCode %> </a>
                 <% } else { %>
                     <% customerCode = "SIN CLIENTE"; %>
                     <span class='toberepared'><%= customerCode %></span>

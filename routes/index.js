@@ -287,14 +287,14 @@ router.get('/visits/:visitId(\\d+)',
     sessionController.loginRequired,
     visitController.show);
 router.get('/visits/new',
-	hc.skip,
+	hc.push,
     sessionController.loginRequired,
     visitController.new);
 router.post('/visits',
 	sessionController.loginRequired,
     visitController.create);
 router.get('/visits/:visitId(\\d+)/edit',
-	hc.skip,
+	hc.push,
     sessionController.loginRequired,
     visitController.edit);
 router.put('/visits/:visitId(\\d+)',
