@@ -38,15 +38,12 @@ exports.deleteExpiredUserSession = function(req, res, next) {
 // middlewares o rutas.
 // Si no existe req.session.user, entonces es que aun no he hecho 
 // login, por lo que me redireccionan a una pantalla de login. 
-// Guardo en redir cual es mi url para volver automaticamente a 
-// esa url despues de hacer login; pero si redir ya existe entonces
-// conservo su valor.
-// 
+//
 exports.loginRequired = function (req, res, next) {
     if (req.session.user) {
         next();
     } else {
-        res.redirect('/session?redir=' + (req.param('redir') || req.url));
+        res.redirect('/session');
     }
 };
 
@@ -119,28 +116,14 @@ var authenticate = function(login, password) {
 
 // GET /session   -- Formulario de login
 //
-// Paso como parametro el valor de redir (es una url a la que 
-// redirigirme despues de hacer login) que me han puesto en la 
-// query (si no existe uso /).
-//
 exports.new = function(req, res, next) {
 
-    var redir = req.query.redir || 
-                url.parse(req.headers.referer || "/").pathname;
-
-    // No volver al formulario de login ni al de registro.
-    if (redir === '/session' || redir === '/users/new') {
-        redir = "/";
-    }
-
-    res.render('session/new', { redir: redir });
+    res.render('session/new');
 };
 
 
 // POST /session   -- Crear la sesion si usuario se autentica
 exports.create = function(req, res, next) {
-
-    var redir = req.body.redir || '/'
 
     var login     = req.body.login;
     var password  = req.body.password;
@@ -156,10 +139,10 @@ exports.create = function(req, res, next) {
                                     isAdmin:user.isAdmin,
                                     expires: Date.now() + maxIdleTime };
 
-                res.redirect(redir); // redirección a redir
+                res.redirect("/goback");
             } else {
                 req.flash('error', 'La autenticación ha fallado. Reinténtelo otra vez.');
-                res.redirect("/session?redir="+redir);
+                res.redirect("/reload");
             }
 		})
 		.catch(function(error) {
@@ -174,5 +157,5 @@ exports.destroy = function(req, res, next) {
 
     delete req.session.user;
     
-    res.redirect("/session"); // redirect a login
+    res.redirect("/goback");
 };

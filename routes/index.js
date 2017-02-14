@@ -42,9 +42,13 @@ router.get('/', hc.set,
 
 
 // Definición de rutas de sesion
-router.get('/session',    sessionController.new);     // formulario login
-router.post('/session',   sessionController.create);  // crear sesión
-router.delete('/session', sessionController.destroy); // destruir sesión
+router.get('/session',
+    hc.push,
+	sessionController.new);     // formulario login
+router.post('/session',
+	sessionController.create);  // crear sesión
+router.delete('/session',
+	sessionController.destroy); // destruir sesión
 
 
 // Definición de rutas de cuentas
