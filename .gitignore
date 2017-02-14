@@ -4,3 +4,4 @@ node_modules
 crm.sqlite
 .env
 .idea/workspace.xml
+uploads/*

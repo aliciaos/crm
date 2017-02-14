@@ -13,6 +13,7 @@ var customerController = require('../controllers/customer_controller');
 var targettypeController = require('../controllers/targettype_controller');
 var visitController = require('../controllers/visit_controller');
 var targetController = require('../controllers/target_controller');
+var reportController = require('../controllers/report_controller');
 
 var hc = require('../controllers/history_controller');
 
@@ -248,23 +249,31 @@ router.delete('/targettypes/:targettypeId(\\d+)',
 
 
 // Definicion de rutas para los objetivos de las visitas
-router.get(   '/visits/:visitId(\\d+)/targets',                     	hc.push, 
-																		sessionController.loginRequired, 
-																		targetController.index);
-router.get(   '/visits/:visitId(\\d+)/targets/:targetId(\\d+)',       	hc.push, 
-																		sessionController.loginRequired, 
-																		targetController.show);
-router.get(   '/visits/:visitId(\\d+)/targets/new',                 	hc.push, 
-																		sessionController.loginRequired, 
-																		targetController.new);
-router.post(  '/visits/:visitId(\\d+)/targets',                    		targetController.create);
-router.get(   '/visits/:visitId(\\d+)/targets/:targetId(\\d+)/edit', 	hc.push, 
-																		sessionController.loginRequired, 
-																		targetController.edit);
-router.put(   '/visits/:visitId(\\d+)/targets/:targetId(\\d+)',      	sessionController.loginRequired, 
-																		targetController.update);
-router.delete('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',   		sessionController.loginRequired, 
-																		targetController.destroy);
+router.get(   '/visits/:visitId(\\d+)/targets',
+    hc.push,
+    sessionController.loginRequired,
+    targetController.index);
+router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
+    hc.push,
+    sessionController.loginRequired,
+    targetController.show);
+router.get('/visits/:visitId(\\d+)/targets/new',
+    hc.push,
+    sessionController.loginRequired,
+    targetController.new);
+router.post('/visits/:visitId(\\d+)/targets',
+    sessionController.loginRequired,
+    targetController.create);
+router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)/edit',
+    hc.push,
+    sessionController.loginRequired,
+    targetController.edit);
+router.put('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
+    sessionController.loginRequired,
+    targetController.update);
+router.delete('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
+    sessionController.loginRequired,
+    targetController.destroy);
 
 
 
@@ -296,7 +305,10 @@ router.delete('/visits/:visitId(\\d+)',
     sessionController.adminRequired,
     visitController.destroy);
 
-
+// Definicion de rutas para los informes
+router.get('/reports',
+    hc.set,
+    reportController.index);
 
 
 module.exports = router;

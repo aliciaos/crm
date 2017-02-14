@@ -1,0 +1,15 @@
+
+
+<h1>
+    Informes de Eficiencia:
+</h1>
+
+<% for (var i in companies) { %>
+    <% var company = companies[i]; %>
+
+    <ul>
+        <li>
+            <a href="/companies/<%= company.id %>/statistics">Cumplimiento de objetivos para <b><%= company.name %></b>.</a>
+        </li>
+    </ul>
+<% } %>

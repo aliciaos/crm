@@ -22,7 +22,11 @@
             <% } %>
 
             <a href="/customers">Clientes</a>
-            <a href="/companies">Fábricas</a>
+
+            <% if (session.user.isAdmin) { %>
+                <a href="/companies">Fábricas</a>
+            <% } %>
+
             <a href="/visits">Visitas</a>
 
             <% if (session.user.isAdmin) { %>
@@ -30,7 +34,9 @@
                 <a href="/targettypes">Objetivos</a>
             <% } %>
 
-            <% if (session.user.username === "admin") { %>
+            <a href="/reports">Informes</a>
+
+        <% if (session.user.username === "admin") { %>
                 <a href="/users">Usuarios</a>
             <% } %>
         <% } %>
