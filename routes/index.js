@@ -15,7 +15,6 @@ var visitController = require('../controllers/visit_controller');
 var targetController = require('../controllers/target_controller');
 var reportController = require('../controllers/report_controller');
 
-var hc = require('../controllers/history_controller');
 
 
 // Autoload de parametros
@@ -28,13 +27,10 @@ router.param('visitId', visitController.load);
 router.param('targetId', targetController.load);    
 
 
-router.get('/goback', hc.goBack);
-router.get('/reload', hc.reload);
 
 
 // GET home page.
-router.get('/', hc.set,
-				function(req, res, next) { 
+router.get('/', function(req, res, next) {
 					res.render('index');
 				}
 		  );
@@ -43,7 +39,6 @@ router.get('/', hc.set,
 
 // Definición de rutas de sesion
 router.get('/session',
-    hc.push,
 	sessionController.new);     // formulario login
 router.post('/session',
 	sessionController.create);  // crear sesión
@@ -53,21 +48,17 @@ router.delete('/session',
 
 // Definición de rutas de cuentas
 router.get('/users',
-    hc.set,
     sessionController.loginRequired,
     userController.index);   // listado usuarios
 router.get('/users/:userId(\\d+)',
-    hc.push,
     sessionController.loginRequired,
     userController.show);    // ver un usuario
 
 router.get('/users/new',
-    hc.push,
     sessionController.loginRequired,
     userController.new);     // formulario crear usuario
 
 router.get('/users/register',
-    hc.set,
     sessionController.loginRequired,
     userController.new);     // formulario para registrar nuevo usuario
 
@@ -75,7 +66,6 @@ router.post('/users',
     sessionController.loginRequired,
     userController.create);     // registrar usuario
 router.get('/users/:userId(\\d+)/edit',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminOrMyselfRequired,
     userController.edit);     // editar información de cuenta
@@ -91,16 +81,13 @@ router.delete('/users/:userId(\\d+)',
 
 // Definicion de rutas para las fabricas
 router.get('/companies',
-    hc.set,
     sessionController.loginRequired,
     companyController.index);
 router.get('/companies/:companyId(\\d+)',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     companyController.show);
 router.get('/companies/new',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     companyController.new);
@@ -109,7 +96,6 @@ router.post('/companies',
     sessionController.adminRequired,
     companyController.create);
 router.get('/companies/:companyId(\\d+)/edit',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     companyController.edit);
@@ -123,7 +109,6 @@ router.delete('/companies/:companyId(\\d+)',
     companyController.destroy);
 
 router.get('/companies/:companyId(\\d+)/statistics',
-    hc.push,
     sessionController.loginRequired,
     companyController.statistics);
 
@@ -131,17 +116,14 @@ router.get('/companies/:companyId(\\d+)/statistics',
 
 // Definicion de rutas para los vendedores
 router.get('/salesmen',
-    hc.set,
     sessionController.loginRequired,
     sessionController.adminRequired,
     salesmanController.index);
 router.get('/salesmen/:salesmanId(\\d+)',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     salesmanController.show);
 router.get('/salesmen/new',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     salesmanController.new);
@@ -151,7 +133,6 @@ router.post('/salesmen',
     upload.single('photo'),
     salesmanController.create);
 router.get('/salesmen/:salesmanId(\\d+)/edit',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     salesmanController.edit);
@@ -168,15 +149,12 @@ router.delete('/salesmen/:salesmanId(\\d+)',
 
 // Definicion de rutas para los clientes
 router.get('/customers',
-    hc.set,
     sessionController.loginRequired,
     customerController.index);
 router.get('/customers/:customerId(\\d+)',
-    hc.push,
     sessionController.loginRequired,
     customerController.show);
 router.get('/customers/new',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     customerController.new);
@@ -185,7 +163,6 @@ router.post('/customers',
     sessionController.adminRequired,
     customerController.create);
 router.get('/customers/:customerId(\\d+)/edit',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     customerController.edit);
@@ -200,7 +177,6 @@ router.delete('/customers/:customerId(\\d+)',
 
 
 router.get('/customers/:customerId(\\d+)/visits',
-    hc.push,
     sessionController.loginRequired,
     visitController.index);
 
@@ -218,17 +194,14 @@ router.post('/customers/import',
 
 // Definicion de rutas para los tipos de objetivos
 router.get('/targettypes',
-    hc.set,
     sessionController.loginRequired,
     sessionController.adminRequired,
     targettypeController.index);
 router.get('/targettypes/:targettypeId(\\d+)',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     targettypeController.show);
 router.get('/targettypes/new',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     targettypeController.new);
@@ -237,7 +210,6 @@ router.post('/targettypes',
     sessionController.adminRequired,
     targettypeController.create);
 router.get('/targettypes/:targettypeId(\\d+)/edit',
-    hc.push,
     sessionController.loginRequired,
     sessionController.adminRequired,
     targettypeController.edit);
@@ -254,22 +226,18 @@ router.delete('/targettypes/:targettypeId(\\d+)',
 
 // Definicion de rutas para los objetivos de las visitas
 router.get(   '/visits/:visitId(\\d+)/targets',
-    hc.push,
     sessionController.loginRequired,
     targetController.index);
 router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
-    hc.push,
     sessionController.loginRequired,
     targetController.show);
 router.get('/visits/:visitId(\\d+)/targets/new',
-    hc.push,
     sessionController.loginRequired,
     targetController.new);
 router.post('/visits/:visitId(\\d+)/targets',
     sessionController.loginRequired,
     targetController.create);
 router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)/edit',
-    hc.push,
     sessionController.loginRequired,
     targetController.edit);
 router.put('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
@@ -283,22 +251,18 @@ router.delete('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
 
 // Definicion de rutas para las visitas
 router.get('/visits',
-	hc.set,
     sessionController.loginRequired,
     visitController.index);
 router.get('/visits/:visitId(\\d+)',
-	hc.push,
     sessionController.loginRequired,
     visitController.show);
 router.get('/visits/new',
-	hc.push,
     sessionController.loginRequired,
     visitController.new);
 router.post('/visits',
 	sessionController.loginRequired,
     visitController.create);
 router.get('/visits/:visitId(\\d+)/edit',
-	hc.push,
     sessionController.loginRequired,
     visitController.edit);
 router.put('/visits/:visitId(\\d+)',
@@ -311,7 +275,6 @@ router.delete('/visits/:visitId(\\d+)',
 
 // Definicion de rutas para los informes
 router.get('/reports',
-    hc.set,
     reportController.index);
 
 

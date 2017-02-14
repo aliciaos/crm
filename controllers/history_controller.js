@@ -1,22 +1,15 @@
 
+
+var express = require('express');
+var router = express.Router();
+
 var URL = require('url');
+
+const HISTORY_SIZE = 20;
 
 // Middlewares
 
-exports.set = function(req, res, next) {
-
-	req.session.history = [req.url];
-	dump(req.session.history);
-	next();
-};
-
-
-exports.skip = function(req, res, next) {
-	next();
-}
-
-
-exports.push = function(req, res, next) {
+function push(req, res, next) {
 
 	req.session.history = req.session.history || [];
 
@@ -25,11 +18,20 @@ exports.push = function(req, res, next) {
 
 	var path1 = URL.parse(req.url).pathname;
 
+	// Reset
+	if (path1 === "/") {
+        req.session.history = [];
+	}
+
+	// Eliminar duplicados seguidos
 	if (path0 === path1) {
 		req.session.history.pop()
 	}
 
 	req.session.history.push(req.url);
+
+	// Limitar tamaño de la historia
+    req.session.history = req.session.history.slice(-HISTORY_SIZE);
 
 	dump(req.session.history);
 
@@ -37,8 +39,7 @@ exports.push = function(req, res, next) {
 };
 
 
-
-exports.goBack = function(req, res, next) {
+function goBack(req, res, next) {
 
 	req.session.history = req.session.history || [];
 
@@ -48,8 +49,7 @@ exports.goBack = function(req, res, next) {
 };
 
 
-
-exports.reload = function(req, res, next) {
+function reload(req, res, next) {
 
 	req.session.history = req.session.history || [];
 
@@ -57,6 +57,12 @@ exports.reload = function(req, res, next) {
 	res.redirect(url);
 };
 
+function reset(req, res, next) {
+
+    req.session.history = ["/"];
+    dump(req.session.history);
+    next();
+};
 
 function dump(history) {
 
@@ -68,4 +74,13 @@ function dump(history) {
 };
 
 
+router.get('/goback', goBack);
+router.get('/reload', reload);
+
+router.get('*', push);
+
+module.exports = {
+	router: router,
+	reset: reset
+};
 

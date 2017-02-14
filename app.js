@@ -9,6 +9,8 @@ var partials = require('express-partials');
 var flash = require('express-flash');
 var methodOverride = require('method-override');
 
+var hc = require('./controllers/history_controller');
+
 
 var index = require('./routes/index');
 
@@ -44,6 +46,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use('/', hc.router);
 app.use('/', index);
 
 // Helper estatico:
@@ -56,8 +59,12 @@ app.locals.escapeText =  function(text) {
           .replace(/\n/g, '<br />');
 };
 
+// Descomentar si se desea limpiar la historia cuando hay un error:
+//app.use(hc.reset);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
