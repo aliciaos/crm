@@ -67,7 +67,7 @@ exports.create = function(req, res, next) {
     .then(function(company) {
         req.flash('success', 'Fábrica creada con éxito.');   
 
-        res.redirect("/goback");
+        res.redirect("/companies/" + company.id);
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -106,7 +106,7 @@ exports.update = function(req, res, next) {
 
         req.flash('success', 'Fábrica editada con éxito.'); 
 
-        res.redirect("/goback");
+        res.redirect("/companies/" + company.id);
     })
     .catch(Sequelize.ValidationError, function(error) {
 

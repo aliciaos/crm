@@ -1,14 +1,31 @@
 
-
-var express = require('express');
-var router = express.Router();
-
 var URL = require('url');
 
 const HISTORY_SIZE = 20;
 
 // Middlewares
 
+/**
+ * Borra la historia anterior.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+function reset(req, res, next) {
+
+    req.session.history = ["/"];
+    dump(req.session.history);
+    next();
+};
+
+/**
+ * Añade la URL actual a la historia, eliminado repetidos.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 function push(req, res, next) {
 
 	req.session.history = req.session.history || [];
@@ -17,11 +34,6 @@ function push(req, res, next) {
 	var path0 = URL.parse(url0).pathname;
 
 	var path1 = URL.parse(req.url).pathname;
-
-	// Reset
-	if (path1 === "/") {
-        req.session.history = [];
-	}
 
 	// Eliminar duplicados seguidos
 	if (path0 === path1) {
@@ -36,6 +48,38 @@ function push(req, res, next) {
 	dump(req.session.history);
 
 	next();
+};
+
+/**
+ * No mete la URL actual en la historia.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+function skip(req, res, next) {
+
+    dump(req.session.history);
+
+    next();
+};
+
+/**
+ * Elimina el ultimo URL de la historia.
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+function pop(req, res, next) {
+
+    req.session.history = req.session.history || [];
+
+	req.session.history.pop();
+
+    dump(req.session.history);
+
+    next();
 };
 
 
@@ -57,12 +101,6 @@ function reload(req, res, next) {
 	res.redirect(url);
 };
 
-function reset(req, res, next) {
-
-    req.session.history = ["/"];
-    dump(req.session.history);
-    next();
-};
 
 function dump(history) {
 
@@ -74,13 +112,12 @@ function dump(history) {
 };
 
 
-router.get('/goback', goBack);
-router.get('/reload', reload);
-
-router.get('*', push);
-
 module.exports = {
-	router: router,
-	reset: reset
+	reset: reset,
+	push: push,
+	pop: pop,
+	skip: skip,
+	reload: reload,
+	goBack: goBack
 };
 

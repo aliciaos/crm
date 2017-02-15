@@ -157,7 +157,7 @@ exports.create = function(req, res, next) {
     .then(function(customer) {
         req.flash('success', 'Cliente creado con éxito.');   
 
-        res.redirect("/goback");
+        res.redirect("/customers/" + customer.id);
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -210,7 +210,7 @@ exports.update = function(req, res, next) {
 
         req.flash('success', 'Cliente editado con éxito.'); 
 
-        res.redirect("/goback");
+        res.redirect("/customers/" + customer.id);
     })
     .catch(Sequelize.ValidationError, function(error) {
 

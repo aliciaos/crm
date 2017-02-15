@@ -67,7 +67,7 @@ exports.create = function(req, res, next) {
     .then(function(targettype) {
         req.flash('success', 'Tipo de objetivo creado con éxito.');   
 
-        res.redirect("/goback");
+        res.redirect("/targettypes/" + targettype.id);
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -106,7 +106,7 @@ exports.update = function(req, res, next) {
 
         req.flash('success', 'Tipo de objetivo editado con éxito.'); 
 
-        res.redirect("/goback");
+        res.redirect("/targettypes/" + targettype.id);
     })
     .catch(Sequelize.ValidationError, function(error) {
 

@@ -15,6 +15,7 @@ var visitController = require('../controllers/visit_controller');
 var targetController = require('../controllers/target_controller');
 var reportController = require('../controllers/report_controller');
 
+var hc = require('../controllers/history_controller');
 
 
 // Autoload de parametros
@@ -27,14 +28,35 @@ router.param('visitId', visitController.load);
 router.param('targetId', targetController.load);    
 
 
+//-----------------------------------------------------------
+
+// History
+
+router.get('/goback', hc.goBack);
+router.get('/reload', hc.reload);
+
+// Rutas que no acaban en /new, /edit, /import, /session
+// Y tampoco es /
+router.get(/(?!\/new$|\/edit$|\/import$|\/session$)\/[^\/]+$/, hc.push);
+
+// Rutas que acaban en /new, /edit, /import o /session
+router.get(/.*\/(new|edit|import|session)$/, hc.skip);
+
+// Ruta Home
+router.get('/', hc.reset);
+
+// La saco de la historia porque hace una redireccion a otro sitio.
+router.get('/users/:userId(\\d+)/visits', hc.pop);
+
+//-----------------------------------------------------------
+
 
 
 // GET home page.
-router.get('/', function(req, res, next) {
-					res.render('index');
-				}
-		  );
-
+router.get('/', function (req, res, next) {
+        res.render('index');
+    }
+);
 
 
 // Definición de rutas de sesion
@@ -57,11 +79,6 @@ router.get('/users/:userId(\\d+)',
 router.get('/users/new',
     sessionController.loginRequired,
     userController.new);     // formulario crear usuario
-
-router.get('/users/register',
-    sessionController.loginRequired,
-    userController.new);     // formulario para registrar nuevo usuario
-
 router.post('/users',
     sessionController.loginRequired,
     userController.create);     // registrar usuario
@@ -176,11 +193,6 @@ router.delete('/customers/:customerId(\\d+)',
     customerController.destroy);
 
 
-router.get('/customers/:customerId(\\d+)/visits',
-    sessionController.loginRequired,
-    visitController.index);
-
-
 router.get('/customers/import',
     sessionController.loginRequired,
     sessionController.adminRequired,
@@ -272,6 +284,26 @@ router.delete('/visits/:visitId(\\d+)',
 	sessionController.loginRequired,
     sessionController.adminRequired,
     visitController.destroy);
+
+
+router.get('/customers/:customerId(\\d+)/visits',
+    sessionController.loginRequired,
+    visitController.index);
+
+router.get('/salesmen/:salesmanId(\\d+)/visits',
+    sessionController.loginRequired,
+    visitController.index);
+
+router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits',
+    sessionController.loginRequired,
+    visitController.index);
+
+
+router.get('/users/:userId(\\d+)/visits',
+    sessionController.loginRequired,
+    visitController.indexUser);
+
+
 
 // Definicion de rutas para los informes
 router.get('/reports',

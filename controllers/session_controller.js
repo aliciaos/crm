@@ -157,5 +157,5 @@ exports.destroy = function(req, res, next) {
 
     delete req.session.user;
     
-    res.redirect("/goback");
+    res.redirect("/");
 };

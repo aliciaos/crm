@@ -1,4 +1,3 @@
-
 var models = require('../models');
 var Sequelize = require('sequelize');
 
@@ -10,7 +9,7 @@ var paginate = require('./paginate').paginate;
 
 
 // Autoload la visita asociada a :visitId
-exports.load = function(req, res, next, visitId) {
+exports.load = function (req, res, next, visitId) {
 
     models.Visit.findById(visitId,
         {
@@ -31,36 +30,55 @@ exports.load = function(req, res, next, visitId) {
             ],
             order: [['plannedFor', 'DESC']]
         })
-    .then(function(visit) {
+    .then(function (visit) {
         if (visit) {
             req.visit = visit;
             next();
-        } else { 
+        } else {
             throw new Error('No existe ninguna visita con Id=' + visitId);
         }
     })
-    .catch(function(error) { next(error); });
+    .catch(function (error) {
+        next(error);
+    });
 };
 
 
 //-----------------------------------------------------------
 
+
+// GET /users/:userId/visits
+//
+// Visitas de un User.
+// Hay que buscar el vendedor asociado al user indicado,
+// èrp puede que no exista un vendedor.
+exports.indexUser = function (req, res, next) {
+
+    models.Salesman.findOne({
+        where: {UserId: req.user.id}
+    })
+    .then(function (salesman) {
+        if (salesman) {
+            res.redirect("/salesmen/" + salesman.id + "/visits");
+        } else {
+            res.redirect("/visits");
+        }
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
+
+
 // GET /visits
-exports.index = function(req, res, next) {
+// GET /customers/:customerId/visits
+// GET /salesmen/:salesmanId/visits
+// GET /salesmen/:salesmanId/customers/:customerId/visits',
+exports.index = function (req, res, next) {
 
     var options = {};
     options.where = {};
-
-    // Nota Mas abajo (en searchcustomer) se hace un include de clientes.
-    options.include = [
-        models.Target
-    ];
-
-    //----------------
-
-    // Query: En la query pueden pasarnos el campo forceSalesmanId para mostrar solo las
-    // visitas de un vendedor.
-    var forceSalesmanId = req.query.forceSalesmanId || 0;
+    options.include = [];
 
     //----------------
 
@@ -85,19 +103,19 @@ exports.index = function(req, res, next) {
 
     if (searchdateafter !== "") {
         if (searchdatebefore !== "") {
-            options.where.plannedFor = { $between: [ searchmomentafter, searchmomentbefore] };
+            options.where.plannedFor = {$between: [searchmomentafter, searchmomentbefore]};
         } else {
-            options.where.plannedFor = { $gte: searchmomentafter };
+            options.where.plannedFor = {$gte: searchmomentafter};
         }
     } else {
         if (searchdatebefore !== "") {
-            options.where.plannedFor = { $lte: searchmomentbefore };
+            options.where.plannedFor = {$lte: searchmomentbefore};
         }
     }
 
 
+    // Visitas de un cliente:
     if (!req.customer) {
-        // Busquedas por cliente:
         var searchcustomer = req.query.searchcustomer || '';
         if (searchcustomer) {
             var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
@@ -125,8 +143,8 @@ exports.index = function(req, res, next) {
     }
 
 
-    if (!forceSalesmanId) {
-        // Busquedas por vendedor:
+    // Visitas de un vendedor:
+    if (!req.salesman) {
         var searchsalesman = req.query.searchsalesman || '';
         if (searchsalesman) {
             var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
@@ -136,14 +154,14 @@ exports.index = function(req, res, next) {
                 model: models.Salesman,
                 as: "Salesman",
                 where: {name: {$like: search_like}},
-                include: [{ model: models.Attachment, as: 'Photo'}]
+                include: [{model: models.Attachment, as: 'Photo'}]
             });
         } else {
             // CUIDADO: Estoy retocando el include existente.
             options.include.push({
                 model: models.Salesman,
                 as: "Salesman",
-                include: [{ model: models.Attachment, as: 'Photo'}]
+                include: [{model: models.Attachment, as: 'Photo'}]
             });
         }
     } else {
@@ -151,17 +169,15 @@ exports.index = function(req, res, next) {
         options.include.push({
             model: models.Salesman,
             as: "Salesman",
-            where: {id: forceSalesmanId},
-            include: [{ model: models.Attachment, as: 'Photo'}]
+            where: {id: req.salesman.id},
+            include: [{model: models.Attachment, as: 'Photo'}]
         });
     }
 
-
     //----------------
 
-
     models.Visit.count(options)
-    .then(function(count) {
+    .then(function (count) {
 
         // Paginacion:
 
@@ -182,10 +198,14 @@ exports.index = function(req, res, next) {
 
         return pagination;
     })
-    .then(function(pagination) {
+    .then(function (pagination) {
 
         options.offset = pagination.offset;
         options.limit = pagination.limit;
+
+        options.include.push(
+            {model: models.Target}
+        );
 
         options.order = [['plannedFor', 'DESC']];
 
@@ -200,7 +220,7 @@ exports.index = function(req, res, next) {
             searchcustomer: searchcustomer,
             searchsalesman: searchsalesman,
             customer: req.customer,
-            forceSalesmanId: forceSalesmanId
+            salesman: req.salesman
         });
     })
     .catch(function (error) {
@@ -209,12 +229,13 @@ exports.index = function(req, res, next) {
 };
 
 
-
 // GET /visits/:visitId
-exports.show = function(req, res, next) {
+exports.show = function (req, res, next) {
 
-    res.render('visits/show', { visit: req.visit,
-                                moment: moment });
+    res.render('visits/show', {
+        visit: req.visit,
+        moment: moment
+    });
 };
 
 //-------------------------------------
@@ -230,26 +251,30 @@ function infoOfSalesmenCustomers() {
 
     return Sequelize.Promise.all([
         models.Salesman.findAll({order: [['name']]}) // Obtener info de vendedores
-        .then(function(salesmen) {
-            return salesmen.map(function(salesman) {
-                                    return {id:   salesman.id,
-                                            name: salesman.name };
+        .then(function (salesmen) {
+            return salesmen.map(function (salesman) {
+                return {
+                    id: salesman.id,
+                    name: salesman.name
+                };
             });
         }),
         models.Customer.findAll({order: [['name']]}) // Obtener info de clientes
-        .then(function(customers) {
-            return customers.map(function(customer) {
-                                    return {id:   customer.id,
-                                            code: customer.code,
-                                            name: customer.name };
+        .then(function (customers) {
+            return customers.map(function (customer) {
+                return {
+                    id: customer.id,
+                    code: customer.code,
+                    name: customer.name
+                };
             });
-        })    
+        })
     ]);
 }
 
 
 // GET /visits/new
-exports.new = function(req, res, next) {
+exports.new = function (req, res, next) {
 
     // En la query me pueden sugerir un cliente a usar.
     var customerId = Number(req.query.customerId) || 0;
@@ -296,9 +321,8 @@ exports.new = function(req, res, next) {
 };
 
 
-
 // POST /visits/create
-exports.create = function(req, res, next) {
+exports.create = function (req, res, next) {
 
     var momentPlannedFor = moment(req.body.plannedFor + " 08:00", "DD-MM-YYYY");
 
@@ -308,64 +332,67 @@ exports.create = function(req, res, next) {
         momentFulfilledAt = moment(req.body.fulfilledAt + " 08:00", "DD-MM-YYYY");
     }
 
-    var visit = {   plannedFor:     momentPlannedFor,
-                    fulfilledAt:    momentFulfilledAt,
-                    notes:          req.body.notes.trim(),
-                    CustomerId:     Number(req.body.customerId) || 0,
-                    SalesmanId:     Number(req.body.salesmanId) || 0
+    var visit = {
+        plannedFor: momentPlannedFor,
+        fulfilledAt: momentFulfilledAt,
+        notes: req.body.notes.trim(),
+        CustomerId: Number(req.body.customerId) || 0,
+        SalesmanId: Number(req.body.salesmanId) || 0
     };
 
     // Guarda en la tabla Visits la nueva visita.
     models.Visit.create(visit)
-    .then(function(visit) {
-        req.flash('success', 'Visita creada con éxito.');   
+    .then(function (visit) {
+        req.flash('success', 'Visita creada con éxito.');
 
         res.redirect("/visits/" + visit.id);
     })
-    .catch(Sequelize.ValidationError, function(error) {
+    .catch(Sequelize.ValidationError, function (error) {
         req.flash('error', 'Errores en el formulario:');
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
-        };
-  
+        }
+        ;
+
         return infoOfSalesmenCustomers()
-        .spread(function(salesmen, customers) {
-            res.render('visits/new', {  visit:          visit,
-                                        customers:      customers,
-                                        salesmen:       salesmen,
-                                        moment:         moment });
+        .spread(function (salesmen, customers) {
+            res.render('visits/new', {
+                visit: visit,
+                customers: customers,
+                salesmen: salesmen,
+                moment: moment
+            });
         });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         req.flash('error', 'Error al crear una visita: ' + error.message);
         next(error);
-    }); 
+    });
 };
 
 
-
-
 // GET /visits/:visitId/edit
-exports.edit = function(req, res, next) {
+exports.edit = function (req, res, next) {
 
     infoOfSalesmenCustomers()
-    .spread(function(salesmen, customers) {
+    .spread(function (salesmen, customers) {
 
-        res.render('visits/edit', { visit:          req.visit,
-                                    customers:      customers,
-                                    salesmen:       salesmen,
-                                    moment:         moment });
+        res.render('visits/edit', {
+            visit: req.visit,
+            customers: customers,
+            salesmen: salesmen,
+            moment: moment
+        });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         req.flash('error', 'Error al editar una visita: ' + error.message);
         next(error);
     });
 };
 
 
-
 // PUT /visits/:visitId
-exports.update = function(req, res, next) {
+exports.update = function (req, res, next) {
 
     var momentPlannedFor = moment(req.body.plannedFor + " 08:00", "DD-MM-YYYY");
 
@@ -375,52 +402,55 @@ exports.update = function(req, res, next) {
         momentFulfilledAt = moment(req.body.fulfilledAt + " 08:00", "DD-MM-YYYY");
     }
 
-    req.visit.plannedFor  = momentPlannedFor,
-    req.visit.fulfilledAt = momentFulfilledAt,
-    req.visit.notes       = req.body.notes.trim(),
-    req.visit.CustomerId  = Number(req.body.customerId) || 0,
-    req.visit.SalesmanId  = Number(req.body.salesmanId) || 0
+    req.visit.plannedFor = momentPlannedFor,
+        req.visit.fulfilledAt = momentFulfilledAt,
+        req.visit.notes = req.body.notes.trim(),
+        req.visit.CustomerId = Number(req.body.customerId) || 0,
+        req.visit.SalesmanId = Number(req.body.salesmanId) || 0
 
     req.visit.save({fields: ["plannedFor", "fulfilledAt", "notes", "CustomerId", "SalesmanId"]})
-    .then(function(visit) {
+    .then(function (visit) {
 
-        req.flash('success', 'Visita editada con éxito.'); 
+        req.flash('success', 'Visita editada con éxito.');
 
         res.redirect("/visits/" + visit.id);
     })
-    .catch(Sequelize.ValidationError, function(error) {
+    .catch(Sequelize.ValidationError, function (error) {
 
         req.flash('error', 'Errores en el formulario:');
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
-        };
+        }
+        ;
 
         return infoOfSalesmenCustomers()
-        .spread(function(salesmen, customers) {
+        .spread(function (salesmen, customers) {
 
-            res.render('visits/edit', { visit:          req.visit,
-                                        customers:      customers,
-                                        salesmen:       salesmen,
-                                        moment:         moment });
+            res.render('visits/edit', {
+                visit: req.visit,
+                customers: customers,
+                salesmen: salesmen,
+                moment: moment
+            });
         });
     })
-    .catch(function(error) {
-      req.flash('error', 'Error al editar una visita: '+error.message);
-      next(error);
+    .catch(function (error) {
+        req.flash('error', 'Error al editar una visita: ' + error.message);
+        next(error);
     });
 };
 
 
 // DELETE /visits/:visitId
-exports.destroy = function(req, res, next) {
+exports.destroy = function (req, res, next) {
 
     // Borrar la visita:
     req.visit.destroy()
-    .then(function() {
+    .then(function () {
         req.flash('success', 'Visita borrada con éxito.');
         res.redirect("/reload");
     })
-    .catch(function(error){
+    .catch(function (error) {
         req.flash('error', 'Error al borrar una visita: ' + error.message);
         next(error);
     });

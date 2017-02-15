@@ -20,3 +20,8 @@ Adaptar la aplicacion para comercializarla, que no sea solo para decoversia.
 Poder marcar visitas como favoritas.
 
 Hiperenlacen en los nombre de clientes, vendedores, etc...
+
+Al editar un usuario, que no sea necesario cambiar el password.
+
+Que pueda editarse el nombre de un user.
+

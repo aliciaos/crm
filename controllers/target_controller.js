@@ -126,7 +126,7 @@ exports.create = function(req, res, next) {
     .then(function(target) {
         req.flash('success', 'Objetivo creado con éxito.');   
 
-        res.redirect("/goback/");
+        res.redirect("/visits/" + req.visit.id);
     })
     .catch(Sequelize.ValidationError, function(error) {
         req.flash('error', 'Errores en el formulario:');
@@ -187,7 +187,7 @@ exports.update = function(req, res, next) {
 
         req.flash('success', 'Objetivo editado con éxito.'); 
 
-        res.redirect("/goback/");
+        res.redirect("/visits/" + req.visit.id);
     })
     .catch(Sequelize.ValidationError, function(error) {
 

@@ -91,7 +91,7 @@ exports.create = function(req, res, next) {
                 return user.save({fields: ["username", "password", "salt"]})
                     .then(function(user) { // Renderizar pagina de usuarios
                         req.flash('success', 'Usuario creado con éxito.');
-                        res.redirect("/goback");
+                        res.redirect("/users/" + user.id);
                     })
                     .catch(Sequelize.ValidationError, function(error) {
                         req.flash('error', 'Errores en el formulario:');
@@ -129,7 +129,7 @@ exports.update = function(req, res, next) {
     req.user.save({fields: ["password", "salt"]})
         .then(function(user) {
             req.flash('success', 'Usuario actualizado con éxito.');
-            res.redirect('/goback');
+            res.redirect('/users/' + user.id);
         })
         .catch(Sequelize.ValidationError, function(error) {
 

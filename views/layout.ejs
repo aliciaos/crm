@@ -18,7 +18,7 @@
         <% if (session.user) { %>
 
             <% if (!session.user.isAdmin) { %>
-                <a href="/visits?forceSalesmanId=<%= session.user.id %>">Mis visitas</a>
+                <a href="/users/<%= session.user.id %>/visits">Mis visitas</a>
             <% } %>
 
             <a href="/customers">Clientes</a>
@@ -46,12 +46,11 @@
             <% if (!session.user) { %>
                 <a href="/session">Entrar</a>
             <% } else { %>
-            <span id="loginname"><%= session.user.username %></span>
-                <a href="/users/<%= session.user.id %>">Perfil</a>
+                <a href="/users/<%= session.user.id %>"><span id="loginname"><%= session.user.username %></span></a>
                 <a href="/session?_method=DELETE">Salir</a>
 
                 <% if (session.user.username === "admin") { %>
-                    <a href="/users/register">Registrar</a>
+                    <a href="/users/new">Registrar</a>
                 <% } %>
 
             <% } %>
@@ -99,7 +98,7 @@
   </section>
 
   <footer class="version">
-        <small>Versión: 13 Febrero 2017</small>
+        <small>Versión: 15 Febrero 2017</small>
   </footer>
 
   </body>

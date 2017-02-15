@@ -128,7 +128,7 @@ exports.create = function (req, res, next) {
 
         if (!req.file) {
             req.flash('info', 'Es un Vendedor sin fotografía.');
-            return;
+            return salesman;
         }
 
         // Salvar la imagen en Cloudinary
@@ -136,10 +136,13 @@ exports.create = function (req, res, next) {
         .then(function(uploadResult) {
             // Crear nuevo attachment en la BBDD.
             return createAttachment(req, uploadResult, salesman);
+        })
+        .then(function() {
+            return salesman;
         });
     })
-    .then(function() {
-        res.redirect("/goback");
+    .then(function(salesman) {
+        res.redirect("/salesmen/" + salesman.id);
     })
     .catch(Sequelize.ValidationError, function (error) {
         req.flash('error', 'Errores en el formulario:');
@@ -195,9 +198,9 @@ exports.update = function (req, res, next) {
             req.flash('info', 'Tenemos un vendedor sin fotografía.');
             if (salesman.Photo) {
                 cloudinary.api.delete_resources(salesman.Photo.public_id);
-                return salesman.Photo.destroy();
+                salesman.Photo.destroy();
             }
-            return;
+            return salesman;
         }
 
         // Salvar la foto nueva en Cloudinary
@@ -205,11 +208,13 @@ exports.update = function (req, res, next) {
         .then(function(uploadResult) {
             // Actualizar el attachment en la BBDD.
             return updateAttachment(req, uploadResult, salesman);
+        })
+        .then(function () {
+            return salesman;
         });
     })
-    .then(function() {
-
-        res.redirect("/goback");
+    .then(function (salesman) {
+        res.redirect("/salesmen/" + salesman.id);
     })
     .catch(Sequelize.ValidationError, function (error) {
 
@@ -250,7 +255,6 @@ exports.destroy = function (req, res, next) {
 };
 
 //------------------------------------------------
-
 
 // FUNCIONES AUXILIARES - Cloudinary
 
@@ -347,5 +351,8 @@ function uploadResourceToCloudinary(req) {
         );
     })
 }
+
+
+//------------------------------------------------
 
 
