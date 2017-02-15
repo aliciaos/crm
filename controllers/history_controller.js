@@ -59,6 +59,8 @@ function push(req, res, next) {
  */
 function skip(req, res, next) {
 
+    req.session.history = req.session.history || [];
+
     dump(req.session.history);
 
     next();
