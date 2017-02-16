@@ -79,7 +79,14 @@ Attachment.hasOne(Salesman, {foreignKey: 'PhotoId'});
 //   Un Usuario tiene muchas visitas favoritas.
 //   Una visita tiene muchos fans (los usuarios que la han marcado como favorita)
 User.belongsToMany(Visit, { as: 'Favourites', through: 'Favourites'});
-Visit.belongsToMany(User, {as: 'Fans', through: 'Favourites'});
+Visit.belongsToMany(User, { as: 'Fans', through: 'Favourites'});
+
+// Clientes principales de las fabricas.
+//   Un cliente tiene varias fabricas principales/habituales/preferidas.
+//   Una fabrica tiene varios clientes principales/habituales/preferidos.
+Customer.belongsToMany(Company, { as: 'MainCompanies', through: 'CompanyCustomer', foreignKey: 'CustomerId'});
+Company.belongsToMany(Customer, { as: 'MainCustomers', through: 'CompanyCustomer', foreignKey: 'CompanyId'});
+
 
 //-------------------------------------------------
 

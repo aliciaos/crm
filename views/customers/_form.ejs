@@ -79,3 +79,29 @@
 
 </ul>
 
+</h2>
+Fábricas Habituales:
+</h2>
+
+<ul>
+    <% for (var i in allCompanies) { %>
+    	<% var company = allCompanies[i]; %>
+
+		<li>
+			<input type="checkbox" name="mainCompanyIds[]" value="<%= company.id %>" id="company<%= company.id %>" >
+			<%=  company.name %>
+		</li>
+
+	<% } %>
+</ul>
+
+<!-- Seleccionar (check) las fabricas habituales -->
+
+<script>
+	<% for (var i in mainCompanyIds) { %>
+		<% var companyId = mainCompanyIds[i]; %>
+
+    	document.getElementById("company<%= companyId %>").checked = true;
+
+    <% } %>
+</script>

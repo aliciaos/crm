@@ -1,4 +1,3 @@
-
 var models = require('../models');
 var Sequelize = require('sequelize');
 var fs = require('fs');
@@ -12,27 +11,39 @@ var paginate = require('./paginate').paginate;
 
 
 // Autoload el cliente asociado a :customerId
-exports.load = function(req, res, next, customerId) {
+exports.load = function (req, res, next, customerId) {
 
-    models.Customer.findById(customerId, 
-                          { order: [[ 'name' ]]
-                          })
-    .then(function(customer) {
+    models.Customer.findById(
+        customerId,
+        {
+            include: [
+                {
+                    model: models.Company,
+                    as: "MainCompanies",
+                    attributes: ['id', 'name']
+                }
+            ],
+            order: [['name']]
+        }
+    )
+    .then(function (customer) {
         if (customer) {
             req.customer = customer;
             next();
-        } else { 
+        } else {
             throw new Error('No existe ningún cliente con Id=' + customerId);
         }
     })
-    .catch(function(error) { next(error); });
+    .catch(function (error) {
+        next(error);
+    });
 };
 
 
 //-----------------------------------------------------------
 
 // GET /customers
-exports.index = function(req, res, next) {
+exports.index = function (req, res, next) {
 
     var options = {};
     options.where = {};
@@ -50,7 +61,7 @@ exports.index = function(req, res, next) {
     }
 
     models.Customer.count(options)
-    .then(function(count) {
+    .then(function (count) {
 
         // Paginacion:
         var items_per_page = 25;
@@ -70,17 +81,17 @@ exports.index = function(req, res, next) {
 
         return pagination;
     })
-    .then(function(pagination) {
+    .then(function (pagination) {
 
         options.offset = pagination.offset;
         options.limit = pagination.limit;
 
-        options.include = [ models.Visit ];
+        options.include = [models.Visit];
 
         // options.order = [['name']];
         options.order = [
             ['name'],
-            [ models.Visit, 'plannedFor', 'DESC' ]
+            [models.Visit, 'plannedFor', 'DESC']
         ];
 
 
@@ -88,156 +99,239 @@ exports.index = function(req, res, next) {
     })
     .then(function (customers) {
         res.render('customers/index.ejs', {
-                customers: customers,
-                moment: moment,
-                search: search
-            });
+            customers: customers,
+            moment: moment,
+            search: search
+        });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         next(error);
     });
 };
 
 
+//-----------------------------------------------------------
+
 
 // GET /customers/:customerId
-exports.show = function(req, res, next) {
+exports.show = function (req, res, next) {
 
-    res.render('customers/show', {customer: req.customer});
+    res.render('customers/show', {
+        customer: req.customer,
+        mainCompanies: req.customer.MainCompanies
+    });
 };
 
 
-// GET /customers/new
-exports.new = function(req, res, next) {
+//-----------------------------------------------------------
 
-    var customer = models.Customer.build({ 
+// Auxiliar
+// Devuelve una promesa que al cumplirse devuelve un array con la informacion
+// de todas las fabricas existentes.
+function getAllCompanies() {
+
+    return models.Company.findAll({order: [['name']]}) // Obtener info de fabricas
+    .then(function (companies) {
+        return companies.map(function (company) {
+            return {
+                id: company.id,
+                name: company.name
+            };
+        });
+    });
+}
+
+
+//-----------------------------------------------------------
+
+
+// GET /customers/new
+exports.new = function (req, res, next) {
+
+    var customer = models.Customer.build({
         code: "",
         name: "",
-        cif: "", 
-        address1: "", 
-        address2: "", 
-        postalCode: "", 
-        city: "", 
-        phone1: "", 
-        phone2: "", 
-        phone3: "", 
-        phone4: "", 
-        email1: "", 
-        email2: "", 
+        cif: "",
+        address1: "",
+        address2: "",
+        postalCode: "",
+        city: "",
+        phone1: "",
+        phone2: "",
+        phone3: "",
+        phone4: "",
+        email1: "",
+        email2: "",
         web: "",
-        cif: "" });
+        cif: ""
+    });
 
-    res.render('customers/new', { customer: customer });
+    getAllCompanies()
+    .then(function (allCompanies) {
+
+        res.render('customers/new', {
+            customer: customer,
+            mainCompanyIds: [],
+            allCompanies: allCompanies
+        });
+    })
+    .catch(function (error) {
+        next(error);
+    });
 };
 
 
 // POST /customers/create
-exports.create = function(req, res, next) {
+exports.create = function (req, res, next) {
 
-    var customer = { 
+    var customer = {
         code: req.body.code.trim(),
         name: req.body.name.trim(),
-        cif: req.body.cif.trim(), 
-        address1: req.body.address1.trim(), 
-        address2: req.body.address2.trim(), 
-        postalCode: req.body.postalCode.trim(), 
-        city: req.body.city.trim(), 
-        phone1: req.body.phone1.trim(), 
-        phone2: req.body.phone2.trim(), 
-        phone3: req.body.phone3.trim(), 
-        phone4: req.body.phone4.trim(), 
-        email1: req.body.email1.trim(), 
-        email2: req.body.email2.trim(), 
+        cif: req.body.cif.trim(),
+        address1: req.body.address1.trim(),
+        address2: req.body.address2.trim(),
+        postalCode: req.body.postalCode.trim(),
+        city: req.body.city.trim(),
+        phone1: req.body.phone1.trim(),
+        phone2: req.body.phone2.trim(),
+        phone3: req.body.phone3.trim(),
+        phone4: req.body.phone4.trim(),
+        email1: req.body.email1.trim(),
+        email2: req.body.email2.trim(),
         web: req.body.web.trim(),
-        cif: req.body.cif.trim() 
+        cif: req.body.cif.trim()
     };
+
+    // Ids de las fabricas habituales
+    var mainCompanyIds = req.body.mainCompanyIds || []
 
     // Guarda en la tabla Customers el nueva cliente.
     models.Customer.create(customer)
-    .then(function(customer) {
-        req.flash('success', 'Cliente creado con éxito.');   
+    .then(function (customer) {
+        req.flash('success', 'Cliente creado con éxito.');
 
-        res.redirect("/customers/" + customer.id);
+        return customer.setMainCompanies(mainCompanyIds)
+        .then(function () {
+
+            req.flash('success', 'Fábricas habituales marcadas con éxito.');
+
+            res.redirect("/customers/" + customer.id);
+        });
     })
-    .catch(Sequelize.ValidationError, function(error) {
+    .catch(Sequelize.ValidationError, function (error) {
         req.flash('error', 'Errores en el formulario:');
         for (var i in error.errors) {
             req.flash('error', error.errors[i].message);
-        };
-  
-        res.render('customers/new', { customer: customer });
+        }
+
+        return getAllCompanies()
+        .then(function (allCompanies) {
+
+            res.render('customers/new', {
+                customer: customer,
+                mainCompanyIds: mainCompanyIds,
+                allCompanies: allCompanies
+            });
+        });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         req.flash('error', 'Error al crear un cliente: ' + error.message);
         next(error);
-    }); 
+    });
 };
-
-
 
 
 // GET /customers/:customerId/edit
-exports.edit = function(req, res, next) {
+exports.edit = function (req, res, next) {
 
-    var customer = req.customer;  // autoload
+    getAllCompanies()
+    .then(function (allCompanies) {
 
-    res.render('customers/edit', { customer: customer });
+        var mainCompanyIds = req.customer.MainCompanies.map(function (company) {
+            return company.id;
+        });
+
+        res.render('customers/edit', {
+            customer: req.customer,
+            mainCompanyIds: mainCompanyIds,
+            allCompanies: allCompanies
+        });
+    })
+    .catch(function (error) {
+        next(error);
+    });
 };
 
 
-
 // PUT /customers/:customerId
-exports.update = function(req, res, next) {
+exports.update = function (req, res, next) {
 
-    req.customer.code       = req.body.code.trim();
-    req.customer.name       = req.body.name.trim();
-    req.customer.cif        = req.body.cif.trim();
-    req.customer.address1   = req.body.address1.trim();
-    req.customer.address2   = req.body.address2.trim();
+    req.customer.code = req.body.code.trim();
+    req.customer.name = req.body.name.trim();
+    req.customer.cif = req.body.cif.trim();
+    req.customer.address1 = req.body.address1.trim();
+    req.customer.address2 = req.body.address2.trim();
     req.customer.postalCode = req.body.postalCode.trim();
-    req.customer.city       = req.body.city.trim();
-    req.customer.phone1     = req.body.phone1.trim();
-    req.customer.phone2     = req.body.phone2.trim();
-    req.customer.phone3     = req.body.phone3.trim();
-    req.customer.phone4     = req.body.phone4.trim();
-    req.customer.email1     = req.body.email1.trim();
-    req.customer.email2     = req.body.email2.trim();
-    req.customer.web        = req.body.web.trim();
-    req.customer.cif        = req.body.cif.trim();
+    req.customer.city = req.body.city.trim();
+    req.customer.phone1 = req.body.phone1.trim();
+    req.customer.phone2 = req.body.phone2.trim();
+    req.customer.phone3 = req.body.phone3.trim();
+    req.customer.phone4 = req.body.phone4.trim();
+    req.customer.email1 = req.body.email1.trim();
+    req.customer.email2 = req.body.email2.trim();
+    req.customer.web = req.body.web.trim();
+    req.customer.cif = req.body.cif.trim();
+
+    var mainCompanyIds = req.body.mainCompanyIds || [];
 
     req.customer.save()
-    .then(function(customer) {
+    .then(function (customer) {
 
-        req.flash('success', 'Cliente editado con éxito.'); 
+        req.flash('success', 'Cliente editado con éxito.');
 
-        res.redirect("/customers/" + customer.id);
+        return customer.setMainCompanies(mainCompanyIds)
+        .then(function () {
+
+            req.flash('success', 'Fábricas habituales editadas con éxito.');
+
+            res.redirect("/customers/" + customer.id);
+        });
     })
-    .catch(Sequelize.ValidationError, function(error) {
+    .catch(Sequelize.ValidationError, function (error) {
 
-      req.flash('error', 'Errores en el formulario:');
-      for (var i in error.errors) {
-          req.flash('error', error.errors[i].value);
-      };
+        req.flash('error', 'Errores en el formulario:');
+        for (var i in error.errors) {
+            req.flash('error', error.errors[i].value);
+        }
 
-      res.render('customers/edit', { customer: req.customer });
+        return getAllCompanies()
+        .then(function (allCompanies) {
+
+            res.render('customers/edit',
+                {
+                    customer: req.customer,
+                    mainCompanyIds: mainCompanyIds,
+                    allCompanies: allCompanies
+                });
+        });
     })
-    .catch(function(error) {
-      req.flash('error', 'Error al editar un cliente: '+error.message);
-      next(error);
+    .catch(function (error) {
+        req.flash('error', 'Error al editar un cliente: ' + error.message);
+        next(error);
     });
 };
 
 
 // DELETE /customers/:customerId
-exports.destroy = function(req, res, next) {
+exports.destroy = function (req, res, next) {
 
     // Borrar el cliente:
     req.customer.destroy()
-    .then(function() {
+    .then(function () {
         req.flash('success', 'Cliente borrado con éxito.');
         res.redirect("/reload");
     })
-    .catch(function(error){
+    .catch(function (error) {
         req.flash('error', 'Error al borrar un cliente: ' + error.message);
         next(error);
     });
@@ -247,14 +341,14 @@ exports.destroy = function(req, res, next) {
 
 
 // GET /customers/importGet
-exports.importForm = function(req, res, next) {
+exports.importForm = function (req, res, next) {
 
     res.render('customers/import');
 };
 
 
 // POST /customers/importPost
-exports.importPost = function(req, res, next) {
+exports.importPost = function (req, res, next) {
 
     if (!req.file) {
         req.flash('error', 'No se han importado clientes porque falta el fichero CSV de clientes.');
@@ -278,7 +372,7 @@ exports.importPost = function(req, res, next) {
         input: fs.createReadStream(req.file.path)
     });
 
-    rl.on('line', function(line) {
+    rl.on('line', function (line) {
         console.log('Line from file: ' + line);
 
         if (isHeadersLine) {
@@ -289,20 +383,20 @@ exports.importPost = function(req, res, next) {
         var fields = line.split(';');
 
         var customer = {
-            code:       (fields[ 0] || "").trim(),
-            name:       (fields[ 1] || "").trim(),
-            cif:        (fields[ 2] || "").trim(),
-            address1:   (fields[ 3] || "").trim(),
-            address2:   (fields[ 4] || "").trim(),
-            postalCode: (fields[ 5] || "").trim(),
-            city:       (fields[ 6] || "").trim(),
-            phone1:     (fields[ 7] || "").trim(),
-            phone2:     (fields[ 8] || "").trim(),
-            phone3:     (fields[ 9] || "").trim(),
-            phone4:     (fields[10] || "").trim(),
-            email1:     (fields[11] || "").trim(),
-            email2:     (fields[12] || "").trim(),
-            web:        (fields[13] || "").trim()
+            code: (fields[0] || "").trim(),
+            name: (fields[1] || "").trim(),
+            cif: (fields[2] || "").trim(),
+            address1: (fields[3] || "").trim(),
+            address2: (fields[4] || "").trim(),
+            postalCode: (fields[5] || "").trim(),
+            city: (fields[6] || "").trim(),
+            phone1: (fields[7] || "").trim(),
+            phone2: (fields[8] || "").trim(),
+            phone3: (fields[9] || "").trim(),
+            phone4: (fields[10] || "").trim(),
+            email1: (fields[11] || "").trim(),
+            email2: (fields[12] || "").trim(),
+            web: (fields[13] || "").trim()
         };
 
         console.log(customer);
@@ -310,7 +404,7 @@ exports.importPost = function(req, res, next) {
         customers.push(customer);
     });
 
-    rl.on('close', function() {
+    rl.on('close', function () {
 
         fs.unlinkSync(req.file.path);
 
@@ -318,10 +412,10 @@ exports.importPost = function(req, res, next) {
             hooks: false,
             validate: true,
             individualHooks: true
-        }).then(function() {
+        }).then(function () {
             req.flash('success', 'El fichero de clientes ' + req.file.originalname + ' se ha cargado con éxito.');
             res.redirect('/reload');
-        }).catch(function(errors) {
+        }).catch(function (errors) {
             console.log(errors);
             req.flash('error', 'Hay campos incorrectos en ' + req.file.originalname + '.');
             req.flash('error', 'No se ha importado ningún cliente');

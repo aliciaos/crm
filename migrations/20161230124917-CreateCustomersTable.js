@@ -1,22 +1,25 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+    up: function (queryInterface, Sequelize) {
         return queryInterface.createTable(
-            'Customers', 
-            {   id: { 
-                    type: Sequelize.INTEGER,  allowNull: false,
-                    primaryKey: true,         autoIncrement: true,  
-                    unique: true 
+            'Customers',
+            {
+                id: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
+                    primaryKey: true,
+                    autoIncrement: true,
+                    unique: true
                 },
                 code: {
                     type: Sequelize.STRING,
                     unique: true,
-                    validate: { notEmpty: {msg: "Falta el código del vendedor."}}
+                    validate: {notEmpty: {msg: "Falta el código del vendedor."}}
                 },
                 name: {
                     type: Sequelize.STRING,
-                    validate: { notEmpty: {msg: "Falta el nombre del vendedor."}}
+                    validate: {notEmpty: {msg: "Falta el nombre del vendedor."}}
                 },
                 cif: {
                     type: Sequelize.STRING
@@ -54,15 +57,16 @@ module.exports = {
                 web: {
                     type: Sequelize.STRING
                 },
-                createdAt: { type: Sequelize.DATE,     allowNull: false },
-                updatedAt: { type: Sequelize.DATE,     allowNull: false }
-           },
-           {    sync: {force: true}
-           }
+                createdAt: {type: Sequelize.DATE, allowNull: false},
+                updatedAt: {type: Sequelize.DATE, allowNull: false}
+            },
+            {
+                sync: {force: true}
+            }
         );
-  },
+    },
 
-  down: function (queryInterface, Sequelize) {
+    down: function (queryInterface, Sequelize) {
         return queryInterface.dropTable('Customers');
-  }
+    }
 };
