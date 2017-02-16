@@ -23,7 +23,7 @@ exports.load = function (req, res, next, customerId) {
                     attributes: ['id', 'name']
                 }
             ],
-            order: [['name']]
+            order: [[ {model: models.Company, as: "MainCompanies"}, 'name', 'ASC']]
         }
     )
     .then(function (customer) {
@@ -130,7 +130,9 @@ exports.show = function (req, res, next) {
 // de todas las fabricas existentes.
 function getAllCompanies() {
 
-    return models.Company.findAll({order: [['name']]}) // Obtener info de fabricas
+    return models.Company.findAll({
+        order: [['name']]
+    })
     .then(function (companies) {
         return companies.map(function (company) {
             return {

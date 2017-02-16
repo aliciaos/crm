@@ -11,15 +11,6 @@
             <img class="icon" src="/images/edit.png">
           </a>
         <% } %>
-       
-
-        <% if (session.user.isAdmin && session.user.id !== user.id) { %>
-            <a href="/users/<%= user.id %>?_method=DELETE"
-               onClick="return confirm('Borrar cuenta: <%= user.username %>');">
-                    <img class="icon" src="/images/basura.png"> 
-            </a>
-        <% } %>
-
 
     <% } %>
 

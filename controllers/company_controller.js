@@ -17,7 +17,7 @@ exports.load = function (req, res, next, companyId) {
                     attributes: ['id', 'code', 'name']
                 }
             ],
-            order: [['name']]
+            order: [[ {model: models.Customer, as: "MainCustomers"}, 'name' ]]
         }
     )
     .then(function (company) {
