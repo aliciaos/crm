@@ -174,6 +174,29 @@ exports.index = function (req, res, next) {
         });
     }
 
+
+    // Filtrar por mis visitas favoritas
+    var searchfavourites = req.query.searchfavourites || "";
+    if (searchfavourites) {
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.User,
+            as: "Fans",
+            attributes: ['id', 'username'],
+            where: {id: req.session.user.id}
+        });
+    } else {
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.User,
+            as: "Fans",
+            attributes: ['id', 'username']
+        });
+    }
+
+
     //----------------
 
     models.Visit.count(options)
@@ -212,6 +235,14 @@ exports.index = function (req, res, next) {
         return models.Visit.findAll(options)
     })
     .then(function (visits) {
+
+        // Marcar las visitas que son favoritas
+        visits.forEach(function (visit) {
+            visit.favourite = visit.Fans.some(function (fan) {
+                return fan.id == req.session.user.id;
+            });
+        });
+
         res.render('visits/index.ejs', {
             visits: visits,
             moment: moment,
@@ -219,6 +250,7 @@ exports.index = function (req, res, next) {
             searchdatebefore: searchdatebefore,
             searchcustomer: searchcustomer,
             searchsalesman: searchsalesman,
+            searchfavourites: searchfavourites,
             customer: req.customer,
             salesman: req.salesman
         });
@@ -232,9 +264,33 @@ exports.index = function (req, res, next) {
 // GET /visits/:visitId
 exports.show = function (req, res, next) {
 
-    res.render('visits/show', {
-        visit: req.visit,
-        moment: moment
+    new Promise(function (resolve, reject) {
+
+        // Para usuarios logeados:
+        //   Si la visita es una de mis favoritas, creo un atributo llamado
+        //   "favourite" con el valor true.
+        if (req.session.user) {
+
+            resolve(
+                req.visit.getFans({where: {id: req.session.user.id}})
+                .then(function (fans) {
+                    if (fans.length > 0) {
+                        req.visit.favourite = true
+                    }
+                })
+            );
+        } else {
+            resolve();
+        }
+    })
+    .then(function () {
+        res.render('visits/show', {
+            visit: req.visit,
+            moment: moment
+        });
+    })
+    .catch(function (error) {
+        next(error);
     });
 };
 

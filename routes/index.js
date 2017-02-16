@@ -14,6 +14,7 @@ var targettypeController = require('../controllers/targettype_controller');
 var visitController = require('../controllers/visit_controller');
 var targetController = require('../controllers/target_controller');
 var reportController = require('../controllers/report_controller');
+var favouriteController = require('../controllers/favourite_controller');
 
 var hc = require('../controllers/history_controller');
 
@@ -309,5 +310,16 @@ router.get('/users/:userId(\\d+)/visits',
 router.get('/reports',
     reportController.index);
 
+
+// Rutas de Favoritos
+router.put('/users/:userId([0-9]+)/favourites/:visitId(\\d+)',
+	sessionController.loginRequired,
+    sessionController.adminOrMyselfRequired,
+    favouriteController.add);
+
+router.delete('/users/:userId([0-9]+)/favourites/:visitId(\\d+)',
+	sessionController.loginRequired,
+    sessionController.adminOrMyselfRequired,
+    favouriteController.del);
 
 module.exports = router;

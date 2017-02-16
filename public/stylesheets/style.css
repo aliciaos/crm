@@ -71,6 +71,19 @@ a:active {
     color: blue;
 }
 
+input[type=checkbox] + .star {
+    content: url(/images/star_grey.png);
+    height: 16px;
+    width: 16px;
+}
+
+input[type=checkbox]:checked + .star {
+    content: url(/images/star_yellow.png);
+    height: 16px;
+    width: 16px;
+}
+
+
 .toberepared {
     color: red;
 }

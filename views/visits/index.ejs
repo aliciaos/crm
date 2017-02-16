@@ -48,6 +48,13 @@
         <br />
     <% } %>
 
+
+    <div class="vcenter">
+        <label>Favoritas:</label>
+        <input type="checkbox" name="searchfavourites" value="1" <%= locals.searchfavourites ? 'checked' : '' %> >
+        <img class="star" src="/images/star_yellow.png" \>
+    </div>
+
 </form>
 
 
@@ -97,7 +104,7 @@
         <th>
             Observaciones
         </th>
-        <th>
+        <th colspan="2">
             
         </th>
     </tr> 
@@ -156,6 +163,11 @@
                        onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img class="icon" src="/images/basura.png"></a>
                 <% } %>
             </td>
+
+            <td>
+                <%- include ../favourites/_stars.ejs %>
+            </td>
+
          </tr> 
     <% } %>
 

@@ -50,8 +50,10 @@ var User = sequelize.import(path.join(__dirname,'user'));
 // Importar la definicion de Attachments de attachment.js
 var Attachment = sequelize.import(path.join(__dirname,'attachment'));
 
+//-------------------------------------------------
 
 // Relaciones entre modelos
+
 Visit.belongsTo(Customer);
 Customer.hasMany(Visit);
 
@@ -72,6 +74,14 @@ User.hasOne(Salesman);
 
 Salesman.belongsTo(Attachment, {as: "Photo", foreignKey: 'PhotoId'});
 Attachment.hasOne(Salesman, {foreignKey: 'PhotoId'});
+
+// Favoritos:
+//   Un Usuario tiene muchas visitas favoritas.
+//   Una visita tiene muchos fans (los usuarios que la han marcado como favorita)
+User.belongsToMany(Visit, { as: 'Favourites', through: 'Favourites'});
+Visit.belongsToMany(User, {as: 'Fans', through: 'Favourites'});
+
+//-------------------------------------------------
 
 // Exportar:
 
