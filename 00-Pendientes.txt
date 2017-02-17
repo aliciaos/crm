@@ -13,17 +13,26 @@ Pensar cuales son los campos de un objetivo que puede editar un vendedor.
 
 Puede un vendedor borrar un objetivo en una visita?
 
-
 Adaptar la aplicacion para comercializarla, que no sea solo para decoversia.
 
-
-Hiperenlacen en los nombre de clientes, vendedores, etc...
+Hiperenlacens en los nombre de clientes, vendedores, etc...
 
 Al editar un usuario, que no sea necesario cambiar el password.
 
 Que pueda editarse el nombre de un user.
 
-Que pueda editarse un vendedor sin cambiarle la foto.
-
 Añadir cuales son los cliente comunes/habituales de una fabrica.
+
+Meter el blog
+
+Gestion de documentos (attachments)
+
+Buscar visitas por clientes de una fabrica, es decir, mostrar las visitas de los clientes habituales de una fabrica.
+
+Dada una fabrica y un tipo de objetivo, crear una visita para todos los clientes habituales de esa fabrica, y que esa visita tenga un objeetivo del tipo indicado.
+
+Crear una base de datos para hacer pruebas de sobrecarga.
+
+Tener una cuenta en heroku de pruebas y otra de produccion.
+
 
