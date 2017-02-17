@@ -1,8 +1,14 @@
 
 <ul>
 	<li>
-		<b for="photo"><b>Fotografía:</b></label>
+		<b for="photo">Fotografía:</b></label>
 		<input type="file" id="photo" accept="image/*" name="photo" /> <p>
+
+
+ 		<% if (!salesman.isNewRecord) { %>
+			<label>Mantener fotografía actual:</label>
+			<input type="checkbox" name="keepphoto" value="1" checked >
+		<% } %>
 	</li>
 
 	<li>

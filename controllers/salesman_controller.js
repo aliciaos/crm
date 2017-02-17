@@ -84,12 +84,14 @@ exports.show = function (req, res, next) {
 function infoOfUsers() {
 
     return models.User.findAll({order: [['username']]})
-        .then(function(users) {
-            return users.map(function(user) {
-                return {id:   user.id,
-                        name: user.username };
-            });
+    .then(function (users) {
+        return users.map(function (user) {
+            return {
+                id: user.id,
+                name: user.username
+            };
         });
+    });
 }
 
 // GET /salesmen/new
@@ -101,14 +103,15 @@ exports.new = function (req, res, next) {
     });
 
     infoOfUsers()
-    .then(function(users) {
+    .then(function (users) {
 
         res.render('salesmen/new', {
             salesman: salesman,
-            users:    users });
+            users: users
+        });
 
     })
-    .catch(function(error) {
+    .catch(function (error) {
         req.flash('error', 'Error al crear un vendedor: ' + error.message);
         next(error);
     });
@@ -118,8 +121,10 @@ exports.new = function (req, res, next) {
 // POST /salesmen/create
 exports.create = function (req, res, next) {
 
-    var salesman = { name:   req.body.name.trim(),
-                     UserId: Number(req.body.userId) || 0 };
+    var salesman = {
+        name: req.body.name.trim(),
+        UserId: Number(req.body.userId) || 0
+    };
 
     // Guarda en la tabla Salesmen el nuevo vendedor.
     models.Salesman.create(salesman)
@@ -133,25 +138,25 @@ exports.create = function (req, res, next) {
 
         // Salvar la imagen en Cloudinary
         return uploadResourceToCloudinary(req)
-        .then(function(uploadResult) {
+        .then(function (uploadResult) {
             // Crear nuevo attachment en la BBDD.
             return createAttachment(req, uploadResult, salesman);
         })
-        .then(function() {
+        .then(function () {
             return salesman;
         });
     })
-    .then(function(salesman) {
+    .then(function (salesman) {
         res.redirect("/salesmen/" + salesman.id);
     })
     .catch(Sequelize.ValidationError, function (error) {
         req.flash('error', 'Errores en el formulario:');
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
-        };
+        }
 
         return infoOfUsers()
-        .then(function(users) {
+        .then(function (users) {
             res.render('salesmen/new', {
                 salesman: salesman,
                 users: users
@@ -171,11 +176,13 @@ exports.edit = function (req, res, next) {
     var salesman = req.salesman;  // autoload
 
     infoOfUsers()
-    .then(function(users) {
-        res.render('salesmen/edit', {   salesman: salesman,
-                                        users:    users});
+    .then(function (users) {
+        res.render('salesmen/edit', {
+            salesman: salesman,
+            users: users
+        });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         req.flash('error', 'Error al editar un vendedor: ' + error.message);
         next(error);
     });
@@ -185,35 +192,58 @@ exports.edit = function (req, res, next) {
 // PUT /salesmen/:salesmanId
 exports.update = function (req, res, next) {
 
-    req.salesman.name   = req.body.name.trim();
-    req.salesman.UserId = Number(req.body.userId) || 0;
+    req.salesman.name = req.body.name.trim();
 
-    req.salesman.save({fields: ["name", "UserId"]})
+
+    new Promise(function (resolve, reject) {
+
+        var userId = Number(req.body.userId) || 0;
+
+        if (userId) {
+            models.User.findById(userId)
+            .then(function (user) {
+                //resolve(req.salesman.setUser(user));
+                resolve(user.setSalesman(req.salesman));
+            });
+        } else {
+            req.salesman.UserId =  0;
+            resolve();
+        }
+    })
+    .then(function () {
+
+        return req.salesman.save({fields: ["name", "UserId"]})
+    })
     .then(function (salesman) {
 
         req.flash('success', 'Vendedor editado con éxito.');
 
-        // Sin imagen: Eliminar attachment e imagen viejos.
-        if (!req.file) {
-            req.flash('info', 'Tenemos un vendedor sin fotografía.');
-            if (salesman.Photo) {
-                cloudinary.api.delete_resources(salesman.Photo.public_id);
-                salesman.Photo.destroy();
+        if (!req.body.keepphoto) {
+            // Sin imagen: Eliminar attachment e imagen viejos.
+            if (!req.file) {
+                req.flash('info', 'Tenemos un vendedor sin fotografía.');
+                if (salesman.Photo) {
+                    cloudinary.api.delete_resources(salesman.Photo.public_id);
+                    salesman.Photo.destroy();
+                }
+                return salesman;
             }
+
+            // Salvar la foto nueva en Cloudinary
+            return uploadResourceToCloudinary(req)
+            .then(function (uploadResult) {
+                // Actualizar el attachment en la BBDD.
+                return updateAttachment(req, uploadResult, salesman);
+            })
+            .then(function () {
+                return salesman;
+            });
+        } else {
             return salesman;
         }
-
-        // Salvar la foto nueva en Cloudinary
-        return uploadResourceToCloudinary(req)
-        .then(function(uploadResult) {
-            // Actualizar el attachment en la BBDD.
-            return updateAttachment(req, uploadResult, salesman);
-        })
-        .then(function () {
-            return salesman;
-        });
     })
     .then(function (salesman) {
+
         res.redirect("/salesmen/" + salesman.id);
     })
     .catch(Sequelize.ValidationError, function (error) {
@@ -222,10 +252,10 @@ exports.update = function (req, res, next) {
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
         }
-        ;
+
 
         return infoOfUsers()
-        .then(function(users) {
+        .then(function (users) {
             res.render('salesmen/edit', {
                 salesman: req.salesman,
                 users: users
@@ -272,14 +302,14 @@ function createAttachment(req, uploadResult, salesman) {
         filename: req.file.originalname,
         mime: req.file.mimetype
     })
-    .then(function(attachment) {
+    .then(function (attachment) {
         return salesman.setPhoto(attachment);
     })
-    .then(function() {
+    .then(function () {
         req.flash('success', 'Fotografía guardada con éxito.');
     })
-    .catch(function(error) { // Ignoro errores de validacion en imagenes
-        req.flash('error', 'No se ha podido salvar la fotografía: '+error.message);
+    .catch(function (error) { // Ignoro errores de validacion en imagenes
+        req.flash('error', 'No se ha podido salvar la fotografía: ' + error.message);
         cloudinary.api.delete_resources(uploadResult.public_id);
     });
 }
@@ -297,7 +327,7 @@ function updateAttachment(req, uploadResult, salesman) {
     var old_public_id = salesman.Photo ? salesman.Photo.public_id : null;
 
     return salesman.getPhoto()
-    .then(function(attachment) {
+    .then(function (attachment) {
         if (!attachment) {
             attachment = models.Attachment.build({});
         }
@@ -307,17 +337,17 @@ function updateAttachment(req, uploadResult, salesman) {
         attachment.mime = req.file.mimetype;
         return attachment.save();
     })
-    .then(function(attachment) {
+    .then(function (attachment) {
         return salesman.setPhoto(attachment);
     })
-    .then(function(attachment) {
+    .then(function (attachment) {
         req.flash('success', 'Imagen nueva guardada con éxito.');
         if (old_public_id) {
             cloudinary.api.delete_resources(old_public_id);
         }
     })
-    .catch(function(error) { // Ignoro errores de validacion en imagenes
-        req.flash('error', 'No se ha podido salvar la nueva imagen: '+error.message);
+    .catch(function (error) { // Ignoro errores de validacion en imagenes
+        req.flash('error', 'No se ha podido salvar la nueva imagen: ' + error.message);
         cloudinary.api.delete_resources(uploadResult.public_id);
     });
 }
