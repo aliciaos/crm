@@ -21,13 +21,9 @@ Al editar un usuario, que no sea necesario cambiar el password.
 
 Que pueda editarse el nombre de un user.
 
-Añadir cuales son los cliente comunes/habituales de una fabrica.
-
 Meter el blog
 
 Gestion de documentos (attachments)
-
-Buscar visitas por clientes de una fabrica, es decir, mostrar las visitas de los clientes habituales de una fabrica.
 
 Dada una fabrica y un tipo de objetivo, crear una visita para todos los clientes habituales de esa fabrica, y que esa visita tenga un objeetivo del tipo indicado.
 

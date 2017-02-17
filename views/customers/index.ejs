@@ -22,13 +22,13 @@
     <label>Clientes habituales de la fábrica:</label>
     <select name="searchCompanyId">
 
-        <option value=""  <%= !searchCompanyId ? "selected" : "" %> >
+        <option value=""  <%= !locals.searchCompanyId ? "selected" : "" %> >
             Todas
         </option>
 
         <% for (var i in companiesInfo) { %>
             <% var companyInfo = companiesInfo[i]; %>
-            <option value="<%= companyInfo.id %>"  <%= companyInfo.id == searchCompanyId ? "selected" : "" %> >
+            <option value="<%= companyInfo.id %>"  <%= companyInfo.id == locals.searchCompanyId ? "selected" : "" %> >
                 <%= companyInfo.name %>
             </option>
         <% } %>

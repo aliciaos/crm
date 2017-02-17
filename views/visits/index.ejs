@@ -20,7 +20,7 @@
            value="<%= locals.searchdateafter || '' %>"
            placeholder="dd-mm-aaaa"
            pattern="\d\d-\d\d-\d\d\d\d"
-           size="10"
+           size="11"
            autocomplete="off" />
 
     <label>Hasta:</label>
@@ -29,7 +29,7 @@
            value="<%= locals.searchdatebefore || '' %>"
            placeholder="dd-mm-aaaa"
            pattern="\d\d-\d\d-\d\d\d\d"
-           size="10"
+           size="11"
            autocomplete="off" />
 
     <br />
@@ -39,6 +39,24 @@
         <input type="text" name="searchcustomer" value="<%= locals.searchcustomer || '' %>" placeholder="Cliente a buscar" size="40" autocomplete="off" />
 
         <br />
+
+        <label>Clientes habituales de la fábrica:</label>
+        <select name="searchCompanyId">
+
+            <option value=""  <%= !locals.searchCompanyId ? "selected" : "" %> >
+                Todas
+            </option>
+
+            <% for (var i in companiesInfo) { %>
+            <% var companyInfo = companiesInfo[i]; %>
+            <option value="<%= companyInfo.id %>"  <%= companyInfo.id == locals.searchCompanyId ? "selected" : "" %> >
+                <%= companyInfo.name %>
+            </option>
+            <% } %>
+        </select>
+
+        <br />
+
     <% } %>
 
     <% if (!locals.salesman) { %>

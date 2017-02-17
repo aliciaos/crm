@@ -5,6 +5,8 @@ var moment = require('moment');
 
 var paginate = require('./paginate').paginate;
 
+var companyHelper = require("../helpers/company");
+
 //-----------------------------------------------------------
 
 
@@ -79,14 +81,19 @@ exports.index = function (req, res, next) {
     var options = {};
     options.where = {};
     options.include = [];
+    options.order = [];
 
     //----------------
 
-
-    // Busquedas por fecha de planificacion: entre dos fechas
     var searchdateafter = req.query.searchdateafter || '';
     var searchdatebefore = req.query.searchdatebefore || '';
+    var searchcustomer = req.query.searchcustomer || '';
+    var searchCompanyId = req.query.searchCompanyId || "";
+    var searchsalesman = req.query.searchsalesman || '';
+    var searchfavourites = req.query.searchfavourites || "";
 
+
+    // Busquedas por fecha de planificacion: entre dos fechas
     var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
     if (searchdateafter && !momentafter.isValid()) {
         req.flash("error", "La fecha " + searchdateafter + " no es válida.");
@@ -114,26 +121,37 @@ exports.index = function (req, res, next) {
     }
 
 
+
     // Visitas de un cliente:
     if (!req.customer) {
-        var searchcustomer = req.query.searchcustomer || '';
+
+        // Filtrar: Clientes habituales de una fabrica:
+        var customerCompanyInclude = [];
+        if (searchCompanyId) {
+            customerCompanyInclude = [{
+                model: models.Company,
+                as: "MainCompanies",
+                attributes: ['id', 'name'],
+                where: {id: searchCompanyId}
+            }];
+        }
+
+        // Filtrar: Codigo y nombre del cliente.
+        var customeInclude = {
+            model: models.Customer,
+            include: customerCompanyInclude
+        };
         if (searchcustomer) {
             var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
-
-            // CUIDADO: Estoy retocando el include existente.
-            options.include.push({
-                model: models.Customer,
-                where: {
-                    $or: [
-                        {code: {$like: search_like}},
-                        {name: {$like: search_like}}
-                    ]
-                }
-            });
-        } else {
-            // CUIDADO: Estoy retocando el include existente.
-            options.include.push(models.Customer);
+            customeInclude.where = {
+                $or: [
+                    {code: {$like: search_like}},
+                    {name: {$like: search_like}}
+                ]
+            };
         }
+        options.include.push(customeInclude);
+
     } else {
         // CUIDADO: Estoy retocando el include existente.
         options.include.push({
@@ -145,7 +163,6 @@ exports.index = function (req, res, next) {
 
     // Visitas de un vendedor:
     if (!req.salesman) {
-        var searchsalesman = req.query.searchsalesman || '';
         if (searchsalesman) {
             var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
 
@@ -176,7 +193,6 @@ exports.index = function (req, res, next) {
 
 
     // Filtrar por mis visitas favoritas
-    var searchfavourites = req.query.searchfavourites || "";
     if (searchfavourites) {
 
         // CUIDADO: Estoy retocando el include existente.
@@ -195,6 +211,7 @@ exports.index = function (req, res, next) {
             attributes: ['id', 'username']
         });
     }
+
 
 
     //----------------
@@ -230,7 +247,7 @@ exports.index = function (req, res, next) {
             {model: models.Target}
         );
 
-        options.order = [['plannedFor', 'DESC']];
+        options.order.push( ['plannedFor', 'DESC'] );
 
         return models.Visit.findAll(options)
     })
@@ -243,16 +260,22 @@ exports.index = function (req, res, next) {
             });
         });
 
-        res.render('visits/index.ejs', {
-            visits: visits,
-            moment: moment,
-            searchdateafter: searchdateafter,
-            searchdatebefore: searchdatebefore,
-            searchcustomer: searchcustomer,
-            searchsalesman: searchsalesman,
-            searchfavourites: searchfavourites,
-            customer: req.customer,
-            salesman: req.salesman
+        companyHelper.getAllCompaniesInfo()
+        .then(function (companiesInfo) {
+
+            res.render('visits/index.ejs', {
+                visits: visits,
+                companiesInfo: companiesInfo,
+                moment: moment,
+                searchdateafter: searchdateafter,
+                searchdatebefore: searchdatebefore,
+                searchcustomer: searchcustomer,
+                searchsalesman: searchsalesman,
+                searchfavourites: searchfavourites,
+                searchCompanyId: searchCompanyId,
+                customer: req.customer,
+                salesman: req.salesman
+            });
         });
     })
     .catch(function (error) {

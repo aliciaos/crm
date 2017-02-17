@@ -64,7 +64,7 @@ exports.index = function (req, res, next) {
         };
     }
 
-    // Busqueda: Clientes habituales de una fabrica:
+    // Filtrar: Clientes habituales de una fabrica:
     var searchCompanyId = req.query.searchCompanyId || "";
     if (searchCompanyId) {
 
