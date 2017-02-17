@@ -2,16 +2,38 @@
 <script src="/javascripts/misc_form.js"></script>
 
 <form method="get" action="<%= url %>" id="filterForm" class="right filters">
+
     <div class="vcenter">
-        <label>Código/Nombre:</label>
-        <input type="text" name="search" value="<%= locals.search || '' %>" placeholder="código o nombre a buscar"
-               size="30" autocomplete="off"/>
+        Filtros:
+        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit" />
 
-        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit"/>
-
-        <input type="image" class="icon" src="/images/cancel.png" border="0"
+        <input type="image" class="icon right" src="/images/cancel.png" border="0"
                onClick="cleanupForm('filterForm')" />
+
     </div>
+
+    <label>Código/Nombre:</label>
+    <input type="text" name="searchCodeName" value="<%= locals.searchCodeName || '' %>"
+           placeholder="código o nombre a buscar"
+           size="30" autocomplete="off"/>
+
+    <br />
+
+    <label>Clientes habituales de la fábrica:</label>
+    <select name="searchCompanyId">
+
+        <option value=""  <%= !searchCompanyId ? "selected" : "" %> >
+            Todas
+        </option>
+
+        <% for (var i in companiesInfo) { %>
+            <% var companyInfo = companiesInfo[i]; %>
+            <option value="<%= companyInfo.id %>"  <%= companyInfo.id == searchCompanyId ? "selected" : "" %> >
+                <%= companyInfo.name %>
+            </option>
+        <% } %>
+    </select>
+
 </form>
 
 <h1> 

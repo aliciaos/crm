@@ -1,5 +1,8 @@
+
 var models = require('../models');
 var Sequelize = require('sequelize');
+
+var customerHelper = require("../helpers/customer");
 
 //-----------------------------------------------------------
 
@@ -64,25 +67,6 @@ exports.show = function (req, res, next) {
 };
 
 
-//-----------------------------------------------------------
-
-// Auxiliar
-// Devuelve una promesa que al cumplirse devuelve un array con la informacion
-// de todos los clientes existentes.
-function getAllCustomers() {
-
-    return models.Customer.findAll({order: [['name']]}) // Obtener info de clientes
-    .then(function (customers) {
-        return customers.map(function (customers) {
-            return {
-                id: customers.id,
-                code: customers.code,
-                name: customers.name
-            };
-        });
-    });
-}
-
 
 //-----------------------------------------------------------
 
@@ -92,7 +76,7 @@ exports.new = function (req, res, next) {
 
     var company = models.Company.build({name: ""});
 
-    getAllCustomers()
+    customerHelper.getAllCustomersInfo()
     .then(function (allCustomers) {
 
         res.render('companies/new', {
@@ -134,7 +118,7 @@ exports.create = function (req, res, next) {
             req.flash('error', error.errors[i].value);
         }
 
-        return getAllCustomers()
+        return customerHelper.getAllCustomersInfo()
         .then(function (allCustomers) {
 
             res.render('companies/new', {
@@ -154,7 +138,7 @@ exports.create = function (req, res, next) {
 // GET /companies/:companyId/edit
 exports.edit = function (req, res, next) {
 
-    getAllCustomers()
+    customerHelper.getAllCustomersInfo()
     .then(function (allCustomers) {
 
         var mainCustomerIds = req.company.MainCustomers.map(function (customer) {
@@ -200,7 +184,7 @@ exports.update = function (req, res, next) {
             req.flash('error', error.errors[i].value);
         }
 
-        return getAllCustomers()
+        return getAllCustomersInfo()
         .then(function (allCustomers) {
 
             res.render('companies/edit', {

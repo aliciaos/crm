@@ -84,8 +84,8 @@ Fábricas Habituales:
 </h2>
 
 <ul>
-    <% for (var i in allCompanies) { %>
-    	<% var company = allCompanies[i]; %>
+    <% for (var i in companiesInfo) { %>
+    	<% var company = companiesInfo[i]; %>
 
 		<li>
 			<input type="checkbox" name="mainCompanyIds[]" value="<%= company.id %>" id="company<%= company.id %>" >

@@ -7,6 +7,8 @@ var moment = require('moment');
 
 var paginate = require('./paginate').paginate;
 
+var companyHelper = require("../helpers/company");
+
 //-----------------------------------------------------------
 
 
@@ -23,7 +25,7 @@ exports.load = function (req, res, next, customerId) {
                     attributes: ['id', 'name']
                 }
             ],
-            order: [[ {model: models.Company, as: "MainCompanies"}, 'name', 'ASC']]
+            order: [[{model: models.Company, as: "MainCompanies"}, 'name', 'ASC']]
         }
     )
     .then(function (customer) {
@@ -47,11 +49,13 @@ exports.index = function (req, res, next) {
 
     var options = {};
     options.where = {};
+    options.include = [];
+    options.order = [];
 
     // Busquedas por varios campos: codigo y nombre.
-    var search = req.query.search || '';
-    if (search) {
-        var search_like = "%" + search.replace(/ +/g, "%") + "%";
+    var searchCodeName = req.query.searchCodeName || '';
+    if (searchCodeName) {
+        var search_like = "%" + searchCodeName.replace(/ +/g, "%") + "%";
         options.where = {
             $or: [
                 {code: {$like: search_like}},
@@ -59,6 +63,21 @@ exports.index = function (req, res, next) {
             ]
         };
     }
+
+    // Busqueda: Clientes habituales de una fabrica:
+    var searchCompanyId = req.query.searchCompanyId || "";
+    if (searchCompanyId) {
+
+        options.include.push({
+                model: models.Company,
+                as: "MainCompanies",
+                attributes: ['id', 'name'],
+                where: {id: searchCompanyId}
+            }
+        );
+        options.order.push([{model: models.Company, as: "MainCompanies"}, 'name', 'ASC']);
+    }
+
 
     models.Customer.count(options)
     .then(function (count) {
@@ -86,22 +105,34 @@ exports.index = function (req, res, next) {
         options.offset = pagination.offset;
         options.limit = pagination.limit;
 
-        options.include = [models.Visit];
+        options.include.push(models.Visit);
 
         // options.order = [['name']];
-        options.order = [
-            ['name'],
-            [models.Visit, 'plannedFor', 'DESC']
-        ];
+        /*
+         options.order = [
+         ['name'],
+         [models.Visit, 'plannedFor', 'DESC']
+         ];
+         */
+        options.order.push(['name']);
 
+        options.order.push([models.Visit, 'plannedFor', 'DESC']);
 
         return models.Customer.findAll(options);
     })
     .then(function (customers) {
-        res.render('customers/index.ejs', {
-            customers: customers,
-            moment: moment,
-            search: search
+
+
+        companyHelper.getAllCompaniesInfo()
+        .then(function (companiesInfo) {
+
+            res.render('customers/index.ejs', {
+                customers: customers,
+                companiesInfo: companiesInfo,
+                moment: moment,
+                searchCodeName: searchCodeName,
+                searchCompanyId: searchCompanyId
+            });
         });
     })
     .catch(function (error) {
@@ -121,27 +152,6 @@ exports.show = function (req, res, next) {
         mainCompanies: req.customer.MainCompanies
     });
 };
-
-
-//-----------------------------------------------------------
-
-// Auxiliar
-// Devuelve una promesa que al cumplirse devuelve un array con la informacion
-// de todas las fabricas existentes.
-function getAllCompanies() {
-
-    return models.Company.findAll({
-        order: [['name']]
-    })
-    .then(function (companies) {
-        return companies.map(function (company) {
-            return {
-                id: company.id,
-                name: company.name
-            };
-        });
-    });
-}
 
 
 //-----------------------------------------------------------
@@ -168,13 +178,13 @@ exports.new = function (req, res, next) {
         cif: ""
     });
 
-    getAllCompanies()
-    .then(function (allCompanies) {
+    companyHelper.getAllCompaniesInfo()
+    .then(function (companiesInfo) {
 
         res.render('customers/new', {
             customer: customer,
             mainCompanyIds: [],
-            allCompanies: allCompanies
+            companiesInfo: companiesInfo
         });
     })
     .catch(function (error) {
@@ -226,13 +236,13 @@ exports.create = function (req, res, next) {
             req.flash('error', error.errors[i].message);
         }
 
-        return getAllCompanies()
-        .then(function (allCompanies) {
+        return companyHelper.getAllCompaniesInfo()
+        .then(function (companiesInfo) {
 
             res.render('customers/new', {
                 customer: customer,
                 mainCompanyIds: mainCompanyIds,
-                allCompanies: allCompanies
+                companiesInfo: companiesInfo
             });
         });
     })
@@ -246,8 +256,8 @@ exports.create = function (req, res, next) {
 // GET /customers/:customerId/edit
 exports.edit = function (req, res, next) {
 
-    getAllCompanies()
-    .then(function (allCompanies) {
+    companyHelper.getAllCompaniesInfo()
+    .then(function (companiesInfo) {
 
         var mainCompanyIds = req.customer.MainCompanies.map(function (company) {
             return company.id;
@@ -256,7 +266,7 @@ exports.edit = function (req, res, next) {
         res.render('customers/edit', {
             customer: req.customer,
             mainCompanyIds: mainCompanyIds,
-            allCompanies: allCompanies
+            companiesInfo: companiesInfo
         });
     })
     .catch(function (error) {
@@ -306,14 +316,14 @@ exports.update = function (req, res, next) {
             req.flash('error', error.errors[i].value);
         }
 
-        return getAllCompanies()
-        .then(function (allCompanies) {
+        return companyHelper.getAllCompaniesInfo()
+        .then(function (companiesInfo) {
 
             res.render('customers/edit',
                 {
                     customer: req.customer,
                     mainCompanyIds: mainCompanyIds,
-                    allCompanies: allCompanies
+                    companiesInfo: companiesInfo
                 });
         });
     })
