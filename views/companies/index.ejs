@@ -15,14 +15,16 @@
             Nombre
         </th>
         <th>
-            Estadísticas
+            Informes
         </th>
 
-        <% if (session.user && session.user.isAdmin) { %>
-           <th>
-           </th>
-        <% } %>
-    </tr> 
+        <th>
+            Visitas
+        </th>
+
+        <th>
+        </th>
+    </tr>
 
     <% for (var i in companies) { %> 
         <% var company = companies[i]; %>      
@@ -36,14 +38,19 @@
                 <a href="/companies/<%= company.id %>/statistics"><img class="icon" src="/images/reports.png"></a>
             </td>
 
-            <% if (session.user && session.user.isAdmin) { %>
-                <td>
-                    <a href="/companies/<%= company.id %>"><img class="icon" src="/images/ver.png"></a>
+            <td>
+                <a href="/companies/<%= company.id %>/visits/new"><img class="icon" src="/images/adds.png"></a>
+            </td>
 
+            <td>
+                <a href="/companies/<%= company.id %>"><img class="icon" src="/images/ver.png"></a>
+
+
+                <% if (session.user && session.user.isAdmin) { %>
                     <a href="/companies/<%= company.id %>?_method=DELETE"
                        onClick="return confirm('¿Seguro que quiere borrar la fábrica: <%= company.name %>?');"><img class="icon" src="/images/basura.png"></a>
-                </td>
-            <% } %>
+                <% } %>
+            </td>
 
         </tr>
     <% } %>

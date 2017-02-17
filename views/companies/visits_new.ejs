@@ -1,0 +1,81 @@
+
+
+<form method="post" action="/companies/<%= company.id %>/visits" >
+
+    <h1>
+        Crear Visitas para los Clientes habituales de <%= company.name %>:
+
+        <input type="image" class="icon" src="/images/save.png" border="0" alt="Submit" />
+        <a href="/goback"><img class="icon" src="/images/cancel.png"></a>
+    </h1>
+
+    <ul>
+
+        <li>
+            <b>Vendedor</b>:
+            <select name="salesmanId">
+
+                <option value="0"  <%= !locals.salesmanId ? "selected" : "" %> >
+                    Seleccione un vendedor
+                </option>
+
+                <% for (var i in locals.salesmenInfo) { %>
+                    <% var salesmanInfo = salesmenInfo[i]; %>
+                    <option value="<%= salesmanInfo.id %>"  <%= salesmanInfo.id == locals.salesmanId ? "selected" : "" %> >
+                        <%= salesmanInfo.name %>
+                    </option>
+                <% } %>
+            </select>
+        </li>
+
+        <li>
+            <label><b>Fecha planificación</b> (dd-mm-aaaa):</label>
+            <input type="text" name="plannedFor"
+                   value="<%= moment(locals.plannedFor).format("DD-MM-YYYY") %>"
+                   pattern="\d\d-\d\d-\d\d\d\d"
+                   placeholder="dd-mm-aaaa"
+                   size="11"
+                   autocomplete="off" />
+        </li>
+
+        <li>
+            <label>Observaciones de las Visitas:</label>
+            <br />
+            <textarea type="text" name="visitsNotes" placeholder="Observaciones" rows="5"
+                      cols="80"><%= locals.visitsNotes %></textarea>
+        </li>
+
+        <li>
+            <b>Tipo de Objetivo</b>:
+            <select name="targetTypeId">
+
+                <option value="0"  <%= !locals.targetTypeId ? "selected" : "" %> >
+                    Seleccione un tipo de objetivo
+                </option>
+
+                <% for (var i in locals.targetTypesInfo) { %>
+                    <% var targetTypeInfo = targetTypesInfo[i]; %>
+                    <option value="<%= targetTypeInfo.id %>"  <%= targetTypeInfo.id == locals.targetTypeId ? "selected" : "" %> >
+                        <%= targetTypeInfo.name %>
+                    </option>
+                <% } %>
+            </select>
+        </li>
+
+        <li>
+            <label>Observaciones del Objetivo:</label>
+            <br />
+            <textarea type="text" name="targetTypesNotes" placeholder="Observaciones" rows="5"
+                      cols="80"><%= locals.targetTypesNotes %></textarea>
+        </li>
+
+    </ul>
+
+    <input type="image" class="icon" src="/images/save.png" border="0" alt="Submit" />
+    <a href="/goback"><img class="icon" src="/images/cancel.png"></a>
+
+</form>
+
+
+
+

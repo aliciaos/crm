@@ -103,7 +103,6 @@ router.get('/companies',
     companyController.index);
 router.get('/companies/:companyId(\\d+)',
     sessionController.loginRequired,
-    sessionController.adminRequired,
     companyController.show);
 router.get('/companies/new',
     sessionController.loginRequired,
@@ -129,6 +128,14 @@ router.delete('/companies/:companyId(\\d+)',
 router.get('/companies/:companyId(\\d+)/statistics',
     sessionController.loginRequired,
     companyController.statistics);
+
+
+router.get('/companies/:companyId(\\d+)/visits/new',
+    sessionController.loginRequired,
+    companyController.visitsNew);
+router.post('/companies/:companyId(\\d+)/visits',
+    sessionController.loginRequired,
+    companyController.visitsCreate);
 
 
 
@@ -299,11 +306,9 @@ router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits',
     sessionController.loginRequired,
     visitController.index);
 
-
 router.get('/users/:userId(\\d+)/visits',
     sessionController.loginRequired,
     visitController.indexUser);
-
 
 
 // Definicion de rutas para los informes

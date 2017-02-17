@@ -6,6 +6,8 @@ var moment = require('moment');
 var paginate = require('./paginate').paginate;
 
 var companyHelper = require("../helpers/company");
+var customerHelper = require("../helpers/customer");
+var salesmanHelper = require("../helpers/salesman");
 
 //-----------------------------------------------------------
 
@@ -329,25 +331,8 @@ exports.show = function (req, res, next) {
 function infoOfSalesmenCustomers() {
 
     return Sequelize.Promise.all([
-        models.Salesman.findAll({order: [['name']]}) // Obtener info de vendedores
-        .then(function (salesmen) {
-            return salesmen.map(function (salesman) {
-                return {
-                    id: salesman.id,
-                    name: salesman.name
-                };
-            });
-        }),
-        models.Customer.findAll({order: [['name']]}) // Obtener info de clientes
-        .then(function (customers) {
-            return customers.map(function (customer) {
-                return {
-                    id: customer.id,
-                    code: customer.code,
-                    name: customer.name
-                };
-            });
-        })
+        salesmanHelper.getAllSalesmenInfo(),
+        customerHelper.getAllCustomersInfo()
     ]);
 }
 

@@ -2,7 +2,11 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
 
+var moment = require('moment');
+
 var customerHelper = require("../helpers/customer");
+var salesmanHelper = require("../helpers/salesman");
+var targetTypeHelper = require("../helpers/targettype");
 
 //-----------------------------------------------------------
 
@@ -294,4 +298,107 @@ exports.statistics = function (req, res, next) {
 };
 
 
+
+//-----------------------------------------------------------
+
+
+// GET /companies/:companyId/visits/new
+exports.visitsNew = function (req, res, next) {
+
+    var salesmanId = "";
+    var salesmenInfo = [];
+    var plannedFor = moment();
+    var visitsNotes = "";
+    var targetTypeId = "";
+    var targetTypesInfo = [];
+    var targetTypesNotes = "";
+
+    // Proponer al usuario logeado como vendedor.
+    // No siempre puede hacerse esto.
+    models.Salesman.findOne({where: {UserId: req.session.user.id}})
+    .then(function (salesman) {
+        salesmanId = salesman && salesman.id || 0;
+    })
+    .then(function () {
+        return salesmanHelper.getAllSalesmenInfo()
+        .then(function (info) {
+            salesmenInfo = info;
+        });
+    })
+    .then(function () {
+        return targetTypeHelper.getAllTargetTypesInfo()
+        .then(function (info) {
+            targetTypesInfo = info;
+        });
+    })
+    .then(function () {
+
+        res.render('companies/visits_new', {
+            company: req.company,
+            salesmanId: salesmanId,
+            salesmenInfo: salesmenInfo,
+            plannedFor: plannedFor,
+            visitsNotes: visitsNotes,
+            targetTypeId: targetTypeId,
+            targetTypesInfo: targetTypesInfo,
+            targetTypesNotes: targetTypesNotes,
+            moment: moment
+        });
+    })
+    .catch(function (error) {
+        req.flash('error', 'Error al crear las visitas: ' + error.message);
+        next(error);
+    });
+};
+
+
+
+// POST /companies/:companyId/visits
+exports.visitsCreate = function (req, res, next) {
+
+    var momentPlannedFor = moment(req.body.plannedFor + " 08:00", "DD-MM-YYYY");
+
+    customerHelper.getAllCustomersInfo()
+    .each(function(customerInfo) {
+
+        var visit = {
+            plannedFor: momentPlannedFor,
+            fulfilledAt: null,
+            notes: req.body.visitsNotes.trim(),
+            CustomerId: customerInfo.id,
+            SalesmanId: Number(req.body.salesmanId) || 0,
+            Targets: [
+                {
+                    success: null,
+                    notes: req.body.targetTypesNotes.trim(),
+                    TargetTypeId: req.body.targetTypeId,
+                    CompanyId: req.company.id
+                }
+            ]
+        };
+
+        // Guarda en la tabla Visits la nueva visita para el cliente que toca.
+        return models.Visit.create(visit,
+            {
+                include: models.Target
+            }
+        )
+        .then(function (visit) {
+            req.flash('success', 'Visita creada con éxito para ' + customerInfo.name + '.');
+        })
+        .catch(Sequelize.ValidationError, function (error) {
+            req.flash('error', 'Errores al crear una visita para formulario ' + customerInfo.name + '.');
+            for (var i in error.errors) {
+                req.flash('error', error.errors[i].message);
+            }
+        });
+    })
+    .then(function() {
+        res.redirect("/reload");
+    })
+    .catch(function (error) {
+        req.flash('error', 'Error al crear una visita: ' + error.message);
+        next(error);
+    });
+};
 

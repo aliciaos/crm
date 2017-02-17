@@ -23,13 +23,13 @@
 
             <a href="/customers">Clientes</a>
 
-            <% if (session.user.isAdmin) { %>
-                <a href="/companies">Fábricas</a>
-            <% } %>
-
             <a href="/visits">Visitas</a>
 
-            <% if (session.user.isAdmin) { %>
+            <% if (session.user.isAdmin || true) { %>
+            <a href="/companies">Fábricas</a>
+            <% } %>
+
+        <% if (session.user.isAdmin) { %>
                 <a href="/salesmen">Vendedores</a>
                 <a href="/targettypes">Objetivos</a>
             <% } %>
