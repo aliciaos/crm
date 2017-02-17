@@ -358,7 +358,7 @@ exports.visitsCreate = function (req, res, next) {
 
     var momentPlannedFor = moment(req.body.plannedFor + " 08:00", "DD-MM-YYYY");
 
-    customerHelper.getAllCustomersInfo()
+    Sequelize.Promise.all(req.company.MainCustomers)
     .each(function(customerInfo) {
 
         var visit = {
