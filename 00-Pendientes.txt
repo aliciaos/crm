@@ -5,13 +5,13 @@ Otro estado de los objetivos de una visita: Cancelado.
 
 Poder ordenar los listados (index.ejs) por varios criterios.
 
-Una entrada en la barra de navegacion para todas las estadisticas
-
 Pensar cuales son los campos de una visita que puede editar un vendedor.
 
 Pensar cuales son los campos de un objetivo que puede editar un vendedor.
 
 Puede un vendedor borrar un objetivo en una visita?
+
+Que un vendedor marque una visita como borrada, pero que no se borre en realidad hasta que lo haga el administrador.
 
 Adaptar la aplicacion para comercializarla, que no sea solo para decoversia.
 
@@ -21,9 +21,11 @@ Al editar un usuario, que no sea necesario cambiar el password.
 
 Que pueda editarse el nombre de un user.
 
+Comprobar si funciona el autologout.
+
 Meter el blog
 
-Gestion de documentos (attachments)
+Gestion de documentos (attachments) con gestion por etiqutas.
 
 Dada una fabrica y un tipo de objetivo, crear una visita para todos los clientes habituales de esa fabrica, y que esa visita tenga un objeetivo del tipo indicado.
 
@@ -31,4 +33,22 @@ Crear una base de datos para hacer pruebas de sobrecarga.
 
 Tener una cuenta en heroku de pruebas y otra de produccion.
 
+Listar visitas pendientes, o con tareas pendientes.
 
+Listar historial de visitas a una fabrica (de todos los clientes).
+
+Geolocalizacion.
+
+Unir dos visitas.
+
+Modo paranoico?
+
+Bootstrap
+
+API REST JSON
+
+Listado en papel de la planificacion de una semana.
+
+Poder editar varias visitas de forma rapida usando AJAX (o algo similar).
+
+Los clientes habituales de las fabricas son simplemente clientes, sin la palabra habituales.
