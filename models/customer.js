@@ -1,52 +1,56 @@
-
 // Definicion del modelo de cliente: Customer:
 
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define(
-        'Customer', 
-        {   code: {
+module.exports = function (sequelize, DataTypes) {
+    return sequelize.define(
+        'Customer',
+        {
+            code: {
                 type: DataTypes.STRING,
-                validate: { notEmpty: {msg: "Falta el código del vendedor."}}
+                validate: {notEmpty: {msg: "Falta el código del vendedor."}}
             },
             name: {
                 type: DataTypes.STRING,
-                validate: { notEmpty: {msg: "Falta el nombre del vendedor."}}
+                validate: {notEmpty: {msg: "Falta el nombre del vendedor."}}
             },
-            cif: { 
+            cif: {
                 type: DataTypes.STRING
             },
-            address1: { 
+            address1: {
                 type: DataTypes.STRING
             },
-            address2: { 
+            address2: {
                 type: DataTypes.STRING
             },
-            postalCode: { 
+            postalCode: {
                 type: DataTypes.STRING
             },
-            city: { 
+            city: {
                 type: DataTypes.STRING
             },
-            phone1: { 
+            phone1: {
                 type: DataTypes.STRING
             },
-            phone2: { 
+            phone2: {
                 type: DataTypes.STRING
             },
-            phone3: { 
+            phone3: {
                 type: DataTypes.STRING
             },
-            phone4: { 
+            phone4: {
                 type: DataTypes.STRING
             },
-            email1: { 
+            email1: {
                 type: DataTypes.STRING
             },
-            email2: { 
+            email2: {
                 type: DataTypes.STRING
             },
-            web: { 
+            web: {
                 type: DataTypes.STRING
             }
+        },
+        {
+            timestamps: true,
+            paranoid: true
         });
 };

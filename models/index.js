@@ -87,7 +87,6 @@ Visit.belongsToMany(User, { as: 'Fans', through: 'Favourites'});
 Customer.belongsToMany(Company, { as: 'MainCompanies', through: 'CompanyCustomer', foreignKey: 'CustomerId'});
 Company.belongsToMany(Customer, { as: 'MainCustomers', through: 'CompanyCustomer', foreignKey: 'CompanyId'});
 
-
 //-------------------------------------------------
 
 // Exportar:

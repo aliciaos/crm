@@ -41,7 +41,7 @@ Geolocalizacion.
 
 Unir dos visitas.
 
-Modo paranoico?
+Modo paranoico? Meter en admin una papelera de reciclaje.
 
 Bootstrap
 

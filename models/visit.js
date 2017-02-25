@@ -1,10 +1,10 @@
-
 // Definicion del modelo de visitas: Visit
 
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
     return sequelize.define(
-        'Visit', 
-        {   plannedFor: { 
+        'Visit',
+        {
+            plannedFor: {
                 type: DataTypes.DATE,
                 validate: {
                     isDate: {
@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
                     }
                 }
             },
-            fulfilledAt: { 
+            fulfilledAt: {
                 type: DataTypes.DATE,
                 allowNull: true,
                 validate: {
@@ -21,8 +21,12 @@ module.exports = function(sequelize, DataTypes) {
                     }
                 }
             },
-            notes: { 
+            notes: {
                 type: DataTypes.TEXT
             }
+        },
+        {
+            timestamps: true,
+            paranoid: true
         });
 };
