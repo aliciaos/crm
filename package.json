@@ -6,13 +6,19 @@
     "start": "heroku local:start",
     "start_old": "node ./bin/www",
     "supervisor": "./node_modules/.bin/supervisor ./bin/www",
-    "migrate_local": "./node_modules/.bin/sequelize db:migrate --url sqlite://$(pwd)/crm.sqlite",
+
     "seed_local": "./node_modules/.bin/sequelize db:seed:all --url sqlite://$(pwd)/crm.sqlite",
-    "seed_heroku": "heroku run ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
-    "migrate_heroku": "heroku run ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
-    "reset_heroku": "heroku pg:reset DATABASE",
-    "mon": "heroku maintenance:on",
-    "moff": "heroku maintenance:off"
+    "seed_heroku_development": "heroku --app dcrmt      run ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
+    "seed_heroku_production":  "heroku --app decoversia run ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
+
+    "migrate_local": "./node_modules/.bin/sequelize db:migrate --url sqlite://$(pwd)/crm.sqlite",
+    "migrate_heroku_development": "heroku --app dcrmt      run ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
+    "migrate_heroku_production":  "heroku --app decoversia run ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
+
+    "reset_heroku_development": "heroku --app dcrmt pg:reset DATABASE",
+
+    "mon_production":  "heroku --app decoversia maintenance:on",
+    "moff_production": "heroku --app decoversia maintenance:off"
   },
   "engines": {
     "node": "7.3.x",
