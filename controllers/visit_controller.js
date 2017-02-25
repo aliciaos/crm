@@ -147,8 +147,8 @@ exports.index = function (req, res, next) {
             var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
             customeInclude.where = {
                 $or: [
-                    {code: {$like: search_like}},
-                    {name: {$like: search_like}}
+                    {code: {$iLike: search_like}},
+                    {name: {$iLike: search_like}}
                 ]
             };
         }
@@ -172,7 +172,7 @@ exports.index = function (req, res, next) {
             options.include.push({
                 model: models.Salesman,
                 as: "Salesman",
-                where: {name: {$like: search_like}},
+                where: {name: {$iLike: search_like}},
                 include: [{model: models.Attachment, as: 'Photo'}]
             });
         } else {

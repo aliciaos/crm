@@ -58,8 +58,8 @@ exports.index = function (req, res, next) {
         var search_like = "%" + searchCodeName.replace(/ +/g, "%") + "%";
         options.where = {
             $or: [
-                {code: {$like: search_like}},
-                {name: {$like: search_like}}
+                {code: {$iLike: search_like}},
+                {name: {$iLike: search_like}}
             ]
         };
     }
