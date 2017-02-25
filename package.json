@@ -16,6 +16,7 @@
     "migrate_heroku_production":  "heroku run --app decoversia ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
 
     "reset_heroku_development": "heroku pg:reset DATABASE --app dcrmt",
+    "reset_heroku_production":  "heroku pg:reset DATABASE --app decoversia",
 
     "mon_production":  "heroku --app decoversia maintenance:on",
     "moff_production": "heroku --app decoversia maintenance:off"
