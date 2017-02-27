@@ -23,7 +23,7 @@ Que pueda editarse el nombre de un user.
 
 Comprobar si funciona el autologout.
 
-Meter el blog
+Meter un blog
 
 Gestion de documentos (attachments) con gestion por etiqutas.
 
@@ -41,8 +41,6 @@ Geolocalizacion.
 
 Unir dos visitas.
 
-Modo paranoico? Meter en admin una papelera de reciclaje.
-
 Bootstrap
 
 API REST JSON
@@ -52,3 +50,11 @@ Listado en papel de la planificacion de una semana.
 Poder editar varias visitas de forma rapida usando AJAX (o algo similar).
 
 Los clientes habituales de las fabricas son simplemente clientes, sin la palabra habituales.
+
+Pensar: La paepelera de reciclaje (modo paranoido) quiza deberia existir solo para las visitas.????
+
+Falta por hacer: Al destruir definitivamente una visita tambien hay que destruir sus objetivos.
+
+Falta por hacer: Al destruir definitivamente un vendedor, tambien hay que destruir su foto.
+
+Falta por hacer: Control de huerfanos al sacar cosas de la papelera. Ejemplo: Que pasa si restauro una visita y su vendedor ha sido borrado y no ha sido restaurado.

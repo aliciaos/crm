@@ -56,12 +56,19 @@ exports.index = function (req, res, next) {
     var searchCodeName = req.query.searchCodeName || '';
     if (searchCodeName) {
         var search_like = "%" + searchCodeName.replace(/ +/g, "%") + "%";
-        options.where = {
-            $or: [
-                {code: {$iLike: search_like}},
-                {name: {$iLike: search_like}}
-            ]
-        };
+
+        var likeCondition;
+        if (!!process.env.DATABASE_URL && /^postgres:/.test(process.env.DATABASE_URL)) {
+            // el operador $iLike solo funciona en pastgres
+            likeCondition = {$iLike: search_like};
+        } else {
+            likeCondition = {$like: search_like};
+        }
+
+        options.where.$or = [
+            {code: likeCondition},
+            {name: likeCondition}
+        ];
     }
 
     // Filtrar: Clientes habituales de una fabrica:
@@ -83,7 +90,7 @@ exports.index = function (req, res, next) {
     .then(function (count) {
 
         // Paginacion:
-        var items_per_page = 25;
+        var items_per_page = 50;
 
         // La pagina a mostrar viene en la query
         var pageno = parseInt(req.query.pageno) || 1;
@@ -102,37 +109,29 @@ exports.index = function (req, res, next) {
     })
     .then(function (pagination) {
 
-        options.offset = pagination.offset;
-        options.limit = pagination.limit;
+            options.offset = pagination.offset;
+            options.limit = pagination.limit;
 
-        options.include.push(models.Visit);
+            options.include.push(models.Visit);
 
-        // options.order = [['name']];
-        /*
-         options.order = [
-         ['name'],
-         [models.Visit, 'plannedFor', 'DESC']
-         ];
-         */
-        options.order.push(['name']);
-
-        options.order.push([models.Visit, 'plannedFor', 'DESC']);
-
-        return models.Customer.findAll(options);
-    })
+            options.order.push(['name']);
+            options.order.push([models.Visit, 'plannedFor', 'DESC']);
+            return models.Customer.findAll(options);
+        }
+    )
     .then(function (customers) {
-
 
         companyHelper.getAllCompaniesInfo()
         .then(function (companiesInfo) {
 
-            res.render('customers/index.ejs', {
-                customers: customers,
-                companiesInfo: companiesInfo,
-                moment: moment,
-                searchCodeName: searchCodeName,
-                searchCompanyId: searchCompanyId
-            });
+            res.render(
+                'customers/index.ejs', {
+                    customers: customers,
+                    companiesInfo: companiesInfo,
+                    moment: moment,
+                    searchCodeName: searchCodeName,
+                    searchCompanyId: searchCompanyId
+                });
         });
     })
     .catch(function (error) {
@@ -333,6 +332,7 @@ exports.update = function (req, res, next) {
     });
 };
 
+//-----------------------------------------------------------
 
 // DELETE /customers/:customerId
 exports.destroy = function (req, res, next) {

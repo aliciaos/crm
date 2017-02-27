@@ -3,6 +3,7 @@ var models = require('../models');
 var Sequelize = require('sequelize');
 var paginate = require('./paginate').paginate;
 
+var moment = require('moment');
 
 // Autoload el user asociado a :userId
 exports.load = function(req, res, next, userId) {
@@ -23,7 +24,14 @@ exports.load = function(req, res, next, userId) {
 // GET /users
 exports.index = function(req, res, next) {
 
-    models.User.count()
+    var options = {};
+    options.where = {};
+    options.include = [];
+    options.order = [];
+
+    //----------------
+
+    models.User.count(options)
     .then(function(count) {
 
         // Paginacion:
@@ -47,9 +55,12 @@ exports.index = function(req, res, next) {
     })
     .then(function(pagination) {
 
-        return models.User.findAll({offset: pagination.offset,
-                                    limit: pagination.limit,
-                                    order: ['username']});
+        options.offset = pagination.offset;
+        options.limit = pagination.limit;
+
+        options.order.push( ['username'] );
+
+        return models.User.findAll(options);
     })
     .then(function(users) {
         res.render('users/index', { users: users });
@@ -145,6 +156,8 @@ exports.update = function(req, res, next) {
         });
 };
 
+//-----------------------------------------------------------
+
 
 // DELETE /users/:id
 exports.destroy = function(req, res, next) {
@@ -165,3 +178,5 @@ exports.destroy = function(req, res, next) {
         });
 };
 
+
+//-----------------------------------------------------------

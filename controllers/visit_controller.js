@@ -145,10 +145,19 @@ exports.index = function (req, res, next) {
         };
         if (searchcustomer) {
             var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
+
+            var likeCondition;
+            if (!!process.env.DATABASE_URL && /^postgres:/.test(process.env.DATABASE_URL)) {
+                // el operador $iLike solo funciona en pastgres
+                likeCondition = {$iLike: search_like};
+            } else {
+                likeCondition = {$like: search_like};
+            }
+
             customeInclude.where = {
                 $or: [
-                    {code: {$iLike: search_like}},
-                    {name: {$iLike: search_like}}
+                    {code: likeCondition},
+                    {name: likeCondition}
                 ]
             };
         }
@@ -168,11 +177,19 @@ exports.index = function (req, res, next) {
         if (searchsalesman) {
             var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
 
+            var likeCondition;
+            if (!!process.env.DATABASE_URL && /^postgres:/.test(process.env.DATABASE_URL)) {
+                // el operador $iLike solo funciona en pastgres
+                likeCondition = {$iLike: search_like};
+            } else {
+                likeCondition = {$like: search_like};
+            }
+
             // CUIDADO: Estoy retocando el include existente.
             options.include.push({
                 model: models.Salesman,
                 as: "Salesman",
-                where: {name: {$iLike: search_like}},
+                where: {name: likeCondition},
                 include: [{model: models.Attachment, as: 'Photo'}]
             });
         } else {
@@ -504,6 +521,8 @@ exports.update = function (req, res, next) {
     });
 };
 
+//-----------------------------------------------------------
+
 
 // DELETE /visits/:visitId
 exports.destroy = function (req, res, next) {
@@ -520,3 +539,4 @@ exports.destroy = function (req, res, next) {
     });
 };
 
+//-----------------------------------------------------------

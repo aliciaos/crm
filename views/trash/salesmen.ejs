@@ -1,23 +1,20 @@
 
 
 <h1> 
-    Vendedores:
+    Vendedores Eliminados:
 
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
-
-    <a href="/salesmen/new"><img class="icon" src="/images/add.png"></a>
 </h1>
 
 <table>
     <tr>
         <th>
+            Borrado
+        </th>
+        <th>
             Nombre
         </th>
         <th>
-            Login
-        </th>
-        <th>
-            
         </th>
     </tr> 
 
@@ -25,6 +22,9 @@
         <% var salesman = salesmen[i]; %>      
 
         <tr>
+            <td>
+                <%= moment(salesman.deletedAt).format("DD-MM-YYYY") %>
+            </td>
             <td>
                 <div class="vcenter">
 
@@ -37,16 +37,16 @@
                     <%= salesman.name %>
                 </div>
             </td>
-
             <td>
-                <%= salesman.User && salesman.User.username || "" %>
-            </td>
+                <% if (session.user && session.user.isAdmin) { %>
+                <a href="/trash/salesmen/<%= salesman.id %>?_method=POST"><img class="icon" src="/images/restore.png"></a>
+                <% } %>
 
-            <td>
-                <a href="/salesmen/<%= salesman.id %>"><img class="icon" src="/images/ver.png"></a>
 
-                <a href="/salesmen/<%= salesman.id %>?_method=DELETE" 
-                   onClick="return confirm('¿Seguro que quiere borrar la fábrica: <%= salesman.name %>?');"><img class="icon" src="/images/basura.png"></a>
+                <% if (session.user && session.user.isAdmin) { %>
+                <a href="/trash/salesmen/<%= salesman.id %>?_method=DELETE"
+                   onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE el vendedor: <%= salesman.name %>?');"><img class="icon" src="/images/kill.png"></a>
+                <% } %>
             </td>
          </tr> 
     <% } %>

@@ -1,0 +1,45 @@
+<a href="/goback"><img class="icon" src="/images/back.png"></a>
+
+<h1>
+    Papelera de Reciclaje
+</h1>
+
+<ul>
+
+    <li>
+        Hay <%= locals.customersCount || "0" %> <b>Clientes</b> en la papelera.
+
+        <a href="/trash/customers"><img class="icon" src="/images/ver.png"></a>
+    </li>
+
+    <li>
+        Hay <%= locals.visitsCount || "0" %> <b>Visitas</b> en la papelera.
+
+        <a href="/trash/visits"><img class="icon" src="/images/ver.png"></a>
+    </li>
+
+    <li>
+        Hay <%= locals.companiesCount || "0" %> <b>Fábricas</b> en la papelera.
+
+        <a href="/trash/companies"><img class="icon" src="/images/ver.png"></a>
+    </li>
+
+    <li>
+        Hay <%= locals.salesmenCount || "0" %> <b>Vendedores</b> en la papelera.
+
+        <a href="/trash/salesmen"><img class="icon" src="/images/ver.png"></a>
+    </li>
+
+    <li>
+        Hay <%= locals.targettypesCount || "0" %> <b>Tipos de Objetivos</b> en la papelera.
+
+        <a href="/trash/targettypes"><img class="icon" src="/images/ver.png"></a>
+    </li>
+
+    <li>
+        Hay <%= locals.usersCount || "0" %> <b>Usuarios</b> en la papelera.
+
+        <a href="/trash/users"><img class="icon" src="/images/ver.png"></a>
+    </li>
+
+</ul>

@@ -15,6 +15,7 @@ var visitController = require('../controllers/visit_controller');
 var targetController = require('../controllers/target_controller');
 var reportController = require('../controllers/report_controller');
 var favouriteController = require('../controllers/favourite_controller');
+var trashController = require('../controllers/trash_controller');
 
 var hc = require('../controllers/history_controller');
 
@@ -326,5 +327,103 @@ router.delete('/users/:userId([0-9]+)/favourites/:visitId(\\d+)',
 	sessionController.loginRequired,
     sessionController.adminOrMyselfRequired,
     favouriteController.del);
+
+
+//----------------------------------------------------
+//  Papelera de Reciclaje
+// ----------------------------------------------------
+
+// Listar contenido de la Papelera de Reciclaje
+router.get('/trash',
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.index);
+
+
+router.get("/trash/customers",
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.customers);
+router.delete('/trash/customers/:customerId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.customerDestroy);
+router.post('/trash/customers/:customerId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.customerRestore);
+
+
+router.get("/trash/visits",
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.visits);
+router.delete('/trash/visits/:visitId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.visitDestroy);
+router.post('/trash/visits/:visitId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.visitRestore);
+
+
+router.get("/trash/companies",
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.companies);
+router.delete('/trash/companies/:companyId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.companyDestroy);
+router.post('/trash/companies/:companyId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.companyRestore);
+
+
+router.get("/trash/salesmen",
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.salesmen);
+router.delete('/trash/salesmen/:salesmanId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.salesmanDestroy);
+router.post('/trash/salesmen/:salesmanId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.salesmanRestore);
+
+
+router.get("/trash/targettypes",
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.targettypes);
+router.delete('/trash/targettypes/:targettypeId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.targettypeDestroy);
+router.post('/trash/targettypes/:targettypeId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.targettypeRestore);
+
+
+router.get("/trash/users",
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.users);
+router.delete('/trash/users/:userId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.userDestroy);
+router.post('/trash/users/:userId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.userRestore);
+
+//----------------------------------------------------
+
 
 module.exports = router;

@@ -3,12 +3,14 @@ var Sequelize = require('sequelize');
 var cloudinary = require('cloudinary');
 var fs = require('fs');
 
+var moment = require('moment');
+
 //-----------------------------------------------------------
 
 // Opciones para imagenes subidas a Cloudinary
 var cloudinary_image_options = {
     async: true,
-    folder: "/crm/decoversia",
+    folder: "/crm/decoversia/salesmen",
     crop: 'limit',
     width: 200,
     height: 200,
@@ -52,6 +54,7 @@ exports.load = function (req, res, next, salesmanId) {
 exports.index = function (req, res, next) {
 
     var options = {};
+    options.where = {};
     options.order = [['name']];
     options.include = [
         models.User,
@@ -268,6 +271,8 @@ exports.update = function (req, res, next) {
     });
 };
 
+//-----------------------------------------------------------
+
 
 // DELETE /salesmen/:salesmanId
 exports.destroy = function (req, res, next) {
@@ -283,6 +288,7 @@ exports.destroy = function (req, res, next) {
         next(error);
     });
 };
+
 
 //------------------------------------------------
 

@@ -15,9 +15,7 @@ module.exports = function (sequelize, DataTypes) {
                 singular: "Salesman",
                 plural: "Salesmen"
             },
-            tableName: "Salesmen"
-        },
-        {
+            tableName: "Salesmen",
             timestamps: true,
             paranoid: true
         });

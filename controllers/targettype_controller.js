@@ -2,6 +2,8 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
 
+var moment = require('moment');
+
 //-----------------------------------------------------------
 
 
@@ -29,6 +31,7 @@ exports.load = function(req, res, next, targettypeId) {
 exports.index = function(req, res, next) {
 
     var options = {};
+    options.where = {};
     options.order = [['name']];
 
     models.TargetType.findAll(options)
@@ -123,6 +126,7 @@ exports.update = function(req, res, next) {
     });
 };
 
+//-----------------------------------------------------------
 
 // DELETE /targettypes/:targettypeId
 exports.destroy = function(req, res, next) {
@@ -139,3 +143,6 @@ exports.destroy = function(req, res, next) {
     });
 };
 
+
+
+//-----------------------------------------------------------

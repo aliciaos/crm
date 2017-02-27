@@ -14,7 +14,7 @@
     </header>
 
     <nav> 
-        .       
+        .
         <% if (session.user) { %>
 
             <% if (!session.user.isAdmin) { %>
@@ -26,18 +26,22 @@
             <a href="/visits">Visitas</a>
 
             <% if (session.user.isAdmin || true) { %>
-            <a href="/companies">Fábricas</a>
+                <a href="/companies">Fábricas</a>
             <% } %>
 
-        <% if (session.user.isAdmin) { %>
+            <% if (session.user.isAdmin) { %>
                 <a href="/salesmen">Vendedores</a>
                 <a href="/targettypes">Objetivos</a>
             <% } %>
 
             <a href="/reports">Informes</a>
 
-        <% if (session.user.username === "admin") { %>
+            <% if (session.user.username === "admin") { %>
                 <a href="/users">Usuarios</a>
+            <% } %>
+
+            <% if (session.user.username === "admin") { %>
+                <a href="/trash">Papelera</a>
             <% } %>
         <% } %>
 

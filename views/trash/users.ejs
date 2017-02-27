@@ -1,0 +1,61 @@
+<h1>
+    Usuarios Eliminados:
+
+    <a href="/goback"><img class="icon" src="/images/back.png"></a>
+</h1>
+
+<% if (locals.paginate_control) { %>
+<%- paginate_control %>
+<% } %>
+
+<table>
+
+    <tr>
+        <th>
+            Borrado
+        </th>
+        <th>
+            Nombre
+        </th>
+        <th>
+            Administrador
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+    <% for (var i in users) { %>
+    <% var user = users[i]; %>
+
+    <tr>
+        <td>
+            <%= moment(user.deletedAt).format("DD-MM-YYYY") %>
+        </td>
+
+        <td>
+            <%= user.username %>
+        </td>
+
+        <td>
+            <%= user.isAdmin ? "Si" : "" %>
+        </td>
+
+        <td>
+            <% if (session.user && session.user.isAdmin) { %>
+            <a href="/trash/users/<%= user.id %>?_method=POST"><img class="icon" src="/images/restore.png"></a>
+            <% } %>
+
+
+            <% if (session.user && session.user.isAdmin) { %>
+            <a href="/trash/users/<%= user.id %>?_method=DELETE"
+               onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE el usuario: <%= user.username %>?');"><img class="icon" src="/images/kill.png"></a>
+            <% } %>
+        </td>
+    </tr>
+
+    <% } %>
+</table>
+
+
+

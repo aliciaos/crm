@@ -47,8 +47,10 @@ exports.load = function (req, res, next, companyId) {
 exports.index = function (req, res, next) {
 
     var options = {};
+    options.where = {};
     options.order = [['name']];
 
+    //----------------
     models.Company.findAll(options)
     .then(function (companies) {
         res.render('companies/index.ejs', {companies: companies});
@@ -204,11 +206,12 @@ exports.update = function (req, res, next) {
     });
 };
 
+//-----------------------------------------------------------
 
 // DELETE /companies/:companyId
 exports.destroy = function (req, res, next) {
 
-    // Borrar la fabricatipo:
+    // Borrar la fabrica:
     req.company.destroy()
     .then(function () {
         req.flash('success', 'Fábrica borrada con éxito.');
