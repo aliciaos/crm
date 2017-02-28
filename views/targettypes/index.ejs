@@ -23,13 +23,9 @@
 
         <tr>
             <td>
-                <%= targettype.name %>
+                <a href="/targettypes/<%= targettype.id %>"> <%= targettype.name %> </a>
             </td>
             <td>
-                <a href="/targettypes/<%= targettype.id %>"><img class="icon" src="/images/ver.png"></a>
-
-                <!-- a href="/targettypes/<%= targettype.id %>/edit"><img class="icon" src="/images/edit.png"></a -->
-
                 <a href="/targettypes/<%= targettype.id %>?_method=DELETE" 
                    onClick="return confirm('¿Seguro que quiere borrar el tipo de objetivo: <%= targettype.name %>?');"><img class="icon" src="/images/basura.png"></a>
             </td>

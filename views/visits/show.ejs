@@ -54,7 +54,13 @@
 		<b>Fecha planificación</b>: <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
 	</li>
 	<li>
-		<b>Fecha realización</b>: <%= !!visit.fulfilledAt ? moment(visit.fulfilledAt).format("DD-MM-YYYY") : "PENDIENTE" %>
+		<b>Fecha realización</b>:
+
+        <% if (!!visit.fulfilledAt) { %>
+        <%= moment(visit.fulfilledAt).format("DD-MM-YYYY") %>
+        <% } else { %>
+		<span class='tobedone'><em>PENDIENTE</em></span>
+        <% } %>
 	</li>
 	<li>
 		<b>Observaciones</b>:  <%- escapeText(visit.notes) %>

@@ -34,7 +34,7 @@
                         <img src="/images/face.png" width="30px" />
                     <% } %>
 
-                    <%= salesman.name %>
+                    <a href="/salesmen/<%= salesman.id %>"> <%= salesman.name %> </a>
                 </div>
             </td>
 
@@ -43,8 +43,6 @@
             </td>
 
             <td>
-                <a href="/salesmen/<%= salesman.id %>"><img class="icon" src="/images/ver.png"></a>
-
                 <a href="/salesmen/<%= salesman.id %>?_method=DELETE" 
                    onClick="return confirm('¿Seguro que quiere borrar la fábrica: <%= salesman.name %>?');"><img class="icon" src="/images/basura.png"></a>
             </td>

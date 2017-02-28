@@ -33,7 +33,7 @@ p {
 }
 
 a {
-  color: #00B7FF;
+  color: blue;
 }
 
 a:link {
@@ -87,6 +87,12 @@ input[type=checkbox]:checked + .star {
 .toberepared {
     color: red;
 }
+
+
+.tobedone {
+    color: #ff15d0;
+}
+
 
 input[type=text], input[type=password] {
     background-color: white;

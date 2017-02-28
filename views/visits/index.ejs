@@ -1,16 +1,15 @@
-
 <script src="/javascripts/misc_form.js"></script>
 
 <form method="get" action="<%= url %>" id="filterForm" class="right filters">
 
-    <input type="hidden" name="forceCustomerId" value=<%= locals.forceCustomerId %> >
+    <input type="hidden" name="forceCustomerId" value=<%= locals.forceCustomerId %>>
 
     <div class="vcenter">
         Filtros:
-        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit" />
+        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit"/>
 
         <input type="image" class="icon right" src="/images/cancel.png" border="0"
-                onClick="cleanupForm('filterForm')" />
+               onClick="cleanupForm('filterForm')"/>
 
     </div>
 
@@ -21,7 +20,7 @@
            placeholder="dd-mm-aaaa"
            pattern="\d\d-\d\d-\d\d\d\d"
            size="11"
-           autocomplete="off" />
+           autocomplete="off"/>
 
     <label>Hasta:</label>
     <input type="text"
@@ -30,42 +29,43 @@
            placeholder="dd-mm-aaaa"
            pattern="\d\d-\d\d-\d\d\d\d"
            size="11"
-           autocomplete="off" />
+           autocomplete="off"/>
 
-    <br />
+    <br/>
 
     <% if (!locals.customer) { %>
-        <label>Cliente:</label>
-        <input type="text" name="searchcustomer" value="<%= locals.searchcustomer || '' %>" placeholder="Cliente a buscar" size="40" autocomplete="off" />
+    <label>Cliente:</label>
+    <input type="text" name="searchcustomer" value="<%= locals.searchcustomer || '' %>" placeholder="Cliente a buscar"
+           size="40" autocomplete="off"/>
 
-        <br />
+    <br/>
 
-        <label>Clientes de la fábrica:</label>
-        <select name="searchCompanyId">
+    <label>Clientes de la fábrica:</label>
+    <select name="searchCompanyId">
 
-            <option value=""  <%= !locals.searchCompanyId ? "selected" : "" %> >
-                Todas
-            </option>
+        <option value="" <%= !locals.searchCompanyId ? "selected" : "" %> >
+            Todas
+        </option>
 
-            <% for (var i in companiesInfo) { %>
-            <% var companyInfo = companiesInfo[i]; %>
-            <option value="<%= companyInfo.id %>"  <%= companyInfo.id == locals.searchCompanyId ? "selected" : "" %> >
-                <%= companyInfo.name %>
-            </option>
-            <% } %>
-        </select>
+        <% for (var i in companiesInfo) { %>
+        <% var companyInfo = companiesInfo[i]; %>
+        <option value="<%= companyInfo.id %>" <%= companyInfo.id == locals.searchCompanyId ? "selected" : "" %> >
+            <%= companyInfo.name %>
+        </option>
+        <% } %>
+    </select>
 
-        <br />
+    <br/>
 
     <% } %>
 
     <% if (!locals.salesman) { %>
-        <label>Vendedor:</label>
-        <input type="text" name="searchsalesman" value="<%= locals.searchsalesman || '' %>" placeholder="Vendedor a buscar" size="40" autocomplete="off" />
+    <label>Vendedor:</label>
+    <input type="text" name="searchsalesman" value="<%= locals.searchsalesman || '' %>" placeholder="Vendedor a buscar"
+           size="40" autocomplete="off"/>
 
-        <br />
+    <br/>
     <% } %>
-
 
     <div class="vcenter">
         <label>Favoritas:</label>
@@ -76,22 +76,20 @@
 </form>
 
 
-
 <h1>
     <% if (locals.customer) { %>
-        <% if (locals.salesman) { %>
-            Mis visitas a <em><%= locals.customer.name %></em>:
-        <% } else { %>
-            Visitas a <em><%= locals.customer.name %></em>:
-        <% } %>
+    <% if (locals.salesman) { %>
+    Mis visitas a <em><%= locals.customer.name %></em>:
     <% } else { %>
-        <% if (locals.salesman) { %>
-            Mis visitas:
-        <% } else { %>
-            Todas las visitas:
-        <% } %>
+    Visitas a <em><%= locals.customer.name %></em>:
     <% } %>
-
+    <% } else { %>
+    <% if (locals.salesman) { %>
+    Mis visitas:
+    <% } else { %>
+    Todas las visitas:
+    <% } %>
+    <% } %>
 
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
 
@@ -99,7 +97,7 @@
 
 </h1>
 
-<%  if (locals.paginate_control) { %>
+<% if (locals.paginate_control) { %>
 <%- paginate_control %>
 <% } %>
 
@@ -123,71 +121,79 @@
         <th>
             Observaciones
         </th>
-        <th colspan="2">
-            
+        <th colspan="3">
+
         </th>
-    </tr> 
+    </tr>
 
-    <% for (var i in visits) { %> 
-        <% var visit = visits[i]; %>
+    <% for (var i in visits) { %>
+    <% var visit = visits[i]; %>
 
-        <% var customerCode = visit.Customer && visit.Customer.code || ""; %>
-        <% var customerId = visit.Customer && visit.Customer.id || 0; %>
+    <% var customerCode = visit.Customer && visit.Customer.code || ""; %>
+    <% var customerId = visit.Customer && visit.Customer.id || 0; %>
 
-        <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
-        <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
+    <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
+    <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
+    <% var salesmanId = visit.Salesman && visit.Salesman.id || 0; %>
 
-        <tr>
-            <td>
-                <% if (customerCode) { %>
-                    <a href="/customers/<%= customerId %>"> <%= customerCode %> </a>
+    <tr>
+        <td>
+            <% if (customerCode) { %>
+            <a href="/customers/<%= customerId %>"> <%= customerCode %> </a>
+            <% } else { %>
+            <% customerCode = "SIN CLIENTE"; %>
+            <span class='toberepared'><%= customerCode %></span>
+            <% } %>
+        </td>
+        <td>
+            <div class="vcenter">
+                <% if (salesmanPhotoUrl) { %>
+                <img src="<%= salesmanPhotoUrl %>" width="30px"/>
                 <% } else { %>
-                    <% customerCode = "SIN CLIENTE"; %>
-                    <span class='toberepared'><%= customerCode %></span>
+                <img src="/images/face.png" width="30px"/>
                 <% } %>
-            </td>
-            <td>
-                <div class="vcenter">
-                    <% if (salesmanPhotoUrl) { %>
-                        <img src="<%= salesmanPhotoUrl %>" width="30px" />
-                    <% } else { %>
-                        <img src="/images/face.png" width="30px" />
-                    <% } %>
 
-                    <% if (salesmanName) { %>
-                        <%= salesmanName %>
-                    <% } else { %>
-                        <% salesmanName = "SIN VENDEDOR"; %>
-                    <span class='toberepared'><em><%= salesmanName %></em></span>
-                    <% } %>
-                </div>
-            </td>
-            <td>
-                <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
-            </td>
-            <td>
-            <%= !!visit.fulfilledAt ? moment(visit.fulfilledAt).format("DD-MM-YYYY") : "PENDIENTE" %>
-            </td>
-            <td>
-                <%= visit.Targets.length %>
-            </td>
-            <td>
-                <%= visit.notes === "" ? "No" : "Si" %>
-            </td>
-            <td>
-                <a href="/visits/<%= visit.id %>"><img class="icon" src="/images/ver.png"></a>
-
-                <% if (session.user && session.user.isAdmin) { %>
-                    <a href="/visits/<%= visit.id %>?_method=DELETE"
-                       onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img class="icon" src="/images/basura.png"></a>
+                <% if (salesmanName) { %>
+                <a href="/salesmen/<%= salesmanId %>"> <%= salesmanName %> </a>
+                <% } else { %>
+                <% salesmanName = "SIN VENDEDOR"; %>
+                <span class='toberepared'><em><%= salesmanName %></em></span>
                 <% } %>
-            </td>
+            </div>
+        </td>
+        <td>
+            <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
+        </td>
+        <td>
+            <% if (!!visit.fulfilledAt) { %>
+            <%= moment(visit.fulfilledAt).format("DD-MM-YYYY") %>
+            <% } else { %>
+            <span class='tobedone'><em>PENDIENTE</em></span>
+            <% } %>
+        </td>
+        <td>
+            <%= visit.Targets.length %>
+        </td>
+        <td>
+            <%= visit.notes === "" ? "No" : "Si" %>
+        </td>
+        <td>
+            <a href="/visits/<%= visit.id %>"><img class="icon" src="/images/ver.png"></a>
+        </td>
+        <td>
 
-            <td>
-                <%- include ../favourites/_stars.ejs %>
-            </td>
+            <% if (session.user && session.user.isAdmin) { %>
+            <a href="/visits/<%= visit.id %>?_method=DELETE"
+               onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img
+                        class="icon" src="/images/basura.png"></a>
+            <% } %>
+        </td>
 
-         </tr> 
+        <td>
+            <%- include ../favourites/_stars.ejs %>
+        </td>
+
+    </tr>
     <% } %>
 
 </table>
