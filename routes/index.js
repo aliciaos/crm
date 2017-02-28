@@ -19,6 +19,12 @@ var trashController = require('../controllers/trash_controller');
 
 var hc = require('../controllers/history_controller');
 
+//-----------------------------------------------------------
+
+// autologout
+router.all('*',sessionController.deleteExpiredUserSession);
+
+//-----------------------------------------------------------
 
 // Autoload de parametros
 router.param('userId', userController.load);
