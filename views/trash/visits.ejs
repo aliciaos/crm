@@ -52,7 +52,7 @@
             </td>
             <td>
                 <% if (customerCode) { %>
-                    <a href="/customers/<%= customerId %>"> <%= customerCode %> </a>
+                    <%= customerCode %>
                 <% } else { %>
                     <% customerCode = "SIN CLIENTE"; %>
                     <span class='toberepared'><%= customerCode %></span>
