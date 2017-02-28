@@ -127,7 +127,7 @@ exports.index = function (req, res, next) {
     // Visitas de un cliente:
     if (!req.customer) {
 
-        // Filtrar: Clientes habituales de una fabrica:
+        // Filtrar: Clientes de una fabrica:
         var customerCompanyInclude = [];
         if (searchCompanyId) {
             customerCompanyInclude = [{

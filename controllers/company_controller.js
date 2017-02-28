@@ -102,7 +102,7 @@ exports.create = function (req, res, next) {
 
     var company = {name: req.body.name.trim()};
 
-    // Ids de los clientes habituales
+    // Ids de los clientes de la fabrica
     var mainCustomerIds = req.body.mainCustomerIds || [];
 
     // Guarda en la tabla Companies la nueva fabrica.
@@ -113,7 +113,7 @@ exports.create = function (req, res, next) {
         return company.setMainCustomers(mainCustomerIds)
         .then(function () {
 
-            req.flash('success', 'Clientes habituales marcados con éxito.');
+            req.flash('success', 'Clientes de la fábrica marcados con éxito.');
 
             res.redirect("/companies/" + company.id);
         });
@@ -178,7 +178,7 @@ exports.update = function (req, res, next) {
         return company.setMainCustomers(mainCustomerIds)
         .then(function () {
 
-            req.flash('success', 'Clientes habituales editados con éxito.');
+            req.flash('success', 'Clientes de la fábrica editados con éxito.');
 
             res.redirect("/companies/" + company.id);
         });

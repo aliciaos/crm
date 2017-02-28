@@ -82,8 +82,8 @@ User.belongsToMany(Visit, { as: 'Favourites', through: 'Favourites'});
 Visit.belongsToMany(User, { as: 'Fans', through: 'Favourites'});
 
 // Clientes principales de las fabricas.
-//   Un cliente tiene varias fabricas principales/habituales/preferidas.
-//   Una fabrica tiene varios clientes principales/habituales/preferidos.
+//   Un cliente tiene varias fabricas a las que compra.
+//   Una fabrica tiene varios clientes que compran sus productos.
 Customer.belongsToMany(Company, { as: 'MainCompanies', through: 'CompanyCustomer', foreignKey: 'CustomerId'});
 Company.belongsToMany(Customer, { as: 'MainCustomers', through: 'CompanyCustomer', foreignKey: 'CompanyId'});
 

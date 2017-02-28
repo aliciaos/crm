@@ -15,7 +15,7 @@ Que un vendedor marque una visita como borrada, pero que no se borre en realidad
 
 Adaptar la aplicacion para comercializarla, que no sea solo para decoversia.
 
-Hiperenlacens en los nombre de clientes, vendedores, etc...
+Hiperenlaces en los nombre de clientes, vendedores, etc...
 
 Al editar un usuario, que no sea necesario cambiar el password.
 
@@ -27,11 +27,7 @@ Meter un blog
 
 Gestion de documentos (attachments) con gestion por etiqutas.
 
-Dada una fabrica y un tipo de objetivo, crear una visita para todos los clientes habituales de esa fabrica, y que esa visita tenga un objeetivo del tipo indicado.
-
 Crear una base de datos para hacer pruebas de sobrecarga.
-
-Tener una cuenta en heroku de pruebas y otra de produccion.
 
 Listar visitas pendientes, o con tareas pendientes.
 
@@ -48,12 +44,6 @@ API REST JSON
 Listado en papel de la planificacion de una semana.
 
 Poder editar varias visitas de forma rapida usando AJAX (o algo similar).
-
-Los clientes habituales de las fabricas son simplemente clientes, sin la palabra habituales.
-
-Pensar: La paepelera de reciclaje (modo paranoido) quiza deberia existir solo para las visitas.????
-
-Falta por hacer: Al destruir definitivamente una visita tambien hay que destruir sus objetivos.
 
 Falta por hacer: Al destruir definitivamente un vendedor, tambien hay que destruir su foto.
 

@@ -71,7 +71,7 @@ exports.index = function (req, res, next) {
         ];
     }
 
-    // Filtrar: Clientes habituales de una fabrica:
+    // Filtrar: Clientes de una fabrica:
     var searchCompanyId = req.query.searchCompanyId || "";
     if (searchCompanyId) {
 
@@ -213,7 +213,7 @@ exports.create = function (req, res, next) {
         cif: req.body.cif.trim()
     };
 
-    // Ids de las fabricas habituales
+    // Ids de las fabricas del cliente
     var mainCompanyIds = req.body.mainCompanyIds || []
 
     // Guarda en la tabla Customers el nueva cliente.
@@ -224,7 +224,7 @@ exports.create = function (req, res, next) {
         return customer.setMainCompanies(mainCompanyIds)
         .then(function () {
 
-            req.flash('success', 'Fábricas habituales marcadas con éxito.');
+            req.flash('success', 'Fábricas del cliente marcadas con éxito.');
 
             res.redirect("/customers/" + customer.id);
         });
@@ -303,7 +303,7 @@ exports.update = function (req, res, next) {
         return customer.setMainCompanies(mainCompanyIds)
         .then(function () {
 
-            req.flash('success', 'Fábricas habituales editadas con éxito.');
+            req.flash('success', 'Fábricas del cliente editadas con éxito.');
 
             res.redirect("/customers/" + customer.id);
         });
