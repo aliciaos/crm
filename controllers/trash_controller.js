@@ -2,6 +2,7 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
 var paginate = require('./paginate').paginate;
+var cloudinary = require('cloudinary');
 
 var moment = require('moment');
 
@@ -219,7 +220,6 @@ exports.customerDestroy = function (req, res, next) {
     });
 };
 
-
 //-----------------------------------------------------------
 
 // GET /trash/salesmen
@@ -227,7 +227,10 @@ exports.salesmen = function (req, res, next) {
 
     var options = {
         paranoid: false,
-        where: { deletedAt: {$not: null} }
+        where: { deletedAt: {$not: null} },
+        include: [
+            {model: models.Attachment, as: 'Photo'}
+        ]
     };
 
     options.order = [['deletedAt', 'DESC']];
@@ -275,13 +278,37 @@ exports.salesmanDestroy = function (req, res, next) {
 
     var salesmanId = req.params["salesmanId_wal"];
 
-    var options = {
-        where: {id: salesmanId},
-        force: true
-    };
+    // Buscar el vendedor borrado y cargar tambien su foto:
+    models.Salesman.findById(salesmanId, {
+        include: [
+            {model: models.Attachment, as: 'Photo'}
+        ],
+        paranoid: false,
+    })
+    .then(function (salesman) {
+        if (!salesman) {
+            throw new Error('No existe ningún vendedor borrado con Id=' + salesmanId);
+        }
 
-    // Destruir definitivamente (no se guarda en la papelera) el vendedor:
-    models.Salesman.destroy(options)
+        // ¿Hay foto?
+        if (!salesman.Photo) {
+            return salesman;
+        }
+
+        // Borrar la foto en Cloudinary.
+        cloudinary.api.delete_resources(salesman.Photo.public_id);
+
+        // Borrar el attachment.
+        return salesman.Photo.destroy()
+        .then(function () {
+            return salesman;
+        });
+    })
+    .then(function (salesman) {
+        // borrar el vendedor:
+
+        return salesman.destroy({force: true});
+    })
     .then(function () {
         req.flash('success', 'Vendedor destruido con éxito.');
         res.redirect("/reload");
@@ -291,7 +318,6 @@ exports.salesmanDestroy = function (req, res, next) {
         next(error);
     });
 };
-
 
 //-----------------------------------------------------------
 

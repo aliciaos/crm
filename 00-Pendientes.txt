@@ -45,6 +45,6 @@ Listado en papel de la planificacion de una semana.
 
 Poder editar varias visitas de forma rapida usando AJAX (o algo similar).
 
-Falta por hacer: Al destruir definitivamente un vendedor, tambien hay que destruir su foto.
-
 Falta por hacer: Control de huerfanos al sacar cosas de la papelera. Ejemplo: Que pasa si restauro una visita y su vendedor ha sido borrado y no ha sido restaurado.
+
+En la papelera de reciclaje no se ven las fotos de los vendedores.
