@@ -59,10 +59,6 @@ Reunion con Angel:
 
  - El listado de visitas no debe ser una tabla, sino cajitas con toda la info de la visita.
 
- - Listado de clientes, que se vea la localidad.
-
- - Phone3 es Fax
-
  - Nuevos campos en clientes:
      * ocultar un cliente.
      * campo para notas/observaciones7comentarios sobre un cliente.
