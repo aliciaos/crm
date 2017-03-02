@@ -63,11 +63,7 @@ Reunion con Angel:
      * ocultar un cliente.
      * campo para notas/observaciones7comentarios sobre un cliente.
 
-Ideas:
-  - En el listado de visitas:
-       * poner un boton HOY al lado de las fechas para que se rellenen con la fecha actual.
-       * poner un boton YO al lado del vendedor seleccionarme a mi mismo.
-
 Crear un despliegue nuevo en la cuenta de Angel que se llame decoversia_staging.herokuapp.com.
+
 Renombrar dcrmt.herokuapp.com a iweb_crm.herokuapp.com.
 
