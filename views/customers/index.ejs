@@ -82,7 +82,14 @@
                 <a href="/customers/<%= customer.id %>"><%= customer.name %></a>
             </td>
             <td>
-                <%= customer.address1 %>
+                <small>
+                    <%= customer.address1 %>
+                    <br/>
+                    <%= customer.address2 %>
+                    <%= customer.postalCode %>
+                    <br/>
+                    <%= customer.city %>
+                </small>
             </td>
 
             <td>

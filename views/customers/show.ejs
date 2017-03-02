@@ -20,14 +20,30 @@
 		<b>CIF</b>: <%= customer.cif %>
 	</li>
 	<li>
-		<b>Dirección</b>: <%= customer.address1 %> <%= customer.address2 %> <%= customer.city %> <%= customer.postalCode %>
+		<b>Dirección</b>: <%= customer.address1 %> - <%= customer.address2 %>  <%= customer.postalCode %> - <%= customer.city %>
+	</li>
+
+	<li>
+		<b>Teléfono 1</b>: <%= customer.phone1 %>
 	</li>
 	<li>
-		<b>Teléfonos</b>: <%= customer.phone1 %> <%= customer.phone2 %> <%= customer.phone3 %> <%= customer.phone4 %>
+		<b>Teléfono 2</b>:  <%= customer.phone2 %>
 	</li>
 	<li>
-		<b>Correos</b>: <%= customer.email1 %> <%= customer.email2 %>
+		<b>FAX</b>: <%= customer.phone3 %>
 	</li>
+	<li>
+		<b>Otro Teléfono</b>: <%= customer.phone4 %>
+	</li>
+
+
+	<li>
+		<b>Correo 1</b>: <%= customer.email1 %>
+	</li>
+	<li>
+		<b>Correo 2</b>: <%= customer.email2 %>
+	</li>
+
 	<li>
 		<b>Web</b>: <%= customer.web %>
 	</li>

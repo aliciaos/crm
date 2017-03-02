@@ -44,3 +44,34 @@ Listado en papel de la planificacion de una semana.
 Poder editar varias visitas de forma rapida usando AJAX (o algo similar).
 
 Falta por hacer: Control de huerfanos al sacar cosas de la papelera. Ejemplo: Que pasa si restauro una visita y su vendedor ha sido borrado y no ha sido restaurado.
+
+Las versiones desplegadas localmente y en pruebas de heroku usan la misma cuenta (y directorio) de cloudinary. Esto hace que las fotos esten mezcladas y me es dificil saber que borrar.
+
+Reunion con Angel:
+ - Permisos de los vendedores:
+    * Un vendedor no puede editar las visitas de otro vendedor, pero un vendedor si puede crear visitas para otro vendedor.
+    * Un vendedor tambien puede cambiar una visita suya para asignarsela a otro vendedor, pero una vez hecho esto no podra editarla. Hay que tener cuidado porque tampoco podra crear
+      nuevos objetivos una vez asignada la visita a otro vendedor. (pensar en ello).
+
+ - Sacar una agenda en papel entre dos fechas.
+
+ - Boton para cerrar una visita y que ya no pueda cambiarse.
+
+ - El listado de visitas no debe ser una tabla, sino cajitas con toda la info de la visita.
+
+ - Listado de clientes, que se vea la localidad.
+
+ - Phone3 es Fax
+
+ - Nuevos campos en clientes:
+     * ocultar un cliente.
+     * campo para notas/observaciones7comentarios sobre un cliente.
+
+Ideas:
+  - En el listado de visitas:
+       * poner un boton HOY al lado de las fechas para que se rellenen con la fecha actual.
+       * poner un boton YO al lado del vendedor seleccionarme a mi mismo.
+
+Crear un despliegue nuevo en la cuenta de Angel que se llame decoversia_staging.herokuapp.com.
+Renombrar dcrmt.herokuapp.com a iweb_crm.herokuapp.com.
+
