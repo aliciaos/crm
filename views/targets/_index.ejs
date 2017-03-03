@@ -1,0 +1,47 @@
+<ul>
+    <% for (var i in targets) { %>
+    <% var target = targets[i]; %>
+
+    <% var typeName = target.TargetType ? target.TargetType.name : "" %>
+    <% var companyName = target.Company ? target.Company.name : "" %>
+
+    <li>
+        <% if (companyName) { %>
+        <%= companyName %>
+        <% } else { %>
+        <span class="toberepared">SIN FABRICA</span>
+        <% } %>
+        -
+        <% if (typeName) { %>
+        <%= typeName %>
+        <% } else { %>
+        <span class="toberepared">SIN TIPO</span>
+        <% } %>
+
+        <b>
+            <% if (target.success === null) { %>
+            [<span class="toberepared">PENDIENTE</span>]
+            <% } else { %>
+            [<%= target.success ? "Cumplido" : "Fallido" %>]
+            <% } %>
+
+        </b>
+
+        <% if (locals.readwrite) { %>
+        <a href="/visits/<%= visit.id %>/targets/<%= target.id %>/edit"><img class="icon" src="/images/edit.png"></a>
+
+        <a href="/visit/<%= visit.id %>/targets/<%= target.id %>&_method=DELETE"
+           onClick="return confirm('¿Seguro que quiere borrar el objetivo <%= typeName %>-<%= companyName %>?');">
+            <img class="icon" src="/images/basura.png">
+        </a>
+        <% } %>
+
+        <br/>
+
+        <% if (target.notes !== "") { %>
+        <b>notas</b>: <%- escapeText(target.notes) %>
+        <% } %>
+
+    </li>
+    <% } %>
+</ul>

@@ -262,11 +262,15 @@ exports.index = function (req, res, next) {
         options.offset = pagination.offset;
         options.limit = pagination.limit;
 
-        options.include.push(
-            {model: models.Target}
-        );
+        options.include.push({
+            model: models.Target,
+            include: [
+                models.Company,
+                models.TargetType
+            ]
+        });
 
-        options.order.push( ['plannedFor', 'DESC'] );
+        options.order.push(['plannedFor', 'DESC']);
 
         return models.Visit.findAll(options)
     })
@@ -282,7 +286,7 @@ exports.index = function (req, res, next) {
         companyHelper.getAllCompaniesInfo()
         .then(function (companiesInfo) {
 
-            res.render('visits/index.ejs', {
+            res.render('visits/indexlong.ejs', {
                 visits: visits,
                 companiesInfo: companiesInfo,
                 moment: moment,

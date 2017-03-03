@@ -8,8 +8,8 @@
 
     <header class="vcenter">
         <h1>
-            <a href="/"> <img src="/images/dvr.png" width="200px" class="left" /> </a>
-            CRM
+            <a href="/"> <img src="<%= process.env.CRM_LOGO || '/images/dvr.png' %>" height="40px" class="left" /> </a>
+            <%= process.env.CRM_TITLE || "CRM" %>
         </h1>
     </header>
 
@@ -102,7 +102,7 @@
   </section>
 
   <footer class="version">
-        <small>Versión: 28 Febrero 2017</small>
+        <small>Versión: 3 Marzo 2017</small>
   </footer>
 
   </body>

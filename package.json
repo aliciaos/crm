@@ -7,19 +7,26 @@
     "start_old": "node ./bin/www",
     "supervisor": "./node_modules/.bin/supervisor ./bin/www",
 
-    "seed_local": "./node_modules/.bin/sequelize db:seed:all --url sqlite://$(pwd)/crm.sqlite",
-    "seed_heroku_development": "heroku run --app dcrmt      ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
-    "seed_heroku_production":  "heroku run --app decoversia ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
-
     "migrate_local": "./node_modules/.bin/sequelize db:migrate --url sqlite://$(pwd)/crm.sqlite",
-    "migrate_heroku_development": "heroku run --app dcrmt      ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
-    "migrate_heroku_production":  "heroku run --app decoversia ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
+    "seed_local":    "./node_modules/.bin/sequelize db:seed:all --url sqlite://$(pwd)/crm.sqlite",
 
-    "reset_heroku_development": "heroku pg:reset DATABASE --app dcrmt",
-    "reset_heroku_production":  "heroku pg:reset DATABASE --app decoversia",
+    "migrate_iweb_development": "heroku run --app dcrmt      ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
+    "seed_iweb_development":    "heroku run --app dcrmt      ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
+    "reset_iweb_development":   "heroku pg:reset DATABASE --app dcrmt",
 
-    "mon_production":  "heroku --app decoversia maintenance:on",
-    "moff_production": "heroku --app decoversia maintenance:off"
+    "migrate_decoversia_production":  "heroku run --app decoversia         ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
+    "migrate_decoversia_staging":     "heroku run --app decoversia-staging ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
+
+    "seed_decoversia_production":  "heroku run --app decoversia         ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
+    "seed_decoversia_staging":     "heroku run --app decoversia-staging ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
+
+    "reset_decoversia_production":  "heroku pg:reset DATABASE --app decoversia",
+    "reset_decoversia_staging":     "heroku pg:reset DATABASE --app decoversia-staging",
+
+    "mon_decoversia_production":  "heroku --app decoversia         maintenance:on",
+    "mon_decoversia_staging":     "heroku --app decoversia-staging maintenance:on",
+    "moff_decoversia_production": "heroku --app decoversia         maintenance:off",
+    "moff_decoversia_staging":    "heroku --app decoversia-staging maintenance:off"
   },
   "engines": {
     "node": "7.3.x",

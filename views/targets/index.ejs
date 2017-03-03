@@ -11,45 +11,6 @@
 
 </h2>
 
+<%- include _index.ejs %>
 
-<ul>
-    <% for (var i in targets) { %> 
-        <% var target = targets[i]; %>  
-
-        <% var typeName = target.TargetType ? target.TargetType.name : "SIN TIPO"   %>
-        <% var companyName = target.Company ? target.Company.name : "SIN FABRICA"   %>
-
-        <li>
-            <%= companyName %>
-            -
-            <%= typeName %>
-                       
-            
-
-            <% if (locals.readwrite) { %>
-                <a href="/visits/<%= visit.id %>/targets/<%= target.id %>/edit"><img class="icon" src="/images/edit.png"></a>
-
-                <a href="/visit/<%= visit.id %>/targets/<%= target.id %>&_method=DELETE" 
-                    onClick="return confirm('¿Seguro que quiere borrar el objetivo <%= typeName %>-<%= companyName %>?');">
-                    <img class="icon" src="/images/basura.png">
-                </a>
-            <% } %>
-
-            <br />
-            
-            <b>Estado</b>:
-                <%= target.success === null ? "PENDIENTE" : "" %>
-                <%= target.success === true ? "Cumplido" : "" %>
-                <%= target.success === false ? "Fallido" : "" %>
-
-
-            <% if (target.notes !== "") { %>
-                <p>
-                    Observaciones: <%- escapeText(target.notes) %>
-                </p>
-            <% } %>
-
-        </li> 
-    <% } %>
-</ul>
 

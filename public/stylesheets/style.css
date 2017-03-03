@@ -29,7 +29,7 @@ h3 {
 }
 
 p {
-    margin: 5px 25px;
+    margin: 5px 20px;
 }
 
 a {
@@ -110,6 +110,17 @@ input[type=text]:focus, input[type=password]:focus {
     border: 1px dotted blue;
     margin: 0px 0px 10px 0px;
     padding: 5px;
+    background-color: #f1fdff;
+}
+
+
+.boxItem {
+    border: 1px dotted blue;
+    margin: 5px 0px 5px 0px;
+    padding: 5px;
+    background-color: #f1fdff;
+    clear: both;
+    border-radius: 5px;
 }
 
 table {
