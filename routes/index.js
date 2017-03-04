@@ -254,24 +254,31 @@ router.delete('/targettypes/:targettypeId(\\d+)',
 // Definicion de rutas para los objetivos de las visitas
 router.get(   '/visits/:visitId(\\d+)/targets',
     sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     targetController.index);
 router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
     sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     targetController.show);
 router.get('/visits/:visitId(\\d+)/targets/new',
     sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     targetController.new);
 router.post('/visits/:visitId(\\d+)/targets',
     sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     targetController.create);
 router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)/edit',
     sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     targetController.edit);
 router.put('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
     sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     targetController.update);
 router.delete('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
     sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     targetController.destroy);
 
 
@@ -291,9 +298,11 @@ router.post('/visits',
     visitController.create);
 router.get('/visits/:visitId(\\d+)/edit',
     sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     visitController.edit);
 router.put('/visits/:visitId(\\d+)',
 	sessionController.loginRequired,
+    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
     visitController.update);
 router.delete('/visits/:visitId(\\d+)',
 	sessionController.loginRequired,

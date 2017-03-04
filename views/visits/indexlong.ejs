@@ -34,6 +34,7 @@
 <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
 <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 <% var salesmanId = visit.Salesman && visit.Salesman.id || 0; %>
+<% var salesmanUserId = visit.Salesman && visit.Salesman.UserId || 0; %>
 
 <div class="boxItem">
 
@@ -44,10 +45,14 @@
             <%- include ../favourites/_stars.ejs %>
 
             <% if (salesmanName) { %>
-            <a href="/salesmen/<%= salesmanId %>"> <%= salesmanName %> </a>
+                <% if (session.user.isAdmin) { %>
+                    <a href="/salesmen/<%= salesmanId %>"> <%= salesmanName %> </a>
+                <% } else { %>
+                    <%= salesmanName %>
+                <% } %>
             <% } else { %>
-            <% salesmanName = "SIN VENDEDOR"; %>
-            <span class='toberepared'><em><%= salesmanName %></em></span>
+                <% salesmanName = "SIN VENDEDOR"; %>
+                <span class='toberepared'><em><%= salesmanName %></em></span>
             <% } %>
 
             <% if (salesmanPhotoUrl) { %>
@@ -72,7 +77,11 @@
             <% } %>
         </small>
 
+
+        <% if (session.user && session.user.isAdmin || !salesmanId || salesmanUserId === session.user.id) { %>
         <a href="/visits/<%= visit.id %>"><img class="icon" src="/images/ver.png"></a>
+        <% } %>
+
 
         <% if (session.user && session.user.isAdmin) { %>
         <a href="/visits/<%= visit.id %>?_method=DELETE"

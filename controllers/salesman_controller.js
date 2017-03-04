@@ -19,6 +19,7 @@ var cloudinary_image_options = {
     tags: ['core', 'decoversia', 'crm']
 };
 
+
 //-----------------------------------------------------------
 
 

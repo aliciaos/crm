@@ -2,6 +2,8 @@
 
 <% var salesmanName = visit.Salesman ? visit.Salesman.name : "SIN VENDEDOR"; %>
 <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
+<% var salesmanId = visit.Salesman && visit.Salesman.id || 0; %>
+<% var salesmanUserId = visit.Salesman && visit.Salesman.UserId || 0; %>
 
 <% var customerCode = visit.Customer ? visit.Customer.code : "" %>
 <% var customerName = visit.Customer ? visit.Customer.name : "" %>
@@ -26,9 +28,11 @@
 
     <a href="/goback"><img class="icon" src="/images/back.png"></a>
 
-    <a href="/visits/<%= visit.id %>/edit"><img class="icon" src="/images/edit.png"></a>
+    <% if (session.user && session.user.isAdmin || !salesmanId || salesmanUserId === session.user.id) { %>
+	<a href="/visits/<%= visit.id %>/edit"><img class="icon" src="/images/edit.png"></a>
+ 	<% } %>
 
-    <% if (session.user && session.user.isAdmin) { %>
+	<% if (session.user && session.user.isAdmin) { %>
 		<a href="/visits/<%= visit.id %>?_method=DELETE"
 		   onClick="return confirm('¿Seguro que desea borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img class="icon" src="/images/basura.png"></a>
     <% } %>
@@ -71,7 +75,7 @@
 
 <%  var targets = visit.Targets %>
 
-<%  locals.readwrite = true; %>
+<% locals.readwrite = session.user && session.user.isAdmin || !salesmanId || salesmanUserId === session.user.id; %>
 
 <hr />
 	<%- include ../targets/index.ejs %>

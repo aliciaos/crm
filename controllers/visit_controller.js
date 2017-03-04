@@ -51,6 +51,25 @@ exports.load = function (req, res, next, visitId) {
 //-----------------------------------------------------------
 
 
+// MW que permite el paso solamente si:
+//   - el usuario logeado es admin,
+//   - la visita no tiene vendedor,
+//   - o el vendedor de la visita esta asociado al usuario logeado.
+exports.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required = function (req, res, next) {
+
+    if (req.session.user.isAdmin ||
+        !req.visit.Salesman ||
+        req.visit.Salesman.UserId === req.session.user.id) {
+        next();
+    } else {
+        console.log('Ruta prohibida: el usuario logeado no es el vendedor referenciado, ni un administrador.');
+        res.send(403);
+    }
+};
+
+//-----------------------------------------------------------
+
+
 // GET /users/:userId/visits
 //
 // Visitas de un User.
