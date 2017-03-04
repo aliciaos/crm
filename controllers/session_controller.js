@@ -7,8 +7,8 @@ var url = require('url');
 // sin que el usuario solicite nuevas paginas, entonces se cerrara
 // la sesion del usuario.
 // El valor esta en milisegundos.
-// 5 minutos
-var maxIdleTime = 5*60*1000;
+// 30 minutos
+var maxIdleTime = 30*60*1000;
 
 
 //

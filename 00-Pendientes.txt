@@ -44,10 +44,6 @@ Falta por hacer: Control de huerfanos al sacar cosas de la papelera. Ejemplo: Qu
 Las versiones desplegadas localmente y en pruebas de heroku usan la misma cuenta (y directorio) de cloudinary. Esto hace que las fotos esten mezcladas y me es dificil saber que borrar.
 
 Reunion con Angel:
- - Permisos de los vendedores:
-    * Un vendedor no puede editar las visitas de otro vendedor, pero un vendedor si puede crear visitas para otro vendedor.
-    * Un vendedor tambien puede cambiar una visita suya para asignarsela a otro vendedor, pero una vez hecho esto no podra editarla. Hay que tener cuidado porque tampoco podra crear
-      nuevos objetivos una vez asignada la visita a otro vendedor. (pensar en ello).
 
  - Sacar una agenda en papel entre dos fechas.
 
