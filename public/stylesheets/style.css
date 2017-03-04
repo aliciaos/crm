@@ -7,7 +7,7 @@ body {
 
 header {
     text-align: center;
-    font-family: "PT Serif Bold",Georgia,serif,times;
+    font-family: "PT Serif Bold", Georgia, serif, times;
     font-size: 18px;
 }
 
@@ -32,8 +32,16 @@ p {
     margin: 5px 20px;
 }
 
+small {
+    font-size: x-small;
+}
+
+big {
+    font-size: larger;
+}
+
 a {
-  color: blue;
+    color: blue;
 }
 
 a:link {
@@ -54,7 +62,7 @@ a:active {
 
 .icon {
     width: 20px;
-        vertical-align: text-bottom;
+    vertical-align: text-bottom;
 
 }
 
@@ -66,7 +74,7 @@ a:active {
     float: left;
 }
 
-:focus { 
+:focus {
     background-color: yellow;
     color: blue;
 }
@@ -83,22 +91,39 @@ input[type=checkbox]:checked + .star {
     width: 16px;
 }
 
+.targetindex ul {
+    margin: 0px 5px;
+    clear: both;
+}
+
+.notes {
+    font-style: italic;
+    font-size: smaller;
+
+    margin: 2px 5px;
+
+}
 
 .toberepared {
     color: red;
 }
 
-
 .tobedone {
     color: #ff15d0;
 }
 
+.done {
+    color: #08ab0a;
+}
+
+.failed {
+    color: red;
+}
 
 input[type=text], input[type=password] {
     background-color: white;
     height: 15px;
-
-    transition: ease-in-out,  background-color .4s ease-in-out, height  .4s ease-in-out;
+    transition: ease-in-out, background-color .4s ease-in-out, height .4s ease-in-out;
 }
 
 input[type=text]:focus, input[type=password]:focus {
@@ -112,7 +137,6 @@ input[type=text]:focus, input[type=password]:focus {
     padding: 5px;
     background-color: #f1fdff;
 }
-
 
 .boxItem {
     border: 1px dotted blue;
@@ -147,7 +171,6 @@ td {
     padding: 1px 2px;
 
 }
-
 
 nav {
     background-color: blue;
@@ -186,13 +209,13 @@ nav a {
 }
 
 #flashinfo {
-  xxxwidth: 450px;
-  border: 2px solid blue;
-  padding: 7px;
-  padding-bottom: 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  color: #000; 
+    xxxwidth: 450px;
+    border: 2px solid blue;
+    padding: 7px;
+    padding-bottom: 0;
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+    color: #000;
 }
 
 #flashinfo h3 {
@@ -203,24 +226,23 @@ nav a {
     margin: -7px;
     margin-bottom: 0px;
     background-color: #00c;
-    color: #ffffff; 
+    color: #ffffff;
 }
 
 #flashinfo ul li {
     margin: 2px 2px 2px 0px;
     font-size: 12px;
-    list-style: square; 
+    list-style: square;
 }
 
-
 #flashsuccess {
-  xxxwidth: 450px;
-  border: 2px solid green;
-  padding: 7px;
-  padding-bottom: 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  color: #000; 
+    xxxwidth: 450px;
+    border: 2px solid green;
+    padding: 7px;
+    padding-bottom: 0;
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+    color: #000;
 }
 
 #flashsuccess h3 {
@@ -236,17 +258,17 @@ nav a {
 #flashsuccess ul li {
     margin: 2px 2px 2px 0px;
     font-size: 12px;
-    list-style: square; 
+    list-style: square;
 }
 
 #flasherror {
-  xxxwidth: 450px;
-  border: 2px solid red;
-  padding: 7px;
-  padding-bottom: 0;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
-  color: #000; 
+    xxxwidth: 450px;
+    border: 2px solid red;
+    padding: 7px;
+    padding-bottom: 0;
+    margin-bottom: 20px;
+    background-color: #f0f0f0;
+    color: #000;
 }
 
 #flasherror h3 {
@@ -265,7 +287,6 @@ nav a {
     list-style: square;
 }
 
-
 .pagination {
     display: inline-block;
     padding-left: 0;
@@ -279,7 +300,7 @@ nav a {
 
 }
 
-.pagination > li > a, 
+.pagination > li > a,
 .pagination > li > span {
     position: relative;
     float: left;
@@ -292,11 +313,11 @@ nav a {
     border: 1px solid #ddd;
 }
 
-.pagination > .active > a, 
-.pagination > .active > span, 
-.pagination > .active > a:hover, 
-.pagination > .active > span:hover, 
-.pagination > .active > a:focus, 
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
 .pagination > .active > span:focus {
     z-index: 2;
     color: #fff;
@@ -305,14 +326,14 @@ nav a {
     border-color: #03a9f4;
 }
 
-.pagination > li:first-child > a, 
+.pagination > li:first-child > a,
 .pagination > li:first-child > span {
     margin-left: 0;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
 }
 
-.pagination > li:last-child > a, 
+.pagination > li:last-child > a,
 .pagination > li:last-child > span {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;

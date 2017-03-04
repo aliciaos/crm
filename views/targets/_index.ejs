@@ -7,25 +7,27 @@
 
     <li>
         <% if (companyName) { %>
-        <%= companyName %>
+        <b><%= companyName %></b>:
         <% } else { %>
-        <span class="toberepared">SIN FABRICA</span>
+        <span class="toberepared">SIN FABRICA</span>:
         <% } %>
-        -
+
         <% if (typeName) { %>
         <%= typeName %>
         <% } else { %>
         <span class="toberepared">SIN TIPO</span>
         <% } %>
 
-        <b>
+        <small>
             <% if (target.success === null) { %>
-            [<span class="toberepared">PENDIENTE</span>]
+                <span class="tobedone">[PENDIENTE]</span>
+            <% } else if (target.success) { %>
+                <span class="done">[Cumplido]</span>
             <% } else { %>
-            [<%= target.success ? "Cumplido" : "Fallido" %>]
+                <span class="failed">[Fallido]
             <% } %>
+        </small>
 
-        </b>
 
         <% if (locals.readwrite) { %>
         <a href="/visits/<%= visit.id %>/targets/<%= target.id %>/edit"><img class="icon" src="/images/edit.png"></a>
@@ -39,7 +41,9 @@
         <br/>
 
         <% if (target.notes !== "") { %>
-        <b>notas</b>: <%- escapeText(target.notes) %>
+        <div class="notes">
+        <%- escapeText(target.notes) %>
+        </div>
         <% } %>
 
     </li>

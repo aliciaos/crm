@@ -1,85 +1,4 @@
-<script src="/javascripts/misc_form.js"></script>
-
-<form method="get" action="<%= url %>" id="filterForm" class="right filters">
-
-    <input type="hidden" name="forceCustomerId" value=<%= locals.forceCustomerId %>>
-
-    <div class="vcenter">
-        Filtros:
-        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit"/>
-
-        <input type="image" class="icon right" src="/images/cancel.png" border="0"
-               onClick="cleanupForm('filterForm')"/>
-
-    </div>
-
-    <label>Planificado desde:</label>
-    <input type="text"
-           id="searchdateafter"
-           name="searchdateafter"
-           value="<%= locals.searchdateafter || '' %>"
-           placeholder="dd-mm-aaaa"
-           pattern="\d\d-\d\d-\d\d\d\d"
-           size="11"
-           autocomplete="off"/>
-
-    <label>Hasta:</label>
-    <input type="text"
-           id="searchdatebefore"
-           name="searchdatebefore"
-           value="<%= locals.searchdatebefore || '' %>"
-           placeholder="dd-mm-aaaa"
-           pattern="\d\d-\d\d-\d\d\d\d"
-           size="11"
-           autocomplete="off"/>
-
-    <% var today = moment().format("DD-MM-YYYY"); %>
-    <input type="image" class="icon right" src="/images/today.png" border="0"
-           onClick="setDate('<%= today %>', 'searchdateafter', 'searchdatebefore'); return false;"/>
-
-    <br/>
-
-    <% if (!locals.customer) { %>
-    <label>Cliente:</label>
-    <input type="text" name="searchcustomer" value="<%= locals.searchcustomer || '' %>" placeholder="Cliente a buscar"
-           size="40" autocomplete="off"/>
-
-    <br/>
-
-    <label>Clientes de la fábrica:</label>
-    <select name="searchCompanyId">
-
-        <option value="" <%= !locals.searchCompanyId ? "selected" : "" %> >
-            Todas
-        </option>
-
-        <% for (var i in companiesInfo) { %>
-        <% var companyInfo = companiesInfo[i]; %>
-        <option value="<%= companyInfo.id %>" <%= companyInfo.id == locals.searchCompanyId ? "selected" : "" %> >
-            <%= companyInfo.name %>
-        </option>
-        <% } %>
-    </select>
-
-    <br/>
-
-    <% } %>
-
-    <% if (!locals.salesman) { %>
-    <label>Vendedor:</label>
-    <input type="text" name="searchsalesman" value="<%= locals.searchsalesman || '' %>" placeholder="Vendedor a buscar"
-           size="40" autocomplete="off"/>
-
-    <br/>
-    <% } %>
-
-    <div class="vcenter">
-        <label>Favoritas:</label>
-        <input type="checkbox" name="searchfavourites" value="1" <%= locals.searchfavourites ? 'checked' : '' %> >
-        <img class="star" src="/images/star_yellow.png" \>
-    </div>
-
-</form>
+<% include _filter.ejs %>
 
 
 <h1>
@@ -102,7 +21,6 @@
     <a href="/visits/new"><img class="icon" src="/images/add.png"></a>
 
 </h1>
-
 
 
 <% if (locals.paginate_control) { %>
@@ -143,22 +61,16 @@
 
 
     <div class="vcenter">
-        <% if (customerCode) { %>
-        <a href="/customers/<%= customerId %>"> <%= customerCode %> </a>
-        /
-        <a href="/customers/<%= customerId %>"> <%= customerName %> </a>
-        <% } else { %>
-        <% customerCode = "SIN CLIENTE"; %>
-        <span class='toberepared'><%= customerCode %></span>
-        <% } %>
-        -
-        (<%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
-        /
-        <% if (!!visit.fulfilledAt) { %>
-        <%= moment(visit.fulfilledAt).format("DD-MM-YYYY") %>
-        <% } else { %>
-        <span class='tobedone'><em>PENDIENTE</em></span>
-        <% } %>)
+
+        <small>
+            <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
+            /
+            <% if (!!visit.fulfilledAt) { %>
+            <%= moment(visit.fulfilledAt).format("DD-MM-YYYY") %>
+            <% } else { %>
+            <span class='tobedone'><em>PENDIENTE</em></span>
+            <% } %>
+        </small>
 
         <a href="/visits/<%= visit.id %>"><img class="icon" src="/images/ver.png"></a>
 
@@ -170,17 +82,36 @@
 
     </div>
 
+    <div class="vcenter">
+        <% if (customerCode) { %>
+        <big>
+            <a href="/customers/<%= customerId %>"> <%= customerName %> </a>
+        </big>
+        <small>
+            (<a href="/customers/<%= customerId %>"><%= customerCode %></a>)
+        </small>
+
+        <% } else { %>
+        <% customerCode = "SIN CLIENTE"; %>
+        <span class='toberepared'><%= customerCode %></span>
+        <% } %>
+    </div>
+
 
     <div>
         <% if (visit.notes) { %>
-        <b>notas</b>: <%- escapeText(visit.notes) %>
+        <div class="notes">
+        <%- escapeText(visit.notes) %>
+        </div>
         <% } %>
     </div>
 
     <% var targets = visit.Targets %>
     <% locals.readwrite = false; %>
 
-    <%- include ../targets/_index.ejs %>
+    <div class="targetindex">
+        <%- include ../targets/_index.ejs %>
+    </div>
 
 </div>
 
