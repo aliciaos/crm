@@ -20,6 +20,26 @@
 
     <a href="/visits/new"><img class="icon" src="/images/add.png"></a>
 
+    <%
+    var urlPrint = "";
+    if (locals.salesman) {
+        urlPrint += "/salesmen/" + locals.salesman.id;
+    }
+    if (locals.customer) {
+        urlPrint += "/customers/" + locals.customer.id;
+    }
+    urlPrint += "/visits/print?";
+    urlPrint += "searchdateafter=" + (locals.searchdateafter || '') + "&";
+    urlPrint += "searchdatebefore=" + (locals.searchdatebefore || '') + "&";
+    urlPrint += "searchcustomer=" + (locals.searchcustomer || '') + "&";
+    urlPrint += "searchsalesman=" + (locals.searchsalesman || '') + "&";
+    urlPrint += "searchCompanyId=" + (locals.searchCompanyId || '') + "&";
+    urlPrint += "searchfavourites=" + (locals.searchfavourites || '');
+    %>
+    <a href="<%= urlPrint %>">
+        <img class="icon" src="/images/print.png">
+    </a>
+
 </h1>
 
 

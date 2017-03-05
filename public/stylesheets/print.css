@@ -3,34 +3,133 @@ body {
     font-family: "Clear Sans",Arial,Arial,sans-serif,helvetica;
 }
 
-.header1 {
-    text-align: center;
+
+small {
+    font-size: x-small;
+}
+
+big {
+    font-size: larger;
+}
+
+.icon {
+    width: 20px;
+    vertical-align: text-bottom;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+
+.targetindex ul {
+    margin: 0px 5px;
+    clear: both;
+}
+
+.notes {
+    font-style: italic;
+    font-size: smaller;
+    margin: 2px 5px;
+}
+
+.toberepared {
+    color: lightgray;
+}
+
+.tobedone {
+    color: lightgray;
+}
+
+.done {
+    color: gray;
+}
+
+.failed {
+    color: gray;
+}
+
+
+.headerPage {
     border: 2px solid;
-    border-bottom: 1px none;
-    height: 100px;
-	margin: 1.5cm 1.5cm 0px 1.5cm;
-	xxxbackground-color: yellow;
+    height: auto;
+    margin: 0cm 0cm 0px 0cm;
     font-family: "PT Serif Bold",Georgia,serif,times;
+    xxxxbackground-color: #00ff35;
+    padding-bottom: 0px;
 }
 
 .logo {
-    padding-left: 20px;
-    width: 25%;
-    height: 100px;
+    width: 28%;
+    height: 40px;
     float: left;
+    xxxxbackground-color: #e5f5ff;
+
 }
 
-.perea {
-    width: 25%;
-    height: 100px;
-    float: left;
+.filters {
+    width: 35%;
+    margin: 0px;
+    padding: 5px;
+    font-size: x-small;
+    text-align: right;
+    xxxxxbackground-color: #e5ff35;
+    float: right;
+
 }
 
-.perea h1 {
+.title1 {
+    text-align: center;
+    width: 35%;
+    height: 40px;
+    float: left;
+    xxxxxbackground-color: #e535ff;
+}
+
+.title1 h1 {
     font-size: 18px;
     font-weight: normal;
-    padding-top: 20px;
+    xxxxxbackground-color: #e5353f;
 }
+
+
+.title2 {
+    clear: both;
+    margin: 5px;
+    vvvvloat: left;
+    xxxxbackground-color: #95550f;
+
+}
+
+.title2 h1 {
+padding: 5px;
+
+    font-size: 18px;
+    font-weight: normal;
+    ccccpadding-top: 20px;
+    xxxxbackground-color: #3535ff;
+
+}
+
+
+.boxItem {
+    margin: 0.2cm 0cm;
+
+    border: 1px dotted gray;
+    ccccmargin: 5px 0px 5px 0px;
+    padding: 3px 5px;
+    clear: both;
+    border-radius: 5px;
+
+    page-break-inside: avoid;
+}
+
+
+
 
 .paptest {
     width: 45%;
@@ -58,55 +157,16 @@ body {
     z-index: 2;
 }
 
-.report {
-    text-align: left;
-    padding-left: 1cm;
-    width: 45%;
-}
-
-.diagnoses {
-    margin: 0px 1.5cm 1.5cm 1.5cm;
-    padding: 0cm 0.5cm;
-    font-weight: normal;
-}
-
-.diagnoses h2 {
-    font-size: 20px;
-    font-weight: normal;
-
-}
-
-.diagnoses h3 {
-    font-size: 18px;
-    font-weight: normal;
-
-}
-
-.diagnoses p {
-    font-size: 14px;
-    font-weight: normal;
-}
-
-.dtresult {
-    padding-left: 0.5cm;
-}
-
-.resultnotes {
-    padding-left: 0.5cm;
-}
-
-.dtroption {
-      padding-left: 1cm;
-}
-
-.optionnotes {
-      padding-left: 1cm;
-}
-
 .underline {
     text-decoration: underline;
 }
 
+.vcenter {
+}
+
+.vcenter img {
+    vertical-align: middle;
+}
 
 .example-print {
     display: none;
@@ -115,8 +175,9 @@ body {
 
 
 @media print {
-    @page { 
-        margin: 0; 
+    @page {
+        size: A4;
+        margin: 1cm;
     }
   
     footer {

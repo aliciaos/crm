@@ -74,7 +74,7 @@ exports.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required = function (req, re
 //
 // Visitas de un User.
 // Hay que buscar el vendedor asociado al user indicado,
-// èrp puede que no exista un vendedor.
+// pero puede que no exista un vendedor.
 exports.indexUser = function (req, res, next) {
 
     models.Salesman.findOne({
@@ -96,7 +96,7 @@ exports.indexUser = function (req, res, next) {
 // GET /visits
 // GET /customers/:customerId/visits
 // GET /salesmen/:salesmanId/visits
-// GET /salesmen/:salesmanId/customers/:customerId/visits',
+// GET /salesmen/:salesmanId/customers/:customerId/visits
 exports.index = function (req, res, next) {
 
     var options = {};
@@ -561,5 +561,242 @@ exports.destroy = function (req, res, next) {
         next(error);
     });
 };
+
+
+//-----------------------------------------------------------
+
+// GET /visits/print
+// GET /customers/:customerId/visits/print
+// GET /salesmen/:salesmanId/visits/print
+// GET /salesmen/:salesmanId/customers/:customerId/visits/print
+exports.printIndex = function (req, res, next) {
+
+    var options = {};
+    options.where = {};
+    options.include = [];
+    options.order = [];
+
+    //----------------
+
+    var searchdateafter = req.query.searchdateafter || '';
+    var searchdatebefore = req.query.searchdatebefore || '';
+    var searchcustomer = req.query.searchcustomer || '';
+    var searchCompanyId = req.query.searchCompanyId || "";
+    var searchsalesman = req.query.searchsalesman || '';
+    var searchfavourites = req.query.searchfavourites || "";
+
+
+    // Busquedas por fecha de planificacion: entre dos fechas
+    var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
+    if (searchdateafter && !momentafter.isValid()) {
+        req.flash("error", "La fecha " + searchdateafter + " no es válida.");
+        momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
+    }
+    var searchmomentafter = momentafter.toDate();
+
+    var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
+    if (searchdatebefore && !momentbefore.isValid()) {
+        req.flash("error", "La fecha " + searchdatebefore + " no es válida.");
+        var momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
+    }
+    var searchmomentbefore = momentbefore.toDate();
+
+    if (searchdateafter !== "") {
+        if (searchdatebefore !== "") {
+            options.where.plannedFor = {$between: [searchmomentafter, searchmomentbefore]};
+        } else {
+            options.where.plannedFor = {$gte: searchmomentafter};
+        }
+    } else {
+        if (searchdatebefore !== "") {
+            options.where.plannedFor = {$lte: searchmomentbefore};
+        }
+    }
+
+
+
+    // Visitas de un cliente:
+    if (!req.customer) {
+
+        // Filtrar: Clientes de una fabrica:
+        var customerCompanyInclude = [];
+        if (searchCompanyId) {
+            customerCompanyInclude = [{
+                model: models.Company,
+                as: "MainCompanies",
+                attributes: ['id', 'name'],
+                where: {id: searchCompanyId}
+            }];
+        }
+
+        // Filtrar: Codigo y nombre del cliente.
+        var customeInclude = {
+            model: models.Customer,
+            include: customerCompanyInclude
+        };
+        if (searchcustomer) {
+            var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
+
+            var likeCondition;
+            if (!!process.env.DATABASE_URL && /^postgres:/.test(process.env.DATABASE_URL)) {
+                // el operador $iLike solo funciona en pastgres
+                likeCondition = {$iLike: search_like};
+            } else {
+                likeCondition = {$like: search_like};
+            }
+
+            customeInclude.where = {
+                $or: [
+                    {code: likeCondition},
+                    {name: likeCondition}
+                ]
+            };
+        }
+        options.include.push(customeInclude);
+
+    } else {
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.Customer,
+            where: {id: req.customer.id}
+        });
+    }
+
+
+    // Visitas de un vendedor:
+    if (!req.salesman) {
+        if (searchsalesman) {
+            var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
+
+            var likeCondition;
+            if (!!process.env.DATABASE_URL && /^postgres:/.test(process.env.DATABASE_URL)) {
+                // el operador $iLike solo funciona en pastgres
+                likeCondition = {$iLike: search_like};
+            } else {
+                likeCondition = {$like: search_like};
+            }
+
+            // CUIDADO: Estoy retocando el include existente.
+            options.include.push({
+                model: models.Salesman,
+                as: "Salesman",
+                where: {name: likeCondition},
+                include: [{model: models.Attachment, as: 'Photo'}]
+            });
+        } else {
+            // CUIDADO: Estoy retocando el include existente.
+            options.include.push({
+                model: models.Salesman,
+                as: "Salesman",
+                include: [{model: models.Attachment, as: 'Photo'}]
+            });
+        }
+    } else {
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.Salesman,
+            as: "Salesman",
+            where: {id: req.salesman.id},
+            include: [{model: models.Attachment, as: 'Photo'}]
+        });
+    }
+
+
+    // Filtrar por mis visitas favoritas
+    if (searchfavourites) {
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.User,
+            as: "Fans",
+            attributes: ['id', 'username'],
+            where: {id: req.session.user.id}
+        });
+    } else {
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.User,
+            as: "Fans",
+            attributes: ['id', 'username']
+        });
+    }
+
+
+
+    //----------------
+
+    models.Visit.count(options)
+    .then(function (count) {
+
+        // Paginacion:
+
+        var items_per_page = 25;
+
+        // La pagina a mostrar viene en la query
+        var pageno = parseInt(req.query.pageno) || 1;
+
+        // Datos para obtener el rango de datos a buscar en la BBDD.
+        var pagination = {
+            offset: items_per_page * (pageno - 1),
+            limit: items_per_page
+        };
+
+        // Crear un string con el HTML que pinta la botonera de paginacion.
+        // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
+        res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
+
+        return pagination;
+    })
+    .then(function (pagination) {
+
+        options.offset = pagination.offset;
+        options.limit = pagination.limit;
+
+        options.include.push({
+            model: models.Target,
+            include: [
+                models.Company,
+                models.TargetType
+            ]
+        });
+
+        options.order.push(['plannedFor', 'DESC']);
+
+        return models.Visit.findAll(options)
+    })
+    .then(function (visits) {
+
+        // Marcar las visitas que son favoritas
+        visits.forEach(function (visit) {
+            visit.favourite = visit.Fans.some(function (fan) {
+                return fan.id == req.session.user.id;
+            });
+        });
+
+        companyHelper.getAllCompaniesInfo()
+        .then(function (companiesInfo) {
+
+            res.render('visits/print.ejs', {
+                layout: false,
+                visits: visits,
+                companiesInfo: companiesInfo,
+                moment: moment,
+                searchdateafter: searchdateafter,
+                searchdatebefore: searchdatebefore,
+                searchcustomer: searchcustomer,
+                searchsalesman: searchsalesman,
+                searchfavourites: searchfavourites,
+                searchCompanyId: searchCompanyId,
+                customer: req.customer,
+                salesman: req.salesman
+            });
+        });
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
+
 
 //-----------------------------------------------------------

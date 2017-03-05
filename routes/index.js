@@ -345,6 +345,27 @@ router.delete('/users/:userId([0-9]+)/favourites/:visitId(\\d+)',
 
 
 //----------------------------------------------------
+// Impresion de visitas
+//----------------------------------------------------
+
+router.get('/visits/print',
+    sessionController.loginRequired,
+    visitController.printIndex);
+
+router.get('/customers/:customerId(\\d+)/visits/print',
+    sessionController.loginRequired,
+    visitController.printIndex);
+
+router.get('/salesmen/:salesmanId(\\d+)/visits/print',
+    sessionController.loginRequired,
+    visitController.printIndex);
+
+router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits/print',
+    sessionController.loginRequired,
+    visitController.printIndex);
+
+
+//----------------------------------------------------
 //  Papelera de Reciclaje
 // ----------------------------------------------------
 

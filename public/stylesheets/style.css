@@ -5,6 +5,7 @@ body {
 
 }
 
+
 header {
     text-align: center;
     font-family: "PT Serif Bold", Georgia, serif, times;
@@ -63,7 +64,6 @@ a:active {
 .icon {
     width: 20px;
     vertical-align: text-bottom;
-
 }
 
 .right {
