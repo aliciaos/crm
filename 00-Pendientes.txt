@@ -45,8 +45,6 @@ Las versiones desplegadas localmente y en pruebas de heroku usan la misma cuenta
 
 Reunion con Angel:
 
- - Sacar una agenda en papel entre dos fechas.
-
  - Boton para cerrar una visita y que ya no pueda cambiarse.
 
  - Nuevos campos en clientes:

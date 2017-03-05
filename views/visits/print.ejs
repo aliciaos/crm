@@ -26,16 +26,51 @@
 
 <header class="headerPage">
 
-    <div class="logo">
-        <img height="40px" src="<%= process.env.CRM_LOGO || '/images/dvr.png' %>" />
+    <div class="header1">
+        <div class="header11">
+
+            <div class="logo">
+                <img height="40px" src="<%= process.env.CRM_LOGO || '/images/dvr.png' %>"/>
+            </div>
+
+            <div class="title1">
+                <h1>
+                    <%= process.env.CRM_TITLE || "CRM" %>
+                </h1>
+            </div>
+        </div>
+
+
+        <div class="header12">
+            <div class="title2">
+
+                <h1>
+                    <% if (locals.customer) { %>
+                    <% if (locals.salesman) { %>
+                    Mis visitas a <em><%= locals.customer.name %></em>
+                    <% } else { %>
+                    Visitas a <em><%= locals.customer.name %></em>
+                    <% } %>
+                    <% } else { %>
+                    <% if (locals.salesman) { %>
+                    Mis visitas
+                    <% } else { %>
+                    Todas las visitas
+                    <% } %>
+                    <% } %>
+                </h1>
+            </div>
+
+        </div>
     </div>
+
 
     <div class="filters">
 
         <% if (locals.searchdateafter || locals.searchdatebefore) { %>
         Planificado <b><%= locals.searchdateafter || '01-01-1900' %></b>
         / <b><%= locals.searchdatebefore || '31-12-9999' %></b>
-        <br />
+        <br/>
         <% } %>
 
         <% if (!locals.customer) { %>
@@ -68,31 +103,7 @@
         <% if (locals.searchfavourites) { %>
         Favoritas: <b>Si</b>
         <% } %>
-    </div>
 
-
-    <div class="title1">
-        <h1>
-            <%= process.env.CRM_TITLE || "CRM" %>
-        </h1>
-    </div>
-
-    <div class="title2">
-    <h1>
-        <% if (locals.customer) { %>
-        <% if (locals.salesman) { %>
-        Mis visitas a <em><%= locals.customer.name %></em>
-        <% } else { %>
-        Visitas a <em><%= locals.customer.name %></em>
-        <% } %>
-        <% } else { %>
-        <% if (locals.salesman) { %>
-        Mis visitas
-        <% } else { %>
-        Todas las visitas
-        <% } %>
-        <% } %>
-    </h1>
     </div>
 
 </header>
