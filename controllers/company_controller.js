@@ -246,6 +246,8 @@ exports.statistics = function (req, res, next) {
             var counters = {};
             targets.forEach(function (target) {
 
+                if (!target.Visit) return;
+
                 var salesmanId = target.Visit.SalesmanId || 0;
                 var customerId = target.Visit.CustomerId || 0;
 
