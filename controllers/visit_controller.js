@@ -726,33 +726,6 @@ exports.printIndex = function (req, res, next) {
 
     //----------------
 
-    models.Visit.count(options)
-    .then(function (count) {
-
-        // Paginacion:
-
-        var items_per_page = 25;
-
-        // La pagina a mostrar viene en la query
-        var pageno = parseInt(req.query.pageno) || 1;
-
-        // Datos para obtener el rango de datos a buscar en la BBDD.
-        var pagination = {
-            offset: items_per_page * (pageno - 1),
-            limit: items_per_page
-        };
-
-        // Crear un string con el HTML que pinta la botonera de paginacion.
-        // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
-        res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
-
-        return pagination;
-    })
-    .then(function (pagination) {
-
-        options.offset = pagination.offset;
-        options.limit = pagination.limit;
-
         options.include.push({
             model: models.Target,
             include: [
@@ -761,18 +734,10 @@ exports.printIndex = function (req, res, next) {
             ]
         });
 
-        options.order.push(['plannedFor', 'DESC']);
+    options.order.push(['plannedFor', 'DESC']);
 
-        return models.Visit.findAll(options)
-    })
+    models.Visit.findAll(options)
     .then(function (visits) {
-
-        // Marcar las visitas que son favoritas
-        visits.forEach(function (visit) {
-            visit.favourite = visit.Fans.some(function (fan) {
-                return fan.id == req.session.user.id;
-            });
-        });
 
         companyHelper.getAllCompaniesInfo()
         .then(function (companiesInfo) {

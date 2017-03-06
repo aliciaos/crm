@@ -51,6 +51,12 @@
 <% var customerCode = visit.Customer && visit.Customer.code || ""; %>
 <% var customerName = visit.Customer && visit.Customer.name || ""; %>
 <% var customerId = visit.Customer && visit.Customer.id || 0; %>
+<% var customerAddr = visit.Customer && (
+        (visit.Customer.address1 || "") + " - " +
+        (visit.Customer.address2 || "") + " " +
+        (visit.Customer.postalCode || "") + "-" +
+        (visit.Customer.city || "")
+        ) || ""; %>
 <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
 <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 <% var salesmanId = visit.Salesman && visit.Salesman.id || 0; %>
@@ -118,6 +124,9 @@
         </big>
         <small>
             (<a href="/customers/<%= customerId %>"><%= customerCode %></a>)
+        </small>
+        <small>
+            <%= customerAddr %>
         </small>
 
         <% } else { %>
