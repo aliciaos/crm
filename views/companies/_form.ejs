@@ -11,7 +11,7 @@
         <% var customer = allCustomers[i]; %>
 
 		<li>
-			<input type="checkbox" name="mainCustomerIds[]" value="<%= customer.id %>" id="customer<%= customer.id %>" >
+			<input type="checkbox" name="customerIds[]" value="<%= customer.id %>" id="customer<%= customer.id %>" >
             <%=  customer.code %> - <%=  customer.name %>
 		</li>
 
@@ -21,10 +21,13 @@
 	<!-- Seleccionar (check) los clientes de la fabrica -->
 
 	<script>
-        <% for (var i in mainCustomerIds) { %>
-        <% var customerId = mainCustomerIds[i]; %>
+        <% for (var i in customerIds) { %>
+        <% var customerId = customerIds[i]; %>
 
-        document.getElementById("customer<%= customerId %>").checked = true;
+        var element = document.getElementById("customer<%= customerId %>");
+        if (element) {
+            element.checked = true;
+        }
 
         <% } %>
 	</script>

@@ -125,7 +125,7 @@ exports.index = function (req, res, next) {
     var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
     if (searchdatebefore && !momentbefore.isValid()) {
         req.flash("error", "La fecha " + searchdatebefore + " no es válida.");
-        var momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
+        momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
     }
     var searchmomentbefore = momentbefore.toDate();
 
@@ -160,6 +160,11 @@ exports.index = function (req, res, next) {
         // Filtrar: Codigo y nombre del cliente.
         var customeInclude = {
             model: models.Customer,
+            where: {
+                $and: [{
+                    archived: false
+                }]
+            },
             include: customerCompanyInclude
         };
         if (searchcustomer) {
@@ -173,20 +178,21 @@ exports.index = function (req, res, next) {
                 likeCondition = {$like: search_like};
             }
 
-            customeInclude.where = {
+            customeInclude.where.$and.push({
                 $or: [
                     {code: likeCondition},
                     {name: likeCondition}
                 ]
-            };
+            });
         }
         options.include.push(customeInclude);
 
     } else {
-        // CUIDADO: Estoy retocando el include existente.
         options.include.push({
             model: models.Customer,
-            where: {id: req.customer.id}
+            where: {
+                id: req.customer.id
+            }
         });
     }
 
@@ -372,7 +378,7 @@ function infoOfSalesmenCustomers() {
 
     return Sequelize.Promise.all([
         salesmanHelper.getAllSalesmenInfo(),
-        customerHelper.getAllCustomersInfo()
+        customerHelper.getUnarchivedCustomersInfo()
     ]);
 }
 
@@ -632,6 +638,11 @@ exports.printIndex = function (req, res, next) {
         // Filtrar: Codigo y nombre del cliente.
         var customeInclude = {
             model: models.Customer,
+            where: {
+                $and: [{
+                    archived: false
+                }]
+            },
             include: customerCompanyInclude
         };
         if (searchcustomer) {
@@ -645,12 +656,12 @@ exports.printIndex = function (req, res, next) {
                 likeCondition = {$like: search_like};
             }
 
-            customeInclude.where = {
+            customeInclude.where.$and.push({
                 $or: [
                     {code: likeCondition},
                     {name: likeCondition}
                 ]
-            };
+            });
         }
         options.include.push(customeInclude);
 

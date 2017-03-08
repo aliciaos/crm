@@ -119,6 +119,10 @@
                 (visit.Customer.postalCode || "") + "-" +
                 (visit.Customer.city || "")
         ) || ""; %>
+<% var customerArchived = visit.Customer && !!visit.Customer.archived; %>
+
+
+
 <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
 <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 <% var salesmanId = visit.Salesman && visit.Salesman.id || 0; %>
@@ -148,6 +152,13 @@
     </div>
 
     <div class="vcenter">
+        <% if (customerArchived) { %>
+        <small>
+            <span class="archived">[Archivado]</span>
+        </small>
+        <br />
+        <% } %>
+
         <% if (customerCode) { %>
             <big><%= customerName %></big>
             <small>(<%= customerCode %>)</small>

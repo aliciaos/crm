@@ -34,6 +34,10 @@
         <% } %>
     </select>
 
+    <br />
+
+    <label>Incluir Archivados:</label>
+    <input type="checkbox" name="searchArchived" value="1" <%= locals.searchArchived ? 'checked' : '' %> >
 </form>
 
 <h1> 
@@ -80,6 +84,14 @@
             </td>
             <td>
                 <a href="/customers/<%= customer.id %>"><%= customer.name %></a>
+
+                <% if (!!customer.archived) { %>
+                <br/>
+
+                <small>
+                    <span class="archived">[Archivado]</span>
+                </small>
+                <% } %>
             </td>
             <td>
                 <small>

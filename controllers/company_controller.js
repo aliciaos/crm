@@ -1,4 +1,3 @@
-
 var models = require('../models');
 var Sequelize = require('sequelize');
 
@@ -20,11 +19,11 @@ exports.load = function (req, res, next, companyId) {
             include: [
                 {
                     model: models.Customer,
-                    as: "MainCustomers",
-                    attributes: ['id', 'code', 'name']
+                    as: "AllCustomers",
+                    attributes: ['id', 'code', 'name', 'archived']
                 }
             ],
-            order: [[ {model: models.Customer, as: "MainCustomers"}, 'name' ]]
+            order: [[{model: models.Customer, as: "AllCustomers"}, 'name']]
         }
     )
     .then(function (company) {
@@ -68,10 +67,9 @@ exports.show = function (req, res, next) {
 
     res.render('companies/show', {
         company: req.company,
-        mainCustomers: req.company.MainCustomers
+        allCustomers: req.company.AllCustomers
     });
 };
-
 
 
 //-----------------------------------------------------------
@@ -82,12 +80,12 @@ exports.new = function (req, res, next) {
 
     var company = models.Company.build({name: ""});
 
-    customerHelper.getAllCustomersInfo()
+    customerHelper.getUnarchivedCustomersInfo()
     .then(function (allCustomers) {
 
         res.render('companies/new', {
             company: company,
-            mainCustomerIds: [],
+            customerIds: [],
             allCustomers: allCustomers
         });
     })
@@ -103,14 +101,14 @@ exports.create = function (req, res, next) {
     var company = {name: req.body.name.trim()};
 
     // Ids de los clientes de la fabrica
-    var mainCustomerIds = req.body.mainCustomerIds || [];
+    var customerIds = req.body.customerIds || [];
 
     // Guarda en la tabla Companies la nueva fabrica.
     models.Company.create(company)
     .then(function (company) {
         req.flash('success', 'Fábrica creada con éxito.');
 
-        return company.setMainCustomers(mainCustomerIds)
+        return company.setAllCustomers(customerIds)
         .then(function () {
 
             req.flash('success', 'Clientes de la fábrica marcados con éxito.');
@@ -124,12 +122,12 @@ exports.create = function (req, res, next) {
             req.flash('error', error.errors[i].value);
         }
 
-        return customerHelper.getAllCustomersInfo()
+        return customerHelper.getUnarchivedCustomersInfo()
         .then(function (allCustomers) {
 
             res.render('companies/new', {
                 company: company,
-                mainCustomerIds: mainCustomerIds,
+                customerIds: customerIds,
                 allCustomers: allCustomers
             });
         });
@@ -144,16 +142,20 @@ exports.create = function (req, res, next) {
 // GET /companies/:companyId/edit
 exports.edit = function (req, res, next) {
 
-    customerHelper.getAllCustomersInfo()
+    customerHelper.getUnarchivedCustomersInfo()
     .then(function (allCustomers) {
 
-        var mainCustomerIds = req.company.MainCustomers.map(function (customer) {
+        var customerIds = req.company.AllCustomers
+        .filter(function (customer) {
+            return !customer.archived;
+        })
+        .map(function (customer) {
             return customer.id;
         });
 
         res.render('companies/edit', {
             company: req.company,
-            mainCustomerIds: mainCustomerIds,
+            customerIds: customerIds,
             allCustomers: allCustomers
         });
     })
@@ -168,14 +170,14 @@ exports.update = function (req, res, next) {
 
     req.company.name = req.body.name.trim();
 
-    var mainCustomerIds = req.body.mainCustomerIds || [];
+    var customerIds = req.body.customerIds || [];
 
     req.company.save({fields: ["name"]})
     .then(function (company) {
 
         req.flash('success', 'Fábrica editada con éxito.');
 
-        return company.setMainCustomers(mainCustomerIds)
+        return company.setAllCustomers(customerIds)
         .then(function () {
 
             req.flash('success', 'Clientes de la fábrica editados con éxito.');
@@ -190,12 +192,12 @@ exports.update = function (req, res, next) {
             req.flash('error', error.errors[i].value);
         }
 
-        return getAllCustomersInfo()
+        return getUnarchivedCustomersInfo()
         .then(function (allCustomers) {
 
             res.render('companies/edit', {
                 company: req.company,
-                mainCustomerIds: mainCustomerIds,
+                customerIds: customerIds,
                 allCustomers: allCustomers
             });
         });
@@ -238,7 +240,7 @@ exports.statistics = function (req, res, next) {
             where: {CompanyId: company.id},
             include: [{
                 model: models.Visit,
-                include: [models.Target,
+                include: [
                     {model: models.Salesman, as: "Salesman"}]
             }]
         })
@@ -272,11 +274,19 @@ exports.statistics = function (req, res, next) {
             return counters;
         }),
 
-        models.Customer.findAll()
-        .then(function (customers) {
-            return customers.map(function (customer) {
-                return {id: customer.id, name: customer.name};
-            });
+        company.AllCustomers
+        .filter(function (customer) {
+            return !customer.archived;
+        })
+        .map(function (customer) {
+            return {
+                id: customer.id,
+                name: customer.name,
+                address1: customer.address1,
+                address2: customer.address2,
+                postalCode: customer.postalCode,
+                city: customer.city
+            };
         }),
 
         models.Salesman.findAll()
@@ -301,7 +311,6 @@ exports.statistics = function (req, res, next) {
         next(error);
     });
 };
-
 
 
 //-----------------------------------------------------------
@@ -357,14 +366,18 @@ exports.visitsNew = function (req, res, next) {
 };
 
 
-
 // POST /companies/:companyId/visits
 exports.visitsCreate = function (req, res, next) {
 
     var momentPlannedFor = moment(req.body.plannedFor + " 08:00", "DD-MM-YYYY");
 
-    Sequelize.Promise.all(req.company.MainCustomers)
-    .each(function(customerInfo) {
+    Sequelize.Promise.all(
+        req.company.AllCustomers
+        .filter(function(customer) {
+            return !customer.archived;
+        })
+    )
+    .each(function (customerInfo) {
 
         var visit = {
             plannedFor: momentPlannedFor,
@@ -398,7 +411,7 @@ exports.visitsCreate = function (req, res, next) {
             }
         });
     })
-    .then(function() {
+    .then(function () {
         res.redirect("/reload");
     })
     .catch(function (error) {

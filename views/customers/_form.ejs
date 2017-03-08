@@ -1,4 +1,13 @@
 <ul>
+    <li class="archived">
+        <label><b>Archivar</b>:</label>
+
+        Si:  <input type="radio" name="archived" value="si"   <%= !!customer.archived   ? "checked" : "" %> >  -
+        No:  <input type="radio" name="archived" value="no"   <%= !customer.archived    ? "checked" : "" %> >
+
+         <br /> <br />
+    </li>
+
     <li>
         <label>Código:</label>
         <input type="text" name="code" value="<%= customer.code %>" placeholder="Código" autocomplete="off" autofocus/>
@@ -88,6 +97,11 @@
         <input type="text" name="web" value="<%= customer.web %>" placeholder="URL" size="60" autocomplete="off"/>
     </li>
 
+    <li>
+        <label>Observaciones:</label>
+        <br />
+        <textarea type="text" name="notes" placeholder="Observaciones" rows="5" cols="80"><%= customer.notes %></textarea>
+    </li>
 </ul>
 
 <h2>

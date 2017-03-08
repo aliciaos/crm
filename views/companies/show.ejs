@@ -21,10 +21,15 @@ Clientes:
 </h2>
 
 <ul>
-    <% for (var i in mainCustomers) { %>
-    <% var customer = mainCustomers[i]; %>
+    <% for (var i in allCustomers) { %>
+    <% var customer = allCustomers[i]; %>
 
-    <li> <%=  customer.code %> - <%=  customer.name %> </li>
+    <% if (!customer.archived) { %>
+
+    <li>
+        <%= customer.code %> - <%= customer.name %>
+    </li>
+    <% } %>
 
     <% } %>
 </ul>

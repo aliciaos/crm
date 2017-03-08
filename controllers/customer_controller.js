@@ -48,7 +48,7 @@ exports.load = function (req, res, next, customerId) {
 exports.index = function (req, res, next) {
 
     var options = {};
-    options.where = {};
+    options.where = {$and: []};
     options.include = [];
     options.order = [];
 
@@ -65,10 +65,12 @@ exports.index = function (req, res, next) {
             likeCondition = {$like: search_like};
         }
 
-        options.where.$or = [
-            {code: likeCondition},
-            {name: likeCondition}
-        ];
+        options.where.$and.push({
+            $or: [
+                {code: likeCondition},
+                {name: likeCondition}
+            ]
+        });
     }
 
     // Filtrar: Clientes de una fabrica:
@@ -83,6 +85,15 @@ exports.index = function (req, res, next) {
             }
         );
         options.order.push([{model: models.Company, as: "MainCompanies"}, 'name', 'ASC']);
+    }
+
+    // Incluir clientes archivados:
+    var searchArchived = !!req.query.searchArchived;
+    if (!searchArchived) {
+
+        options.where.$and.push({
+            archived: false
+        });
     }
 
 
@@ -130,7 +141,9 @@ exports.index = function (req, res, next) {
                     companiesInfo: companiesInfo,
                     moment: moment,
                     searchCodeName: searchCodeName,
-                    searchCompanyId: searchCompanyId
+                    searchCompanyId: searchCompanyId,
+                    searchArchived: searchArchived
+
                 });
         });
     })
@@ -174,7 +187,8 @@ exports.new = function (req, res, next) {
         email1: "",
         email2: "",
         web: "",
-        cif: ""
+        notes: "",
+        archived: false
     });
 
     companyHelper.getAllCompaniesInfo()
@@ -210,7 +224,9 @@ exports.create = function (req, res, next) {
         email1: req.body.email1.trim(),
         email2: req.body.email2.trim(),
         web: req.body.web.trim(),
-        cif: req.body.cif.trim()
+        notes: req.body.notes.trim(),
+        archived: req.body.archived === "si"
+
     };
 
     // Ids de las fabricas del cliente
@@ -291,7 +307,8 @@ exports.update = function (req, res, next) {
     req.customer.email1 = req.body.email1.trim();
     req.customer.email2 = req.body.email2.trim();
     req.customer.web = req.body.web.trim();
-    req.customer.cif = req.body.cif.trim();
+    req.customer.notes = req.body.notes.trim();
+    req.customer.archived = req.body.archived === "si";
 
     var mainCompanyIds = req.body.mainCompanyIds || [];
 

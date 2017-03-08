@@ -47,6 +47,13 @@ module.exports = function (sequelize, DataTypes) {
             },
             web: {
                 type: DataTypes.STRING
+            },
+            notes: {
+                type: DataTypes.TEXT
+            },
+            archived: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
             }
         },
         {

@@ -48,8 +48,31 @@ Reunion con Angel:
  - Boton para cerrar una visita y que ya no pueda cambiarse.
 
  - Nuevos campos en clientes:
-     * ocultar un cliente.
-     * campo para notas/observaciones7comentarios sobre un cliente.
+     * ocultar un cliente. (done)
+     * campo para notas/observaciones/comentarios sobre un cliente. (done)
+     * En los listados de clientes poder filtrar por: Todos, Archivados, NoArchivados.
 
 Renombrar dcrmt.herokuapp.com a iweb_crm.herokuapp.com. ???
+
+
+
+Sobre los clientes archivados y los informes de eficiencia:
+   - incluir solo los clientes de la fabrica. --------------- done
+   - no incluir tampoco los clientes archivados. --------------- done
+
+Sobre los clientes (archvados) de una fabrica:
+   - Al ver una fabrica (show), el listado de sus clientes muestra solo los clientes no archivados. ------------------ done
+   - Al crear y editar una fabrica se presenta un selector solo con los clientes no archivados. ---------------------- done
+   - La funcion que devuelve los clientes de una fabrica no devuelve los archivados. --------------------------------- done
+
+
+ERROR: Al editar una fabrica, si existe un cliente archivado, entonces salen los checkboxes desmarcado. -------------- arreglado
+
+Sobre crear una visita para todos los clientes de una fabrica:
+   - meter solo los clientes no archivados. ---------------------------- done
+
+Listado de visitas:
+   - No incluir los clientes archivados. --------------- done
+   - Tampoco en la impresion de listado. --------------- done
+   - Pero si se saca el listado de un cliente archivado, poner ARCHIVADO junto al nombre. --------------- done
 

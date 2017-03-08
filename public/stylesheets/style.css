@@ -104,6 +104,11 @@ input[type=checkbox]:checked + .star {
 
 }
 
+
+.archived {
+    color: red;
+}
+
 .toberepared {
     color: red;
 }

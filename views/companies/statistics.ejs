@@ -1,7 +1,5 @@
-
-
 <h1>
-	Estadísticas
+    Estadísticas
 
     <%= company.name %>
 
@@ -9,44 +7,52 @@
 </h1>
 
 
-
 <div style="overflow-x:auto;">
-<table>
-	<tr>
-		<td> </td>
-		<% for (var j in salesmen) { %>
-			<% var salesman = salesmen[j]; %>
-			<th colspan="2"> <%= salesman.name %> </th>
-		<% } %>
-	</tr>
+    <table>
+        <tr>
+            <td></td>
+            <% for (var j in salesmen) { %>
+            <% var salesman = salesmen[j]; %>
+            <th colspan="2"> <%= salesman.name %> </th>
+            <% } %>
+        </tr>
 
-	<% for (var i in customers) { %>
-		<% var customer = customers[i]; %>
+        <% for (var i in customers) { %>
+        <% var customer = customers[i]; %>
 
-		<tr>
-			<th> <%= customer.name %> </th>
+        <tr>
+            <th>
+                <%= customer.name %>
+                <br />
+                <small>
+                    <%= customer.address1 %>
+                    <br/>
+                    <%= customer.address2 %>
+                    <%= customer.postalCode %>-<%= customer.city %>
+                </small>
+            </th>
 
-			<% for (var j in salesmen) { %>
-				<% var salesman = salesmen[j]; %>
-				<% var total = counters[salesman.id] && counters[salesman.id][customer.id] && counters[salesman.id][customer.id].total || 0; %>
-				<% var dones = counters[salesman.id] && counters[salesman.id][customer.id] && counters[salesman.id][customer.id].done || 0 %>
-				<% var fails = counters[salesman.id] && counters[salesman.id][customer.id] && counters[salesman.id][customer.id].fail || 0 %>
-				<% var pendings = counters[salesman.id] && counters[salesman.id][customer.id] && counters[salesman.id][customer.id].pending || 0 %>
+            <% for (var j in salesmen) { %>
+            <% var salesman = salesmen[j]; %>
+            <% var total = counters[salesman.id] && counters[salesman.id][customer.id] && counters[salesman.id][customer.id].total || 0; %>
+            <% var dones = counters[salesman.id] && counters[salesman.id][customer.id] && counters[salesman.id][customer.id].done || 0 %>
+            <% var fails = counters[salesman.id] && counters[salesman.id][customer.id] && counters[salesman.id][customer.id].fail || 0 %>
+            <% var pendings = counters[salesman.id] && counters[salesman.id][customer.id] && counters[salesman.id][customer.id].pending || 0 %>
 
-				<td>
-					Total = <%= total %>
-					<br />
-					Realizadas = <%= dones %>
-					<br />
-					Fallidas = <%= fails %>
-					<br />
-					Pendientes = <%= pendings %>
-				</td>
-				<td>
-					<%= total != 0 ? (dones/total*100)+"%" : "" %>
-				</td>
-			<% } %>
-		</tr>
-	<% } %>
-</table>
+            <td>
+                Total = <span class=""><%= total %></span>
+                <br/>
+                <small>Realizadas = <span class="done"><%= dones %></span></small>
+                <br/>
+                <small>Fallidas = <span class="failed"><%= fails %></span></small>
+                <br/>
+                <small>Pendientes = <span class="tobedone"><%= pendings %></span></small>
+            </td>
+            <td>
+                <%= total != 0 ? (dones / total * 100).toFixed(2) + "%" : "" %>
+            </td>
+            <% } %>
+        </tr>
+        <% } %>
+    </table>
 </div>

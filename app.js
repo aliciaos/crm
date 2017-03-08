@@ -47,7 +47,7 @@ app.use('/', index);
 
 // Helper estatico:
 app.locals.escapeText =  function(text) {
-   return String(text)
+   return String(text || "")
           .replace(/&(?!\w+;)/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;')

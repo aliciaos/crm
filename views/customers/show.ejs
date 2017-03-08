@@ -10,6 +10,14 @@
 </h1>
 
 <ul>
+    <% if (!!customer.archived) { %>
+	<li  class="archived">
+		<big>
+			<span>Archivado</span>
+		</big>
+	</li>
+    <% } %>
+
 	<li>
 		<b>Código</b>: <%= customer.code %>
 	</li>
@@ -47,6 +55,10 @@
 	<li>
 		<b>Web</b>: <%= customer.web %>
 	</li>
+
+	<li>
+		<b>Observaciones</b>:  <%- escapeText(customer.notes) %>
+	</li>
 </ul>
 
 
@@ -69,7 +81,10 @@ Visitas:
 </h2>
 
 <ul>
+    <% if (!customer.archived) { %>
 	<li> <a href="/visits/new?customerId=<%= customer.id %>"><img class="icon" src="/images/add.png"> Crear una visita nueva a este cliente</a> </li>
+    <% } %>
+
 	<li> <a href="/customers/<%= customer.id %>/visits"><img class="icon" src="/images/ver.png"> Ver todas las visitas a este cliente</a> </li>
 	<li> <a href="/salesmen/<%= session.user.id %>/customers/<%= customer.id %>/visits"><img class="icon" src="/images/ver.png"> Ver mis visitas a este cliente</a> </li>
 
