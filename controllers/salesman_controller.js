@@ -10,7 +10,7 @@ var moment = require('moment');
 // Opciones para imagenes subidas a Cloudinary
 var cloudinary_image_options = {
     async: true,
-    folder: "/crm/decoversia/salesmen",
+    folder: "/crm/" + (process.env.CLOUDINARY_SUBFOLDER || "iweb") + "/salesmen",
     crop: 'limit',
     width: 200,
     height: 200,
