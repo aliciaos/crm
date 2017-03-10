@@ -7,9 +7,21 @@
   <body>
 
     <header class="vcenter">
+        <div class="login right">
+            <% if (!session.user) { %>
+            <a href="/session">Entrar</a>
+            <% } else { %>
+            <a href="/users/<%= session.user.id %>"><span id="loginname"><%= session.user.username %></span></a>
+            <a href="/session?_method=DELETE">Salir</a>
+
+            <% if (session.user.username === "admin") { %>
+            <% } %>
+            <% } %>
+        </div>
         <h1>
             <a href="/"> <img src="<%= process.env.CRM_LOGO || '/images/dvr.png' %>" height="40px" class="left" /> </a>
             <%= process.env.CRM_TITLE || "CRM" %>
+
         </h1>
     </header>
 
@@ -46,19 +58,7 @@
         <% } %>
 
 
-        <div class="login right">
-            <% if (!session.user) { %>
-                <a href="/session">Entrar</a>
-            <% } else { %>
-                <a href="/users/<%= session.user.id %>"><span id="loginname"><%= session.user.username %></span></a>
-                <a href="/session?_method=DELETE">Salir</a>
 
-                <% if (session.user.username === "admin") { %>
-                    <!-- a href="/users/new">Registrar</a -->
-                <% } %>
-
-            <% } %>
-        </div>
     </nav>
 
     <section>
