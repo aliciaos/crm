@@ -50,7 +50,7 @@ Reunion con Angel:
  - Nuevos campos en clientes:
      * ocultar un cliente. (done)
      * campo para notas/observaciones/comentarios sobre un cliente. (done)
-     * En los listados de clientes poder filtrar por: Todos, Archivados, NoArchivados.
+     * En los listados de clientes poder filtrar por: Todos, Archivados, NoArchivados. PASANDO DE ESTO
 
 Renombrar dcrmt.herokuapp.com a iweb_crm.herokuapp.com. ???
 
@@ -76,3 +76,5 @@ Listado de visitas:
    - Tampoco en la impresion de listado. --------------- done
    - Pero si se saca el listado de un cliente archivado, poner ARCHIVADO junto al nombre. --------------- done
 
+Las fotos deberian quitarse de la tabla de vendedores y hacer una tabla Fotos. El modelo fotos tendria claves externas a la
+tabla de Usuarios y a la de adjuntos. Y asi tambien podria crear tablas de para otros tipos de usuarios con cuenta en el portal. ¿Esto tiene sentido?

@@ -99,10 +99,10 @@ exports.indexUser = function (req, res, next) {
 // GET /salesmen/:salesmanId/customers/:customerId/visits
 exports.index = function (req, res, next) {
 
-    var options = {};
-    options.where = {};
-    options.include = [];
-    options.order = [];
+    var countOptions = {};
+    countOptions.where = {};
+    countOptions.include = [];
+    countOptions.order = [];
 
     //----------------
 
@@ -120,36 +120,43 @@ exports.index = function (req, res, next) {
         req.flash("error", "La fecha " + searchdateafter + " no es válida.");
         momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
     }
-    var searchmomentafter = momentafter.toDate();
 
     var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
     if (searchdatebefore && !momentbefore.isValid()) {
         req.flash("error", "La fecha " + searchdatebefore + " no es válida.");
         momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
     }
-    var searchmomentbefore = momentbefore.toDate();
 
     if (searchdateafter !== "") {
         if (searchdatebefore !== "") {
-            options.where.plannedFor = {$between: [searchmomentafter, searchmomentbefore]};
+            countOptions.where.plannedFor = {$between: [momentafter.toDate(), momentbefore.toDate()]};
         } else {
-            options.where.plannedFor = {$gte: searchmomentafter};
+            countOptions.where.plannedFor = {$gte: momentafter.toDate()};
         }
     } else {
         if (searchdatebefore !== "") {
-            options.where.plannedFor = {$lte: searchmomentbefore};
+            countOptions.where.plannedFor = {$lte: momentbefore.toDate()};
         }
     }
 
 
 
-    // Visitas de un cliente:
+    // Visitas de un cliente especificado en la URL:
     if (!req.customer) {
 
-        // Filtrar: Clientes de una fabrica:
-        var customerCompanyInclude = [];
+        // Incluir los clientes no archivados:
+        var customeInclude = {
+            model: models.Customer,
+            where: {
+                $and: [{
+                    archived: false
+                }]
+            }
+        };
+
+        // Filtrar: Clientes de la fabrica especificada en la query:
         if (searchCompanyId) {
-            customerCompanyInclude = [{
+            customeInclude.include = [{
                 model: models.Company,
                 as: "MainCompanies",
                 attributes: ['id', 'name'],
@@ -158,15 +165,6 @@ exports.index = function (req, res, next) {
         }
 
         // Filtrar: Codigo y nombre del cliente.
-        var customeInclude = {
-            model: models.Customer,
-            where: {
-                $and: [{
-                    archived: false
-                }]
-            },
-            include: customerCompanyInclude
-        };
         if (searchcustomer) {
             var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
 
@@ -185,10 +183,10 @@ exports.index = function (req, res, next) {
                 ]
             });
         }
-        options.include.push(customeInclude);
+        countOptions.include.push(customeInclude);
 
     } else {
-        options.include.push({
+        countOptions.include.push({
             model: models.Customer,
             where: {
                 id: req.customer.id
@@ -197,7 +195,7 @@ exports.index = function (req, res, next) {
     }
 
 
-    // Visitas de un vendedor:
+    // Visitas de un vendedor especificado en la URL:
     if (!req.salesman) {
         if (searchsalesman) {
             var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
@@ -211,7 +209,7 @@ exports.index = function (req, res, next) {
             }
 
             // CUIDADO: Estoy retocando el include existente.
-            options.include.push({
+            countOptions.include.push({
                 model: models.Salesman,
                 as: "Salesman",
                 where: {name: likeCondition},
@@ -219,7 +217,7 @@ exports.index = function (req, res, next) {
             });
         } else {
             // CUIDADO: Estoy retocando el include existente.
-            options.include.push({
+            countOptions.include.push({
                 model: models.Salesman,
                 as: "Salesman",
                 include: [{model: models.Attachment, as: 'Photo'}]
@@ -227,7 +225,7 @@ exports.index = function (req, res, next) {
         }
     } else {
         // CUIDADO: Estoy retocando el include existente.
-        options.include.push({
+        countOptions.include.push({
             model: models.Salesman,
             as: "Salesman",
             where: {id: req.salesman.id},
@@ -240,7 +238,7 @@ exports.index = function (req, res, next) {
     if (searchfavourites) {
 
         // CUIDADO: Estoy retocando el include existente.
-        options.include.push({
+        countOptions.include.push({
             model: models.User,
             as: "Fans",
             attributes: ['id', 'username'],
@@ -249,7 +247,7 @@ exports.index = function (req, res, next) {
     } else {
 
         // CUIDADO: Estoy retocando el include existente.
-        options.include.push({
+        countOptions.include.push({
             model: models.User,
             as: "Fans",
             attributes: ['id', 'username']
@@ -257,10 +255,9 @@ exports.index = function (req, res, next) {
     }
 
 
-
     //----------------
 
-    models.Visit.count(options)
+    models.Visit.count(countOptions)
     .then(function (count) {
 
         // Paginacion:
@@ -270,24 +267,16 @@ exports.index = function (req, res, next) {
         // La pagina a mostrar viene en la query
         var pageno = parseInt(req.query.pageno) || 1;
 
-        // Datos para obtener el rango de datos a buscar en la BBDD.
-        var pagination = {
-            offset: items_per_page * (pageno - 1),
-            limit: items_per_page
-        };
-
         // Crear un string con el HTML que pinta la botonera de paginacion.
         // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
         res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
 
-        return pagination;
-    })
-    .then(function (pagination) {
+        var findOptions = countOptions;
 
-        options.offset = pagination.offset;
-        options.limit = pagination.limit;
+        findOptions.offset = items_per_page * (pageno - 1);
+        findOptions.limit = items_per_page;
 
-        options.include.push({
+        findOptions.include.push({
             model: models.Target,
             include: [
                 models.Company,
@@ -295,9 +284,9 @@ exports.index = function (req, res, next) {
             ]
         });
 
-        options.order.push(['plannedFor', 'DESC']);
+        findOptions.order.push(['plannedFor', 'DESC']);
 
-        return models.Visit.findAll(options)
+        return models.Visit.findAll(findOptions)
     })
     .then(function (visits) {
 
