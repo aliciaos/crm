@@ -16,6 +16,8 @@ var targetController = require('../controllers/target_controller');
 var reportController = require('../controllers/report_controller');
 var favouriteController = require('../controllers/favourite_controller');
 var trashController = require('../controllers/trash_controller');
+var postController = require('../controllers/post_controller');
+var commentController = require('../controllers/comment_controller');
 
 var hc = require('../controllers/history_controller');
 
@@ -33,7 +35,10 @@ router.param('salesmanId', salesmanController.load);
 router.param('customerId', customerController.load);    
 router.param('targettypeId', targettypeController.load);    
 router.param('visitId', visitController.load);    
-router.param('targetId', targetController.load);    
+router.param('targetId', targetController.load);
+
+router.param('postId', postController.load);
+router.param('commentId', commentController.load);
 
 
 //-----------------------------------------------------------
@@ -366,6 +371,66 @@ router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits/print
 
 
 //----------------------------------------------------
+// Blog
+//----------------------------------------------------
+
+router.get('/posts/:postId(\\d+)/comments',
+    sessionController.loginRequired,
+    commentController.index);
+
+router.get('/posts/:postId(\\d+)/comments/new',
+    sessionController.loginRequired,
+    commentController.new);
+
+router.get('/posts/:postId(\\d+)/comments/:commentId(\\d+)',
+    sessionController.loginRequired,
+    commentController.show);
+
+router.post('/posts/:postId(\\d+)/comments',
+    sessionController.loginRequired,
+    commentController.create);
+
+router.get('/posts/:postId(\\d+)/comments/:commentId(\\d+)/edit',
+    sessionController.loginRequired,
+    commentController.loggedUserIsAuthor,
+    commentController.edit);
+
+router.put('/posts/:postId(\\d+)/comments/:commentId(\\d+)',
+    sessionController.loginRequired,
+    commentController.loggedUserIsAuthor,
+    commentController.update);
+
+router.delete('/posts/:postId(\\d+)/comments/:commentId(\\d+)',
+    sessionController.loginRequired,
+    commentController.loggedUserIsAuthor,
+    commentController.destroy);
+
+router.get('/posts',
+    sessionController.loginRequired,
+    postController.index);
+router.get('/posts/new',
+    sessionController.loginRequired,
+    postController.new);
+router.get('/posts/:postId(\\d+)',
+    sessionController.loginRequired,
+    postController.show);
+router.post('/posts',
+    sessionController.loginRequired,
+    postController.create);
+router.get('/posts/:postId(\\d+)/edit',
+    sessionController.loginRequired,
+    postController.loggedUserIsAuthor,
+    postController.edit);
+router.put('/posts/:postId(\\d+)',
+    sessionController.loginRequired,
+    postController.loggedUserIsAuthor,
+    postController.update);
+router.delete('/posts/:postId(\\d+)',
+    sessionController.loginRequired,
+    postController.loggedUserIsAuthor,
+    postController.destroy);
+
+//----------------------------------------------------
 //  Papelera de Reciclaje
 // ----------------------------------------------------
 
@@ -459,7 +524,20 @@ router.post('/trash/users/:userId_wal(\\d+)',   // wal = without auto loading
     sessionController.adminRequired,
     trashController.userRestore);
 
-//----------------------------------------------------
 
+router.get("/trash/posts",
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.posts);
+router.delete('/trash/posts/:postId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.postDestroy);
+router.post('/trash/posts/:postId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    sessionController.adminRequired,
+    trashController.postRestore);
+
+//----------------------------------------------------
 
 module.exports = router;

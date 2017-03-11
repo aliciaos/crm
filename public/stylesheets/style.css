@@ -30,7 +30,7 @@ h3 {
 }
 
 p {
-    margin: 5px 20px;
+    margin: 5px 0px;
 }
 
 small {
@@ -101,9 +101,7 @@ input[type=checkbox]:checked + .star {
     font-size: smaller;
 
     margin: 2px 5px;
-
 }
-
 
 .archived {
     color: red;
@@ -211,6 +209,43 @@ nav a {
 
 .vcenter input {
     vertical-align: middle;
+}
+
+
+article.post {
+    border: 2px solid #1648ff;
+    padding: 5px;
+    margin: 6px;
+    background-color: #f5f5ff;
+    border-radius: 5px;
+    clear: both;
+}
+
+header.post {
+    text-align: left;
+    font-family: "PT Serif Bold", Georgia, serif, times;
+    font-size: 18px;
+}
+
+h3.post {
+    margin: 0px;
+    font-style: italic;
+}
+
+
+article.comment {
+    border: 2px solid #5adfff;
+    padding: 5px;
+    margin: 4px 4px 4px 20px;
+    background-color: #f5f5ff;
+    clear: both;
+
+}
+
+header.comment {
+    text-align: left;
+    font-family: "PT Serif Bold", Georgia, serif, times;
+    font-size: 18px;
 }
 
 #flashinfo {

@@ -1,0 +1,87 @@
+
+<script src="/javascripts/misc_form.js"></script>
+
+<form method="get" action="<%= url %>" id="filterForm" class="right filters">
+
+    <div class="vcenter">
+        Filtros:
+        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit" />
+
+        <input type="image" class="icon right" src="/images/cancel.png" border="0"
+               onClick="cleanupForm('filterForm')" />
+
+    </div>
+
+    <label>Contenido:</label>
+    <input type="text" name="searchContent" value="<%= locals.searchContent || '' %>"
+           placeholder="texto a buscar"
+           size="30" autocomplete="off"/>
+
+</form>
+
+<h1>
+    Posts:
+
+    <a href="/goback"><img class="icon" src="/images/back.png"></a>
+
+    <a href="/posts/new"><img class="icon" src="/images/add.png"></a>
+</h1>
+
+
+<% if (locals.paginate_control) { %>
+<%- paginate_control %>
+<% } %>
+
+
+<% for (var i in posts) { %>
+<% var post = posts[i]; %>
+<% var authorName = post.Author && post.Author.username; %>
+<% var salesman = post.Author && post.Author.Salesman; %>
+<% var salesmanName = salesman && salesman.name; %>
+<% var salesmanId = salesman && salesman.id; %>
+<% var authorPhotoUrl = salesman && salesman.Photo && salesman.Photo.url || ""; %>
+
+<article class="post">
+
+    <div class="right">
+
+        <div class="vcenter">
+
+            <% if (salesmanName) { %>
+            <% if (session.user.isAdmin) { %>
+            <a href="/salesmen/<%= salesmanId %>"> <%= salesmanName %> </a>
+            <% } else { %>
+            <%= salesmanName %>
+            <% } %>
+            <% } else if (authorName) { %>
+            <%= authorName %>
+            <% } else { %>
+            <span class='toberepared'><em>sin autor</em></span>
+            <% } %>
+
+            <% if (authorPhotoUrl) { %>
+            <img src="<%= authorPhotoUrl %>" width="30px"/>
+            <% } else { %>
+            <img src="/images/face.png" width="30px"/>
+            <% } %>
+        </div>
+
+        <small>
+            <%= post.updatedAt.toLocaleDateString() %>
+        </small>
+    </div>
+
+    <header class="post">
+        <h3 class="post">
+            <a href='/posts/<%= post.id %>'> <%= post.title %> </a>
+        </h3>
+    </header>
+
+    <p class="small">
+        <%= post.body.slice(0, 300) %> ...
+    </p>
+
+</article>
+
+<% } %>
+

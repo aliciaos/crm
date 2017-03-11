@@ -122,7 +122,7 @@ exports.new = function (req, res, next) {
 };
 
 
-// POST /salesmen/create
+// POST /salesmen
 exports.create = function (req, res, next) {
 
     var salesman = {

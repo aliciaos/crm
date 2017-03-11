@@ -1,4 +1,3 @@
-
 var models = require('../models');
 var Sequelize = require('sequelize');
 var paginate = require('./paginate').paginate;
@@ -22,14 +21,16 @@ exports.index = function (req, res, next) {
         models.Company.count(options),      // Contar fabricas
         models.TargetType.count(options),   // Contar vendedores
         models.Salesman.count(options),     // Contar targettypes
-        models.User.count(options)          // Contar usuarios
+        models.User.count(options),         // Contar usuarios
+        models.Post.count(options)          // Contar posts
     ])
     .spread(function (customersCount,
                       visitsCount,
                       companiesCount,
                       targettypesCount,
                       salesmenCount,
-                      usersCount) {
+                      usersCount,
+                      postsCount) {
 
         res.render("trash/index", {
             customersCount: customersCount,
@@ -37,14 +38,13 @@ exports.index = function (req, res, next) {
             companiesCount: companiesCount,
             targettypesCount: targettypesCount,
             salesmenCount: salesmenCount,
-            usersCount: usersCount
+            usersCount: usersCount,
+            postsCount: postsCount
         });
     })
     .catch(function (error) {
         next(error);
     });
-
-
 };
 
 //-----------------------------------------------------------
@@ -54,7 +54,7 @@ exports.companies = function (req, res, next) {
 
     var options = {
         paranoid: false,
-        where: { deletedAt: {$not: null} }
+        where: {deletedAt: {$not: null}}
     };
 
     options.order = [['deletedAt', 'DESC']];
@@ -80,7 +80,7 @@ exports.companyRestore = function (req, res, next) {
 
     var companyId = req.params["companyId_wal"];
 
-    var options = {where: {id: companyId} };
+    var options = {where: {id: companyId}};
 
     // Restaurar (sacar de la papelera) la fabrica:
     models.Company.restore(options)
@@ -128,7 +128,7 @@ exports.customers = function (req, res, next) {
 
     var options = {
         paranoid: false,
-        where: { deletedAt: {$not: null} }
+        where: {deletedAt: {$not: null}}
     };
 
     models.Customer.count(options)
@@ -182,7 +182,7 @@ exports.customerRestore = function (req, res, next) {
 
     var customerId = req.params["customerId_wal"];
 
-    var options = {where: {id: customerId} };
+    var options = {where: {id: customerId}};
 
     // Restaurar (sacar de la papelera) el cliente:
     models.Customer.restore(options)
@@ -227,7 +227,7 @@ exports.salesmen = function (req, res, next) {
 
     var options = {
         paranoid: false,
-        where: { deletedAt: {$not: null} },
+        where: {deletedAt: {$not: null}},
         include: [
             {model: models.Attachment, as: 'Photo'}
         ]
@@ -257,7 +257,7 @@ exports.salesmanRestore = function (req, res, next) {
 
     var salesmanId = req.params["salesmanId_wal"];
 
-    var options = {where: {id: salesmanId} };
+    var options = {where: {id: salesmanId}};
 
     // Restaurar (sacar de la papelera) el vendedor:
     models.Salesman.restore(options)
@@ -327,7 +327,7 @@ exports.targettypes = function (req, res, next) {
 
     var options = {
         paranoid: false,
-        where: { deletedAt: {$not: null} }
+        where: {deletedAt: {$not: null}}
     };
 
     options.order = [['deletedAt', 'DESC']];
@@ -355,7 +355,7 @@ exports.targettypeRestore = function (req, res, next) {
 
     var targettypeId = req.params["targettypeId_wal"];
 
-    var options = {where: {id: targettypeId} };
+    var options = {where: {id: targettypeId}};
 
     // Restaurar (sacar de la papelera) el tipo de objetivo:
     models.TargetType.restore(options)
@@ -402,7 +402,7 @@ exports.users = function (req, res, next) {
 
     var options = {
         paranoid: false,
-        where: { deletedAt: {$not: null} }
+        where: {deletedAt: {$not: null}}
     };
 
     options.order = [['deletedAt', 'DESC']];
@@ -429,7 +429,7 @@ exports.userRestore = function (req, res, next) {
 
     var userId = req.params["userId_wal"];
 
-    var options = {where: {id: userId} };
+    var options = {where: {id: userId}};
 
     // Restaurar (sacar de la papelera) un usuario:
     models.User.restore(options)
@@ -468,7 +468,6 @@ exports.userDestroy = function (req, res, next) {
 };
 
 
-
 //-----------------------------------------------------------
 
 
@@ -492,22 +491,14 @@ exports.visits = function (req, res, next) {
         // La pagina a mostrar viene en la query
         var pageno = parseInt(req.query.pageno) || 1;
 
-        // Datos para obtener el rango de datos a buscar en la BBDD.
-        var pagination = {
-            offset: items_per_page * (pageno - 1),
-            limit: items_per_page
-        };
 
         // Crear un string con el HTML que pinta la botonera de paginacion.
         // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
         res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
 
-        return pagination;
-    })
-    .then(function (pagination) {
 
-        options.offset = pagination.offset;
-        options.limit = pagination.limit;
+        options.offset = items_per_page * (pageno - 1);
+        options.limit = items_per_page;
 
         options.include = [
             models.Target,
@@ -543,7 +534,7 @@ exports.visitRestore = function (req, res, next) {
 
     var visitId = req.params["visitId_wal"];
 
-    var options = {where: {id: visitId} };
+    var options = {where: {id: visitId}};
 
     // Restaurar (sacar de la papelera) la visita:
     models.Visit.restore(options)
@@ -590,6 +581,106 @@ exports.visitDestroy = function (req, res, next) {
     });
 };
 
+
+//-----------------------------------------------------------
+
+
+// GET /trash/posts
+exports.posts = function (req, res, next) {
+
+    var options = {
+        paranoid: false,
+        where: {deletedAt: {$not: null}}
+    };
+
+    //----------------
+
+    models.Post.count(options)
+    .then(function (count) {
+
+        // Paginacion:
+
+        var items_per_page = 25;
+
+        // La pagina a mostrar viene en la query
+        var pageno = parseInt(req.query.pageno) || 1;
+
+
+        // Crear un string con el HTML que pinta la botonera de paginacion.
+        // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
+        res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
+
+
+        options.offset = items_per_page * (pageno - 1);
+        options.limit = items_per_page;
+
+        options.order = [['updatedAt', 'DESC']];
+        options.include = [{model: models.User, as: 'Author'}];
+
+        return models.Post.findAll(options);
+    })
+    .then(function (posts) {
+        res.render('trash/posts', {posts: posts});
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
+
+//-----------------------------------------------------------
+
+
+// POST /trash/posts/:postId_wal
+exports.postRestore = function (req, res, next) {
+
+    var postId = req.params["postId_wal"];
+
+    var options = {where: {id: postId}};
+
+    // Restaurar (sacar de la papelera) el post:
+    models.Post.restore(options)
+    .then(function () {
+        req.flash('success', 'Post restaurado con éxito.');
+        res.redirect("/reload");
+    })
+    .catch(function (error) {
+        req.flash('error', 'Error al restaurar un post: ' + error.message);
+        next(error);
+    });
+};
+
+//-----------------------------------------------------------
+
+// DELETE /trash/posts/:postId_wal
+exports.postDestroy = function (req, res, next) {
+
+    var postId = req.params["postId_wal"];
+
+    var commentsOptions = {
+        where: {PostId: postId},
+        force: true
+    };
+
+    var postOptions = {
+        where: {id: postId},
+        force: true
+    };
+
+    // Destruir definitivamente (no se guarda en la papelera) los comentarios del
+    // post y el post:
+    Promise.all([
+        models.Comment.destroy(commentsOptions),
+        models.Post.destroy(postOptions)
+    ])
+    .then(function () {
+        req.flash('success', 'Post y sus comentarios destruidos con éxito.');
+        res.redirect("/reload");
+    })
+    .catch(function (error) {
+        req.flash('error', 'Error al destruir una post y sus comentarios: ' + error.message);
+        next(error);
+    });
+};
 
 //-----------------------------------------------------------
 

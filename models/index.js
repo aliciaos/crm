@@ -50,6 +50,12 @@ var User = sequelize.import(path.join(__dirname,'user'));
 // Importar la definicion de Attachments de attachment.js
 var Attachment = sequelize.import(path.join(__dirname,'attachment'));
 
+// Importar la definicion de Posts de post.js
+var Post = sequelize.import(path.join(__dirname,'post'));
+
+// Importar la definicion de Comments de coment.js
+var Comment = sequelize.import(path.join(__dirname,'comment'));
+
 //-------------------------------------------------
 
 // Relaciones entre modelos
@@ -87,6 +93,13 @@ Visit.belongsToMany(User, { as: 'Fans', through: 'Favourites'});
 Customer.belongsToMany(Company, { as: 'MainCompanies', through: 'CompanyCustomer', foreignKey: 'CustomerId'});
 Company.belongsToMany(Customer, { as: 'AllCustomers', through: 'CompanyCustomer', foreignKey: 'CompanyId'});
 
+Post.hasMany(Comment);
+Comment.belongsTo(Post);
+User.hasMany(Post, {foreignKey: 'AuthorId'});
+Post.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
+User.hasMany(Comment, {foreignKey: 'AuthorId'});
+Comment.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
+
 //-------------------------------------------------
 
 // Exportar:
@@ -99,4 +112,6 @@ exports.Target 		= Target;
 exports.Visit		= Visit;
 exports.User 		= User;
 exports.Attachment 	= Attachment;
+exports.Post        = Post;
+exports.Comment     = Comment;
 
