@@ -19,7 +19,8 @@ Al editar un usuario, que no sea necesario cambiar el password.
 
 Que pueda editarse el nombre de un user.
 
-Meter un blog
+Meter un blog:
+    - Ya esta metidos los posts y los comentarios, con autores, pero sin adjuntos.
 
 Gestion de documentos (attachments) con gestion por etiqutas.
 
