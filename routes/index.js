@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var multer  = require('multer');
-var upload = multer({ dest: './uploads/' });
+var upload = multer({ dest: './uploads/', limits: {fileSize: 20*1024*1024} });
 
 var userController = require('../controllers/user_controller');
 var sessionController = require('../controllers/session_controller');
@@ -377,32 +377,26 @@ router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits/print
 router.get('/posts/:postId(\\d+)/comments',
     sessionController.loginRequired,
     commentController.index);
-
 router.get('/posts/:postId(\\d+)/comments/new',
     sessionController.loginRequired,
     commentController.new);
-
 router.get('/posts/:postId(\\d+)/comments/:commentId(\\d+)',
     sessionController.loginRequired,
     commentController.show);
-
 router.post('/posts/:postId(\\d+)/comments',
     sessionController.loginRequired,
     commentController.create);
-
 router.get('/posts/:postId(\\d+)/comments/:commentId(\\d+)/edit',
     sessionController.loginRequired,
-    commentController.loggedUserIsAuthor,
+    commentController.loggedUserIsAuthorOrAdmin,
     commentController.edit);
-
 router.put('/posts/:postId(\\d+)/comments/:commentId(\\d+)',
     sessionController.loginRequired,
-    commentController.loggedUserIsAuthor,
+    commentController.loggedUserIsAuthorOrAdmin,
     commentController.update);
-
 router.delete('/posts/:postId(\\d+)/comments/:commentId(\\d+)',
     sessionController.loginRequired,
-    commentController.loggedUserIsAuthor,
+    commentController.loggedUserIsAuthorOrAdmin,
     commentController.destroy);
 
 router.get('/posts',
@@ -419,16 +413,29 @@ router.post('/posts',
     postController.create);
 router.get('/posts/:postId(\\d+)/edit',
     sessionController.loginRequired,
-    postController.loggedUserIsAuthor,
+    postController.loggedUserIsAuthorOrAdmin,
     postController.edit);
 router.put('/posts/:postId(\\d+)',
     sessionController.loginRequired,
-    postController.loggedUserIsAuthor,
+    postController.loggedUserIsAuthorOrAdmin,
     postController.update);
 router.delete('/posts/:postId(\\d+)',
     sessionController.loginRequired,
-    postController.loggedUserIsAuthor,
+    postController.loggedUserIsAuthorOrAdmin,
     postController.destroy);
+router.get('/posts/:postId(\\d+)/attachments/new',
+    sessionController.loginRequired,
+    postController.loggedUserIsAuthor,
+    postController.newAttachment);
+router.post('/posts/:postId(\\d+)/attachments',
+    sessionController.loginRequired,
+    postController.loggedUserIsAuthor,
+    upload.single('attachment'),
+    postController.createAttachment);
+router.delete('/posts/:postId(\\d+)/attachments/:attachmentId_wal(\\d+)',   // wal = without auto loading
+    sessionController.loginRequired,
+    postController.loggedUserIsAuthor,
+    postController.destroyAttachment);
 
 //----------------------------------------------------
 //  Papelera de Reciclaje

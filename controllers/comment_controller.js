@@ -25,6 +25,23 @@ exports.load = function (req, res, next, commentId) {
 };
 
 
+//-----------------------------------------------------------
+
+
+// MW que permite el paso solamente si:
+//   - el usuario logeado es admin,
+//   - el usuario logeado es el autor del comentario.
+exports.loggedUserIsAuthorOrAdmin = function (req, res, next) {
+
+    if (req.session.user.isAdmin ||
+        req.session.user.id === req.comment.AuthorId) {
+        next();
+    } else {
+        console.log('Ruta prohibida: el usuario logeado no es el autor del comentario, ni es un administrador.');
+        res.send(403);
+    }
+};
+
 /*
  * Comprueba que el usuario logeado es el author.
  */
@@ -37,6 +54,9 @@ exports.loggedUserIsAuthor = function (req, res, next) {
         res.send(403);
     }
 };
+
+
+//-----------------------------------------------------------
 
 
 exports.index = function (req, res, next) {
@@ -138,7 +158,7 @@ exports.update = function (req, res, next) {
 // DELETE /posts/:postId/comments/:commentId
 exports.destroy = function (req, res, next) {
     // Borrar el comentario:
-    req.comment.destroy()
+    req.comment.destroy({force: true})
     .then(function () {
         req.flash('success', 'Comentario borrado con éxito.');
         res.redirect("/reload");

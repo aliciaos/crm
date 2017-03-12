@@ -41,6 +41,9 @@ API REST JSON
 Poder editar varias visitas de forma rapida usando AJAX (o algo similar).
 
 Falta por hacer: Control de huerfanos al sacar cosas de la papelera. Ejemplo: Que pasa si restauro una visita y su vendedor ha sido borrado y no ha sido restaurado.
+   - Adjuntos de los posts.
+   - Comentarios de los posts.
+
 
 Las versiones desplegadas localmente y en pruebas de heroku usan la misma cuenta (y directorio) de cloudinary. Esto hace que las fotos esten mezcladas y me es dificil saber que borrar.
 

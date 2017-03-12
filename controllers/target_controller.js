@@ -212,7 +212,7 @@ exports.update = function(req, res, next) {
 // DELETE /visits/:visitId/targets/:targetId
 exports.destroy = function(req, res, next) {
 
-    req.target.destroy()
+    req.target.destroy({force: true})
     .then( function() {
         req.flash('success', 'Objetivo borrado con éxito.');
 

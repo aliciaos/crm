@@ -5,7 +5,6 @@ body {
 
 }
 
-
 header {
     text-align: center;
     font-family: "PT Serif Bold", Georgia, serif, times;
@@ -211,7 +210,6 @@ nav a {
     vertical-align: middle;
 }
 
-
 article.post {
     border: 2px solid #1648ff;
     padding: 5px;
@@ -232,6 +230,32 @@ h3.post {
     font-style: italic;
 }
 
+div.attachments {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    cccccalign-items: stretch;
+    justify-content: flex-start;
+
+    margin: 5px 30px;
+
+}
+
+div.attachmentItem {
+    flex: 0 200px;
+
+    display: flex;
+    flex-direction: column;
+    cccccalign-items: stretch;
+    justify-content: space-between;
+
+    padding: 5px;
+    margin: 2px;
+    background-color: #dce9ff;
+
+    border: 1px dotted blue;
+    border-radius: 5px;
+}
 
 article.comment {
     border: 2px solid #5adfff;

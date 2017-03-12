@@ -100,6 +100,8 @@ Post.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
 User.hasMany(Comment, {foreignKey: 'AuthorId'});
 Comment.belongsTo(User, {as: 'Author', foreignKey: 'AuthorId'});
 
+Post.belongsToMany(Attachment, {through: 'PostAttachments'});
+
 //-------------------------------------------------
 
 // Exportar:

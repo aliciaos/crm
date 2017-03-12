@@ -656,31 +656,52 @@ exports.postDestroy = function (req, res, next) {
 
     var postId = req.params["postId_wal"];
 
-    var commentsOptions = {
-        where: {PostId: postId},
-        force: true
-    };
+    // Buscar el post a destruir definiticamente:
+    models.Post.findById(postId, {
+        paranoid: false,
+        where: {deletedAt: {$not: null}}
+    })
+    .then(function (post) {
+        if (!post) {
+            throw new Error('No existe ningún post con Id=' + postId);
+        }
 
-    var postOptions = {
-        where: {id: postId},
-        force: true
-    };
+        // Obtener los ficheros adjuntos:
+        return post.getAttachments()
+        .each(function (attachment) {
 
-    // Destruir definitivamente (no se guarda en la papelera) los comentarios del
-    // post y el post:
-    Promise.all([
-        models.Comment.destroy(commentsOptions),
-        models.Post.destroy(postOptions)
-    ])
+            // Borrar el fichero en Cloudinary.
+            cloudinary.api.delete_resources(attachment.public_id);
+
+            // Borrar el attacment de la base de datos.
+            return attachment.destroy({force: true});
+        })
+        .then(function () {
+            // Desenganchar los ficheros adjuntos:
+            return post.setAttachments([])
+        })
+        .then(function () {
+            // Destruir definitivamente (no se guarda en la papelera) el post:
+            return post.destroy({force: true});
+        });
+    })
     .then(function () {
-        req.flash('success', 'Post y sus comentarios destruidos con éxito.');
+        // Destruir definitivamente (no se guarda en la papelera) los comentarios del post:
+        return models.Comment.destroy({
+            where: {PostId: postId},
+            force: true
+        });
+    })
+    .then(function () {
+        req.flash('success', 'Post, comentarios y adjuntos destruidos con éxito.');
         res.redirect("/reload");
     })
     .catch(function (error) {
-        req.flash('error', 'Error al destruir una post y sus comentarios: ' + error.message);
+        req.flash('error', 'Error al destruir un post con sus comentarios y adjuntos: ' + error.message);
         next(error);
     });
-};
+}
+;
 
 //-----------------------------------------------------------
 

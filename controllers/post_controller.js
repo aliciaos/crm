@@ -3,6 +3,19 @@ var Sequelize = require('sequelize');
 
 var paginate = require('./paginate').paginate;
 
+var cloudinary = require('cloudinary');
+var fs = require('fs');
+
+
+// Opciones para imagenes subidas a Cloudinary
+var cloudinary_upload_options = {
+    async: true,
+    folder: "/crm/" + (process.env.CLOUDINARY_SUBFOLDER || "iweb") + "/posts",
+    resource_type: "auto",
+    tags: ['core', 'decoversia', 'crm']
+};
+
+
 exports.load = function (req, res, next, postId) {
 
     models.Post.findById(
@@ -21,7 +34,18 @@ exports.load = function (req, res, next, postId) {
                 {
                     model: models.Comment,
                     order: [['updatedAt', 'DESC']],
-                    include: [{model: models.User, as: 'Author'}]
+                    include: [{
+                        model: models.User,
+                        as: 'Author',
+                        include: {
+                            model: models.Salesman,
+                            as: "Salesman",
+                            include: [{model: models.Attachment, as: 'Photo'}]
+                        }
+                    }]
+                },
+                {
+                    model: models.Attachment
                 }
             ]
         }
@@ -40,6 +64,24 @@ exports.load = function (req, res, next, postId) {
 };
 
 
+//-----------------------------------------------------------
+
+
+// MW que permite el paso solamente si:
+//   - el usuario logeado es admin,
+//   - el usuario logeado es el autor del post.
+exports.loggedUserIsAuthorOrAdmin = function (req, res, next) {
+
+    if (req.session.user.isAdmin ||
+        req.session.user.id === req.post.AuthorId) {
+        next();
+    } else {
+        console.log('Ruta prohibida: el usuario logeado no es el autor del post, ni es un administrador.');
+        res.send(403);
+    }
+};
+
+
 /*
  * Comprueba que el usuario logeado es el author.
  */
@@ -52,6 +94,9 @@ exports.loggedUserIsAuthor = function (req, res, next) {
         res.send(403);
     }
 };
+
+
+//-----------------------------------------------------------
 
 
 // GET /posts
@@ -128,7 +173,8 @@ exports.index = function (req, res, next) {
 exports.show = function (req, res, next) {
 
     res.render('posts/show', {
-        post: req.post
+        post: req.post,
+        cloudinary: cloudinary
     });
 };
 
@@ -229,21 +275,90 @@ exports.destroy = function (req, res, next) {
     });
 };
 
+//--------------------------------------------------------------
 
 
+// GET /posts/:postId/attachment/new
+exports.newAttachment = function (req, res, next) {
+
+    res.render('posts/newAttachment', {post: req.post});
+};
 
 
+// POST /posts/:postId/attachments
+exports.createAttachment = function (req, res, next) {
+
+    if (!req.file) {
+        req.flash('error', 'Falta seleccionar la imagen, película o el documento a adjuntar.');
+        res.render('posts/newAttachment', {post: req.post});
+        return;
+    }
+
+    // Salvar la imagen en Cloudinary
+    var attachmentHelper = require("../helpers/attachment.js");
+    return attachmentHelper.uploadResourceToCloudinary(req, cloudinary_upload_options)
+    .then(function (uploadResult) {
+
+        // Crear nuevo attachment en la BBDD.
+        return models.Attachment.create({
+            public_id: uploadResult.public_id,
+            url: uploadResult.url,
+            filename: req.file.originalname,
+            mime: req.file.mimetype
+        })
+        .then(function (attachment) {
+            return req.post.addAttachment(attachment);
+        })
+        .then(function () {
+            req.flash('success', 'Adjunto guardado con éxito.');
+            res.redirect("/reload");
+        })
+        .catch(function (error) {
+            req.flash('error', 'No se ha podido salvar el adjunto: ' + result.error.message);
+            cloudinary.api.delete_resources(uploadResult.public_id);
+            next(error);
+        });
+    })
+    .then(function () {
+        var path = req.file.path;
+        fs.unlink(path); // borrar la imagen subida a ./uploads
+    })
+    .catch(function (error) {
+        req.flash('error', 'No se ha podido subir el adjunto a Cloudinary: ' + error.message);
+        next(error);
+    });
+};
 
 
+// DELETE /posts/:postId/attachments/:attachmentId
+exports.destroyAttachment = function (req, res, next) {
 
+    var attachmentId = req.params["attachmentId_wal"];
 
+    models.Attachment.findById(attachmentId)
+    .then(function (attachment) {
+        if (attachment) {
 
+            return req.post.removeAttachment(attachment)
+            .then(function () {
 
+                // Borrar el fichero en Cloudinary.
+                cloudinary.api.delete_resources(attachment.public_id);
 
-
-
-
-
-
+                // Borrar el attacment de la base de datos.
+                return attachment.destroy({force: true})
+                .then(function () {
+                    req.flash('success', 'Fichero adjunto eliminado con éxito.');
+                    res.redirect("/reload");
+                });
+            });
+        } else {
+            throw new Error('No existe ningún fichero adjunto con Id=' + attachmentId);
+        }
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
 
 
