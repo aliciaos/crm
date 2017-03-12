@@ -7,6 +7,10 @@
     "start_old": "node ./bin/www",
     "supervisor": "./node_modules/.bin/supervisor ./bin/www",
 
+    "open_iweb_development":       "heroku open --app dcrmt",
+    "open_decoversia_production":  "heroku open --app decoversia",
+    "open_decoversia_staging":     "heroku open --app decoversia-staging",
+
     "migrate_local": "./node_modules/.bin/sequelize db:migrate --url sqlite://$(pwd)/crm.sqlite",
     "seed_local":    "./node_modules/.bin/sequelize db:seed:all --url sqlite://$(pwd)/crm.sqlite",
 
