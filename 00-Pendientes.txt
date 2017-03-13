@@ -25,6 +25,7 @@ Meter un blog:
 Gestion de documentos (attachments) con gestion por etiqutas.
 
 Crear una base de datos para hacer pruebas de sobrecarga.
+    - Analizar la complejidad de los informes de eficiencia.
 
 Listar visitas pendientes, o con tareas pendientes.
 
@@ -58,8 +59,6 @@ Reunion con Angel:
 
 Renombrar dcrmt.herokuapp.com a iweb_crm.herokuapp.com. ???
 
-
-
 Sobre los clientes archivados y los informes de eficiencia:
    - incluir solo los clientes de la fabrica. --------------- done
    - no incluir tampoco los clientes archivados. --------------- done
@@ -82,3 +81,6 @@ Listado de visitas:
 
 Las fotos deberian quitarse de la tabla de vendedores y hacer una tabla Fotos. El modelo fotos tendria claves externas a la
 tabla de Usuarios y a la de adjuntos. Y asi tambien podria crear tablas de para otros tipos de usuarios con cuenta en el portal. ¿Esto tiene sentido?
+
+Favoritos en los posts.
+
