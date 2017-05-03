@@ -9,7 +9,6 @@ exports.add = function(req, res, next) {
         if (req.xhr) {
             res.send(200);
         } else {
-            var redir = req.body.redir || '/users/' + req.user.id + '/favourites';
             res.redirect("/reload");
         }
     })
@@ -27,7 +26,6 @@ exports.del = function(req, res, next) {
         if (req.xhr) {
             res.send(200);
         } else {
-            var redir = req.body.redir || '/users/' + req.user.id + '/favourites';
             res.redirect("/reload");
         }
     })

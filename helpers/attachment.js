@@ -6,16 +6,16 @@ var fs = require('fs');
  *
  * Si puede subir el fichero la promesa se satisface y devuelve el public_id y
  * la url del recurso subido.
- * Si no puede subir la imagen, la promesa se rechaza.
+ * Si no puede subir el fichero, la promesa se rechaza.
  *
  * @return Devuelve una Promesa.
  */
-exports.uploadResourceToCloudinary = function (req, options) {
+exports.uploadResourceToCloudinary = function (path, options) {
 
     return new Promise(function (resolve, reject) {
 
         cloudinary.v2.uploader.upload(
-            req.file.path,
+            path,
             options,
             function (error, result) {
                 if (!error) {

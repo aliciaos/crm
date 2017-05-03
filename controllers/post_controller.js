@@ -266,7 +266,7 @@ exports.destroy = function (req, res, next) {
     // Borrar el post:
     req.post.destroy()
     .then(function () {
-        req.flash('success', 'POst borrado con éxito.');
+        req.flash('success', 'Post borrado con éxito.');
         res.redirect("/goback");
     })
     .catch(function (error) {
@@ -296,7 +296,15 @@ exports.createAttachment = function (req, res, next) {
 
     // Salvar la imagen en Cloudinary
     var attachmentHelper = require("../helpers/attachment.js");
-    return attachmentHelper.uploadResourceToCloudinary(req, cloudinary_upload_options)
+    return attachmentHelper.uploadResourceToCloudinary(req.file.path, cloudinary_upload_options)
+    .then(function (uploadResult) {
+
+        // borrar la imagen subida a ./uploads
+        var path = req.file.path;
+        fs.unlink(path);
+
+        return uploadResult;
+    })
     .then(function (uploadResult) {
 
         // Crear nuevo attachment en la BBDD.
@@ -318,10 +326,6 @@ exports.createAttachment = function (req, res, next) {
             cloudinary.api.delete_resources(uploadResult.public_id);
             next(error);
         });
-    })
-    .then(function () {
-        var path = req.file.path;
-        fs.unlink(path); // borrar la imagen subida a ./uploads
     })
     .catch(function (error) {
         req.flash('error', 'No se ha podido subir el adjunto a Cloudinary: ' + error.message);

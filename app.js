@@ -9,7 +9,7 @@ var partials = require('express-partials');
 var flash = require('express-flash');
 var methodOverride = require('method-override');
 
-var index = require('./routes/index');
+var router = require('./routes');
 
 var app = express();
 
@@ -43,7 +43,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use('/', index);
+app.use(router);
 
 // Helper estatico:
 app.locals.escapeText =  function(text) {
