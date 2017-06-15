@@ -9,7 +9,7 @@ var companyApi = require('../api/company');
 var visitApi = require('../api/visit');
 var targetApi = require('../api/target');
 var targetTypeApi = require('../api/targetType');
-
+var userApi = require('../api/user');
 
 //-----------------------------------------------------------
 
@@ -18,6 +18,16 @@ router.all('*', function(req, res, next) {
     console.log("=== API ===>", req.url);
     next();
 });
+
+
+//-----------------------------------------------------------
+
+// Autoload de parametros
+router.param('userId',     userApi.load);
+router.param('salesmanId', salesmanApi.load);
+router.param('customerId', customerApi.load);
+
+//-----------------------------------------------------------
 
 
 // Definición de rutas de sesion
@@ -49,6 +59,25 @@ router.get('/companies',
 router.get('/visits',
     sessionApi.loginRequired,
     visitApi.index);
+
+router.get('/customers/:customerId(\\d+)/visits',
+    sessionApi.loginRequired,
+    visitApi.index);
+
+router.get('/salesmen/:salesmanId(\\d+)/visits',
+    sessionApi.loginRequired,
+    visitApi.index);
+
+router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits',
+    sessionApi.loginRequired,
+    visitApi.index);
+
+router.get('/users/:userId(\\d+)/visits',
+    sessionApi.loginRequired,
+    visitApi.indexUser);
+
+
+
 
 // Definicion de rutas para los objetivos de todas las visitas
 router.get(   '/targets',

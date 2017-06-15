@@ -1,6 +1,32 @@
 var models = require('../models');
 
 
+
+
+// GET /users/:userId/visits
+//
+// Visitas de un User.
+// Hay que buscar el vendedor asociado al user indicado,
+// pero puede que no exista un vendedor.
+exports.indexUser = function (req, res, next) {
+
+    models.Salesman.findOne({
+        where: {UserId: req.user.id}
+    })
+    .then(function (salesman) {
+        if (salesman) {
+            res.redirect("/api/salesmen/" + salesman.id + "/visits");
+        } else {
+            res.redirect("/api/visits");
+        }
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
+
+
+
 // GET /visits
 // GET /customers/:customerId/visits
 // GET /salesmen/:salesmanId/visits
@@ -27,7 +53,6 @@ exports.index = function (req, res, next) {
         // Incluir los clientes no archivados:
         var customeInclude = {
             model: models.Customer,
-            attributes: ['id'],
             where: {
                 $and: [{
                     archived: false
@@ -40,7 +65,6 @@ exports.index = function (req, res, next) {
             customeInclude.include = [{
                 model: models.Company,
                 as: "MainCompanies",
-                attributes: ['id'],
                 where: {id: searchCompanyId}
             }];
         }
@@ -69,7 +93,6 @@ exports.index = function (req, res, next) {
     } else {
         options.include.push({
             model: models.Customer,
-            attributes: ['id'],
             where: {
                 id: req.customer.id
             }
@@ -94,15 +117,15 @@ exports.index = function (req, res, next) {
             options.include.push({
                 model: models.Salesman,
                 as: "Salesman",
-                attributes: ['id'],
-                where: {name: likeCondition}
+                where: {name: likeCondition},
+                include: [{model: models.Attachment, as: "Photo"}]
             });
         } else {
             // CUIDADO: Estoy retocando el include existente.
             options.include.push({
                 model: models.Salesman,
                 as: "Salesman",
-                attributes: ['id']
+                include: [{model: models.Attachment, as: "Photo"}]
             });
         }
     } else {
@@ -110,8 +133,8 @@ exports.index = function (req, res, next) {
         options.include.push({
             model: models.Salesman,
             as: "Salesman",
-            attributes: ['id'],
-            where: {id: req.salesman.id}
+            where: {id: req.salesman.id},
+            include: [{model: models.Attachment, as: "Photo"}]
         });
     }
 
@@ -123,7 +146,6 @@ exports.index = function (req, res, next) {
         options.include.push({
             model: models.User,
             as: "Fans",
-            attributes: ['id', 'username'],
             where: {id: req.session.user.id}
         });
     } else {
@@ -131,8 +153,7 @@ exports.index = function (req, res, next) {
         // CUIDADO: Estoy retocando el include existente.
         options.include.push({
             model: models.User,
-            as: "Fans",
-            attributes: ['id', 'username']
+            as: "Fans"
         });
     }
 
@@ -144,12 +165,10 @@ exports.index = function (req, res, next) {
         model: models.Target,
         include: [
             {
-                model: models.Company,
-                attributes: ['id']
+                model: models.Company
             },
             {
-                model: models.TargetType,
-                attributes: ['id']
+                model: models.TargetType
             }
         ]
     });
