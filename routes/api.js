@@ -76,7 +76,9 @@ router.get('/users/:userId(\\d+)/visits',
     sessionApi.loginRequired,
     visitApi.indexUser);
 
-
+router.get('/users/logged/visits',
+    sessionApi.loginRequired,
+    visitApi.indexLoggedUser);
 
 
 // Definicion de rutas para los objetivos de todas las visitas

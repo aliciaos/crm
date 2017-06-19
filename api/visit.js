@@ -17,7 +17,7 @@ exports.indexUser = function (req, res, next) {
         if (salesman) {
             res.redirect("/api/salesmen/" + salesman.id + "/visits");
         } else {
-            res.redirect("/api/visits");
+            res.json([]);
         }
     })
     .catch(function (error) {
@@ -25,6 +25,26 @@ exports.indexUser = function (req, res, next) {
     });
 };
 
+
+// GET /users/logged/visits
+exports.indexLoggedUser = function (req, res, next) {
+
+    var loggedUserId = req.session.user.id;
+
+    models.Salesman.findOne({
+        where: {UserId: loggedUserId}
+    })
+    .then(function (salesman) {
+        if (salesman) {
+            res.redirect("/api/salesmen/" + salesman.id + "/visits");
+        } else {
+            res.json([]);
+        }
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
 
 
 // GET /visits
