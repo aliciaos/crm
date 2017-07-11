@@ -1,7 +1,54 @@
 var models = require('../models');
+var Sequelize = require('sequelize');
+
+var moment = require('moment');
+
+//-----------------------------------------------------------
 
 
+// Autoload la visita asociada a :visitId
+exports.load = function (req, res, next, visitId) {
 
+    models.Visit.findById(visitId)
+    .then(function (visit) {
+        if (visit) {
+            req.visit = visit;
+            next();
+        } else {
+            throw new Error('No existe ninguna visita con Id=' + visitId);
+        }
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
+
+
+//-----------------------------------------------------------
+
+
+// MW que permite el paso solamente si el vendedor de la visita esta asociado al usuario logeado.
+exports.salesmanIsLoggedUser_Required = function (req, res, next) {
+
+    var loggedUserId = req.session.user.id;
+
+    models.Salesman.findOne({
+        where: {UserId: loggedUserId}
+    })
+    .then(function (salesman) {
+        if (salesman) {
+            next();
+        } else {
+            console.log('Ruta prohibida: el usuario logeado no es el vendedor.');
+            res.send(403);
+        }
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
+
+//-----------------------------------------------------------
 
 // GET /users/:userId/visits
 //
@@ -208,6 +255,47 @@ exports.index = function (req, res, next) {
         res.json(visits);
     })
     .catch(function (error) {
+        next(error);
+    });
+};
+
+
+
+// PUT /visits/:visitId
+//
+// Solo se actualizan los campos fulfilledAt y notes.
+exports.update = function (req, res, next) {
+
+    // Poner null si no hay fecha de realizacion
+    var momentFulfilledAt = null;
+    if (req.body.fulfilledAt && req.body.fulfilledAt.trim()) {
+        momentFulfilledAt = moment(req.body.fulfilledAt + " 08:00", "DD-MM-YYYY");
+    }
+    req.visit.fulfilledAt = momentFulfilledAt;
+
+    // Hay notas?
+    if (req.body.notes) {
+        req.visit.notes = req.body.notes.trim();
+    }
+
+    req.visit.save({fields: ["fulfilledAt", "notes"]})
+    .then(function (visit) {
+
+        console.log('API: Visita ' + visit.id + ' editada con éxito.');
+
+        res.sendStatus(200);
+    })
+    .catch(Sequelize.ValidationError, function (error) {
+
+        console.log('API: Errores en actualizacion:');
+        for (var i in error.errors) {
+            console.log('API error: ', error.errors[i].value);
+        }
+
+        res.sendStatus(409);
+    })
+    .catch(function (error) {
+        console.log('API error: ' + error.message);
         next(error);
     });
 };

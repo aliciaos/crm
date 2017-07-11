@@ -26,6 +26,7 @@ router.all('*', function(req, res, next) {
 router.param('userId',     userApi.load);
 router.param('salesmanId', salesmanApi.load);
 router.param('customerId', customerApi.load);
+router.param('visitId',    visitApi.load);
 
 //-----------------------------------------------------------
 
@@ -79,6 +80,12 @@ router.get('/users/:userId(\\d+)/visits',
 router.get('/users/logged/visits',
     sessionApi.loginRequired,
     visitApi.indexLoggedUser);
+
+
+router.put('/visits/:visitId(\\d+)',
+    sessionApi.loginRequired,
+    visitApi.salesmanIsLoggedUser_Required,
+    visitApi.update);
 
 
 // Definicion de rutas para los objetivos de todas las visitas
