@@ -27,6 +27,7 @@ router.param('userId',     userApi.load);
 router.param('salesmanId', salesmanApi.load);
 router.param('customerId', customerApi.load);
 router.param('visitId',    visitApi.load);
+router.param('targetId',   targetApi.load);
 
 //-----------------------------------------------------------
 
@@ -86,6 +87,12 @@ router.put('/visits/:visitId(\\d+)',
     sessionApi.loginRequired,
     visitApi.salesmanIsLoggedUser_Required,
     visitApi.update);
+
+
+router.put('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
+    sessionApi.loginRequired,
+    visitApi.salesmanIsLoggedUser_Required,
+    targetApi.update);
 
 
 // Definicion de rutas para los objetivos de todas las visitas
