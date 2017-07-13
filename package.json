@@ -33,7 +33,7 @@
     "moff_decoversia_staging":    "heroku --app decoversia-staging maintenance:off"
   },
   "engines": {
-    "node": "7.3.x",
+    "node": "7.10.1",
     "npm": "3.10.x"
   },
   "dependencies": {
