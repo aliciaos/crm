@@ -1,7 +1,7 @@
 <h2>
     Comentarios:
 
-    <a href="/posts/<%= post.id %>/comments/new"><img class="icon" src="/images/add.png"></a>
+    <a href="/posts/<%= post.id %>/comments/new"><img class="icon" src="/icons/add.png"></a>
 </h2>
 
 <% for (var i in comments) { %>
@@ -48,10 +48,10 @@
     <% if (session.user && (session.user.id == comment.AuthorId || session.user.isAdmin) ) { %>
 
     <div>
-        <a href="/posts/<%= post.id %>/comments/<%= comment.id %>/edit"><img class="icon" src="/images/edit.png"></a>
+        <a href="/posts/<%= post.id %>/comments/<%= comment.id %>/edit"><img class="icon" src="/icons/edit.png"></a>
 
         <a href="/posts/<%= post.id %>/comments/<%= comment.id %>?_method=DELETE"
-           onClick="return confirm('¿Seguro que quiere borrar el comentario?');"><img class="icon" src="/images/basura.png"></a>
+           onClick="return confirm('¿Seguro que quiere borrar el comentario?');"><img class="icon" src="/icons/basura.png"></a>
 
     </div>
     <% } %>

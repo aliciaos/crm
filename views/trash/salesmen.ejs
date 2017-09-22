@@ -3,7 +3,7 @@
 <h1> 
     Vendedores Eliminados:
 
-    <a href="/goback"><img class="icon" src="/images/back.png"></a>
+    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
 </h1>
 
 <table>
@@ -39,13 +39,13 @@
             </td>
             <td>
                 <% if (session.user && session.user.isAdmin) { %>
-                <a href="/trash/salesmen/<%= salesman.id %>?_method=POST"><img class="icon" src="/images/restore.png"></a>
+                <a href="/trash/salesmen/<%= salesman.id %>?_method=POST"><img class="icon" src="/icons/restore.png"></a>
                 <% } %>
 
 
                 <% if (session.user && session.user.isAdmin) { %>
                 <a href="/trash/salesmen/<%= salesman.id %>?_method=DELETE"
-                   onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE el vendedor: <%= salesman.name %>?');"><img class="icon" src="/images/kill.png"></a>
+                   onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE el vendedor: <%= salesman.name %>?');"><img class="icon" src="/icons/kill.png"></a>
                 <% } %>
             </td>
          </tr> 

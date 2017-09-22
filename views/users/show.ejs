@@ -2,13 +2,13 @@
 <h1>
     Usuario
 
-    <a href="/goback"><img class="icon" src="/images/back.png"></a>
+    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
 
     <% if (session.user) { %>
 
         <% if (session.user.isAdmin || session.user.id === user.id) { %>
           <a href="/users/<%= user.id %>/edit"> 
-            <img class="icon" src="/images/edit.png">
+            <img class="icon" src="/icons/edit.png">
           </a>
         <% } %>
 

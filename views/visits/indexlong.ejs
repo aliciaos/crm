@@ -16,9 +16,9 @@
     <% } %>
     <% } %>
 
-    <a href="/goback"><img class="icon" src="/images/back.png"></a>
+    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
 
-    <a href="/visits/new"><img class="icon" src="/images/add.png"></a>
+    <a href="/visits/new"><img class="icon" src="/icons/add.png"></a>
 
     <%
     var urlPrint = "";
@@ -37,7 +37,7 @@
     urlPrint += "searchfavourites=" + (locals.searchfavourites || '');
     %>
     <a href="<%= urlPrint %>">
-        <img class="icon" src="/images/print.png">
+        <img class="icon" src="/icons/print.png">
     </a>
 
 </h1>
@@ -108,14 +108,14 @@
 
 
         <% if (session.user && session.user.isAdmin || !salesmanId || salesmanUserId === session.user.id) { %>
-        <a href="/visits/<%= visit.id %>"><img class="icon" src="/images/ver.png"></a>
+        <a href="/visits/<%= visit.id %>"><img class="icon" src="/icons/ver.png"></a>
         <% } %>
 
 
         <% if (session.user && session.user.isAdmin) { %>
         <a href="/visits/<%= visit.id %>?_method=DELETE"
            onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img
-                    class="icon" src="/images/basura.png"></a>
+                    class="icon" src="/icons/basura.png"></a>
         <% } %>
 
     </div>

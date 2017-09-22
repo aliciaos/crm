@@ -8,9 +8,9 @@
 
     <div class="vcenter">
         Filtros:
-        <input type="image" class="icon" src="/images/find.png" border="0" alt="Submit"/>
+        <input type="image" class="icon" src="/icons/find.png" border="0" alt="Submit"/>
 
-        <input type="image" class="icon right" src="/images/cancel.png" border="0"
+        <input type="image" class="icon right" src="/icons/cancel.png" border="0"
                onClick="cleanupForm('filterForm')"/>
 
     </div>
@@ -36,7 +36,7 @@
            autocomplete="off"/>
 
     <% var today = moment().format("DD-MM-YYYY"); %>
-    <input type="image" class="icon right" src="/images/today.png" border="0"
+    <input type="image" class="icon right" src="/icons/today.png" border="0"
            onClick="setDate('<%= today %>', 'searchdateafter', 'searchdatebefore'); return false;"/>
 
     <br/>
@@ -78,7 +78,7 @@
     <div class="vcenter">
         <label>Favoritas:</label>
         <input type="checkbox" name="searchfavourites" value="1" <%= locals.searchfavourites ? 'checked' : '' %> >
-        <img class="star" src="/images/star_yellow.png" \>
+        <img class="star" src="/icons/star_yellow.png" \>
     </div>
 
 </form>
