@@ -1,4 +1,5 @@
 
+Que la autenticacion en el API REST pueda hacerse usando un TOKEN.
 
 Otro estado de los objetivos de una visita: Cancelado.
     - Esto me fastidia porque tengo un booleano (null, true, false)
