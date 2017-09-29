@@ -1,4 +1,6 @@
 
+ERROR: Al acceder a la ruta "/users/25" con in id que no existe (en este caso seria el 25) se genera un error quye doice que id no existe.
+
 Que la autenticacion en el API REST pueda hacerse usando un TOKEN.
 
 Otro estado de los objetivos de una visita: Cancelado.

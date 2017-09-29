@@ -2,6 +2,7 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
 var paginate = require('./paginate').paginate;
+var authentication = require('../helpers/authentication');
 
 var moment = require('moment');
 
@@ -77,8 +78,8 @@ exports.show = function(req, res, next) {
 
 // GET /users/new
 exports.new = function(req, res, next) {
-    var user = models.User.build({ username: "", 
-                                   password: "" });
+    var user = { username: "",
+                 password: "" };
 
     res.render('users/new', { user: user });
 };
@@ -92,30 +93,34 @@ exports.create = function(req, res, next) {
 
     // El login debe ser unico:
     models.User.find({where: {username: req.body.user.username}})
-        .then(function(existing_user) {
-            if (existing_user) {
-                var emsg = "El usuario \""+ req.body.user.username +"\" ya existe."
-                req.flash('error', emsg);
-                res.render('users/new', { user: user });
-            } else {
-                // Guardar en la BBDD
-                return user.save({fields: ["username", "password", "salt"]})
-                    .then(function(user) { // Renderizar pagina de usuarios
-                        req.flash('success', 'Usuario creado con éxito.');
-                        res.redirect("/users/" + user.id);
-                    })
-                    .catch(Sequelize.ValidationError, function(error) {
-                        req.flash('error', 'Errores en el formulario:');
-                        for (var i in error.errors) {
-                            req.flash('error', error.errors[i].value);
-                        };
-                        res.render('users/new', { user: user });
-                    });
-            }
-        })
-        .catch(function(error) { 
-            next(error);
-        });
+    .then(function(existing_user) {
+        if (existing_user) {
+            var emsg = "El usuario \""+ req.body.user.username +"\" ya existe."
+            req.flash('error', emsg);
+            res.render('users/new', { user: user });
+        } else {
+
+            // Crear el valor de Token:
+            user.token = authentication.createToken();
+
+            // Guardar en la BBDD
+            return user.save({fields: ["username", "token", "password", "salt"]})
+                .then(function(user) { // Renderizar pagina de usuarios
+                    req.flash('success', 'Usuario creado con éxito.');
+                    res.redirect("/users/" + user.id);
+                })
+                .catch(Sequelize.ValidationError, function(error) {
+                    req.flash('error', 'Errores en el formulario:');
+                    for (var i in error.errors) {
+                        req.flash('error', error.errors[i].value);
+                    };
+                    res.render('users/new', { user: user });
+                });
+        }
+    })
+    .catch(function(error) {
+        next(error);
+    });
 };
 
 
@@ -180,3 +185,23 @@ exports.destroy = function(req, res, next) {
 
 
 //-----------------------------------------------------------
+
+
+// PUT /users/:id/token
+// Genera y guarda un nuevo token
+exports.createToken = function(req, res, next) {
+
+    req.user.token = authentication.createToken();
+
+    req.user.save({fields: ["token"]})
+    .then(function(user) {
+        req.flash('success', 'Token de Usuario generado con éxito.');
+        res.redirect('/reload');
+    })
+    .catch(function(error) {
+        next(error);
+    });
+};
+
+//-----------------------------------------------------------
+

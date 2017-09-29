@@ -25,3 +25,13 @@
   <b>Es Administrador:</b>
   <%= user.isAdmin ? "Si" : "No" %>
 </p>
+
+
+<% if (session.user.isAdmin || session.user.id === user.id) { %>
+    <p>
+        <b>Token:</b>
+        <%= user.token %>
+    </p>
+
+    Generar nuevo token: <a href="/users/<%= user.id %>/token?_method=PUT"><img class="icon" src="/icons/reload.png"></a>
+<% } %>

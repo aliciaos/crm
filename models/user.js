@@ -10,6 +10,10 @@ module.exports = function (sequelize, DataTypes) {
                 unique: true,
                 validate: {notEmpty: {msg: "Falta username"}}
             },
+            token: {
+                type: DataTypes.STRING,
+                validate: {notEmpty: {msg: "Falta token"}}
+            },
             password: {
                 type: DataTypes.STRING,
                 validate: {notEmpty: {msg: "Falta password"}},

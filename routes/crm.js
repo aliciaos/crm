@@ -51,8 +51,8 @@ router.get('/reload', hc.reload);
 // Y tampoco es /
 router.get(/(?!\/new$|\/edit$|\/import$|\/session$)\/[^\/]+$/, hc.push);
 
-// Rutas que acaban en /new, /edit, /import o /session
-router.get(/.*\/(new|edit|import|session)$/, hc.skip);
+// Rutas que acaban en /new, /edit, /import, /token o /session
+router.get(/.*\/(new|edit|import|token|session)$/, hc.skip);
 
 // Ruta Home
 router.get('/', hc.reset);
@@ -104,6 +104,11 @@ router.delete('/users/:userId(\\d+)',
     sessionController.loginRequired,
     sessionController.adminAndNotMyselfRequired,
     userController.destroy);  // borrar cuenta
+
+router.put('/users/:userId(\\d+)/token',
+    sessionController.loginRequired,
+    sessionController.adminOrMyselfRequired,
+    userController.createToken);   // generar un nuevo token
 
 
 // Definicion de rutas para las fabricas

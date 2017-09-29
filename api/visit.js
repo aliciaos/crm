@@ -27,19 +27,19 @@ exports.load = function (req, res, next, visitId) {
 //-----------------------------------------------------------
 
 
-// MW que permite el paso solamente si el vendedor de la visita esta asociado al usuario logeado.
+// MW que permite el paso solamente si el vendedor de la visita esta asociado al token usado.
 exports.salesmanIsLoggedUser_Required = function (req, res, next) {
 
-    var loggedUserId = req.session.user.id;
+    var tokenUserId = req.token.userId;
 
     models.Salesman.findOne({
-        where: {UserId: loggedUserId}
+        where: {UserId: tokenUserId}
     })
     .then(function (salesman) {
         if (salesman) {
             next();
         } else {
-            console.log('Ruta prohibida: el usuario logeado no es el vendedor.');
+            console.log('Ruta prohibida: el token usado no es el del vendedor.');
             res.send(403);
         }
     })
@@ -62,7 +62,7 @@ exports.indexUser = function (req, res, next) {
     })
     .then(function (salesman) {
         if (salesman) {
-            res.redirect("/api/salesmen/" + salesman.id + "/visits");
+            res.redirect("/api/salesmen/" + salesman.id + "/visits?token=" + req.query.token);
         } else {
             res.json([]);
         }
@@ -76,14 +76,15 @@ exports.indexUser = function (req, res, next) {
 // GET /users/logged/visits
 exports.indexLoggedUser = function (req, res, next) {
 
-    var loggedUserId = req.session.user.id;
+    // TODO: deberia cambiarse en la ruta la palabra logged por withToken
+    var tokenUserId = req.token.userId;
 
     models.Salesman.findOne({
-        where: {UserId: loggedUserId}
+        where: {UserId: tokenUserId}
     })
     .then(function (salesman) {
         if (salesman) {
-            res.redirect("/api/salesmen/" + salesman.id + "/visits");
+            res.redirect("/api/salesmen/" + salesman.id + "/visits?token=" + req.query.token);
         } else {
             res.json([]);
         }
@@ -213,7 +214,7 @@ exports.index = function (req, res, next) {
         options.include.push({
             model: models.User,
             as: "Fans",
-            where: {id: req.session.user.id}
+            where: {id: req.token.userId}
         });
     } else {
 
@@ -248,7 +249,7 @@ exports.index = function (req, res, next) {
         // Marcar las visitas que son favoritas
         visits.forEach(function (visit) {
             visit.favourite = visit.Fans.some(function (fan) {
-                return fan.id == req.session.user.id;
+                return fan.id == req.token.userId;
             });
         });
 
