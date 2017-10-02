@@ -14,7 +14,7 @@ exports.load = function(req, res, next, userId) {
                 req.user = user;
                 next();
             } else {
-                req.flash('error', 'No existe el usuario con id='+id+'.');
+                req.flash('error', 'No existe el usuario con id='+userId+'.');
                 throw new Error('No existe userId=' + userId);
             }
         })
