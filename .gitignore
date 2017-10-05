@@ -7,3 +7,4 @@ crm.sqlite
 uploads/*
 config/server.json
 public/clients
+utils

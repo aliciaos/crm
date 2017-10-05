@@ -5,7 +5,7 @@ var crypto = require('crypto');
 exports.createToken = function() {
 
     var salt = Math.round((new Date().valueOf() * Math.random())) + '';
-    return crypto.createHmac('sha256', salt).update("UserCrmToken").digest('hex');
+    return crypto.createHmac('sha256', salt).update("UserCrmToken").digest('hex').substring(10,30);
 
 }
 

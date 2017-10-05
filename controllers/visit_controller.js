@@ -145,7 +145,7 @@ exports.index = function (req, res, next) {
     if (!req.customer) {
 
         // Incluir los clientes no archivados:
-        var customeInclude = {
+        var customerInclude = {
             model: models.Customer,
             where: {
                 $and: [{
@@ -156,7 +156,7 @@ exports.index = function (req, res, next) {
 
         // Filtrar: Clientes de la fabrica especificada en la query:
         if (searchCompanyId) {
-            customeInclude.include = [{
+            customerInclude.include = [{
                 model: models.Company,
                 as: "MainCompanies",
                 attributes: ['id', 'name'],
@@ -176,14 +176,14 @@ exports.index = function (req, res, next) {
                 likeCondition = {$like: search_like};
             }
 
-            customeInclude.where.$and.push({
+            customerInclude.where.$and.push({
                 $or: [
                     {code: likeCondition},
                     {name: likeCondition}
                 ]
             });
         }
-        countOptions.include.push(customeInclude);
+        countOptions.include.push(customerInclude);
 
     } else {
         countOptions.include.push({
@@ -451,7 +451,6 @@ exports.create = function (req, res, next) {
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
         }
-        ;
 
         return infoOfSalesmenCustomers()
         .spread(function (salesmen, customers) {
