@@ -1,10 +1,34 @@
 
+<script>
+    function validateForm() {
+
+        var msgs = [];
+
+        var cid = document.getElementById('customerId').value;
+        if (cid === "0") {
+            msgs.push('- Debe seleccionar un cliente.');
+        }
+
+        var sid = document.getElementById('salesmanId').value;
+        if (sid === "0") {
+            msgs.push('- Debe seleccionar un vendedor.');
+        }
+
+        if (msgs.length) {
+            alert("Existen errores: " + msgs.join("\n"));
+            return false;
+        } else {
+            return true;
+        }
+    }
+</script>
+
 
 <ul>
 	<li>
 		<b>Cliente</b>:
 
-		<select name="customerId">
+		<select name="customerId" id="customerId" >
 
 		    <option value="0"  <%= visit.CustomerId === 0 ? "selected" : "" %> > 
     				Seleccione un cliente  
@@ -23,7 +47,7 @@
 
 	<li>
 		<b>Vendedor</b>: 
-		<select name="salesmanId">
+		<select name="salesmanId" id="salesmanId" >
 
 		    <option value="0"  <%= visit.SalesmanId === 0 ? "selected" : "" %> > 
     				Seleccione un vendedor  

@@ -439,12 +439,32 @@ exports.create = function (req, res, next) {
         SalesmanId: Number(req.body.salesmanId) || 0
     };
 
-    // Guarda en la tabla Visits la nueva visita.
-    models.Visit.create(visit)
-    .then(function (visit) {
-        req.flash('success', 'Visita creada con éxito.');
+    Sequelize.Promise.all([
+        // Comprobar que existe el cliente seleccionado:
+        models.Customer.findById(req.body.customerId),
+        // Comprobar que existe el vendedor seleccionado:
+        models.Salesman.findById(req.body.salesmanId)
+    ])
+    .spread(function (customer, salesman) {
+        var errors = [];
+        if (!customer) {
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "customer", 'No se ha especificado ningún cliente existente.'));
+        }
+        if (!salesman) {
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "salesman", 'No se ha especificado ningún vendedor existente.'));
+        }
+        if (errors.length) {
+            throw new Sequelize.ValidationError("Errores de Validación personalizados", errors);
+        }
+    })
+    .then(function () {
+        // Guarda en la tabla Visits la nueva visita.
+        return models.Visit.create(visit)
+        .then(function (visit) {
+            req.flash('success', 'Visita creada con éxito.');
 
-        res.redirect("/visits/" + visit.id);
+            res.redirect("/visits/" + visit.id);
+        });
     })
     .catch(Sequelize.ValidationError, function (error) {
         req.flash('error', 'Errores en el formulario:');
@@ -500,18 +520,39 @@ exports.update = function (req, res, next) {
         momentFulfilledAt = moment(req.body.fulfilledAt + " 08:00", "DD-MM-YYYY");
     }
 
-    req.visit.plannedFor = momentPlannedFor,
-        req.visit.fulfilledAt = momentFulfilledAt,
-        req.visit.notes = req.body.notes.trim(),
-        req.visit.CustomerId = Number(req.body.customerId) || 0,
-        req.visit.SalesmanId = Number(req.body.salesmanId) || 0
+    req.visit.plannedFor = momentPlannedFor;
+    req.visit.fulfilledAt = momentFulfilledAt;
+    req.visit.notes = req.body.notes.trim();
+    req.visit.CustomerId = Number(req.body.customerId) || 0;
+    req.visit.SalesmanId = Number(req.body.salesmanId) || 0;
 
-    req.visit.save({fields: ["plannedFor", "fulfilledAt", "notes", "CustomerId", "SalesmanId"]})
-    .then(function (visit) {
+    Sequelize.Promise.all([
+        // Comprobar que existe el cliente seleccionado:
+        models.Customer.findById(req.body.customerId),
+        // Comprobar que existe el vendedor seleccionado:
+        models.Salesman.findById(req.body.salesmanId)
+    ])
+    .spread(function (customer, salesman) {
+        var errors = [];
+        if (!customer) {
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "customer", 'No se ha especificado ningún cliente existente.'));
+        }
+        if (!salesman) {
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "salesman", 'No se ha especificado ningún vendedor existente.'));
+        }
+        if (errors.length) {
+            throw new Sequelize.ValidationError("Errores de Validación personalizados", errors);
+        }
+    })
+    .then(function () {
+        // Guarda en la tabla Visits la visita.
+        return req.visit.save({fields: ["plannedFor", "fulfilledAt", "notes", "CustomerId", "SalesmanId"]})
+        .then(function (visit) {
 
-        req.flash('success', 'Visita editada con éxito.');
+            req.flash('success', 'Visita editada con éxito.');
 
-        res.redirect("/visits/" + visit.id);
+            res.redirect("/visits/" + visit.id);
+        });
     })
     .catch(Sequelize.ValidationError, function (error) {
 
@@ -519,7 +560,6 @@ exports.update = function (req, res, next) {
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
         }
-        ;
 
         return infoOfSalesmenCustomers()
         .spread(function (salesmen, customers) {

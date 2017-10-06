@@ -1,4 +1,19 @@
 
+Al editar una visita que no pueda cambiarse el cliente.
+
+Evitar que queden huerfanos. Por ejemplo no dejar que se pueda borrar un cliente si existen visitas de él.
+
+Pensar en esto:
+   - Seria interesante que las visitas tuvieran un campo AuthorId que indicara quien fue el usuario que creo la visita. Pero si se edita, ¿que pasa con AuthorId?
+
+   - Cualquier usuario que pueda entrar en el portal puede crear nuevas visitas para cualquier vendedor. Esto hay que quitarlo y cambiarlo por lo siguiente:
+      * Un administrador puede crear visitas para cualquier vendedor, pero un usuario No administrador y que sea vendedor solo puede crearse visitas para el mismo.
+      * Los administradores pueden editar cualquier visita, y los vendedores solo pueden editar las suyas.
+      * Un usuario solo puede editar las visitas de las que el es el vendedor. Pero al editarlas puede cambiar al cliente y el vendedor. ¿Queremos esto?
+         o Que los clientes no se puedan cambviar nunca.
+         o Solo un administrador puede cambiar el vendedor.
+
+Error: Al crear un usuario no se comprueba que paswword y confirm_password son iguales.
 
 Poner en produccion: adaptar req.session
 
@@ -44,9 +59,6 @@ Falta por hacer: Control de huerfanos al sacar cosas de la papelera. Ejemplo: Qu
 Boton para cerrar una visita y que ya no pueda cambiarse.
 
 Renombrar dcrmt.herokuapp.com a iweb_crm.herokuapp.com. ???
-
-Las fotos deberian quitarse de la tabla de vendedores y hacer una tabla Fotos. El modelo fotos tendria claves externas a la
-tabla de Usuarios y a la de adjuntos. Y asi tambien podria crear tablas de para otros tipos de usuarios con cuenta en el portal. ¿Esto tiene sentido?
 
 Favoritos en los posts.
 
