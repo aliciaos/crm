@@ -91,10 +91,12 @@ function infoOfTargetTypesCompanies() {
 // GET /visits/:visitId/targets/new
 exports.new = function(req, res, next) {
 
-    var target = models.Target.build({  success: null,
-                                        notes: "",
-                                        TargetTypeId: 0, 
-                                        CompanyId: 0  });
+    var target = {
+        success: null,
+        notes: "",
+        TargetTypeId: 0,
+        CompanyId: 0
+    };
 
     infoOfTargetTypesCompanies()
     .spread(function(targettypes, companies) {
@@ -115,37 +117,61 @@ exports.create = function(req, res, next) {
 
     var success = req.body.success === "nulo" ? null : req.body.success === "si";
 
-    var target = {  success:        success,
-                    notes:          req.body.notes.trim(),
-                    TargetTypeId:   req.body.targettypeId,
-                    CompanyId:      req.body.companyId,
-                    VisitId:        req.visit.id };
+    var target = {
+        success: success,
+        notes: req.body.notes.trim(),
+        TargetTypeId: Number(req.body.targettypeId) || 0,
+        CompanyId: Number(req.body.companyId) || 0,
+        VisitId: req.visit.id
+    };
 
-    // Guarda en la tabla Targets el nuevo objetivo.
-    models.Target.create(target)
-    .then(function(target) {
-        req.flash('success', 'Objetivo creado con éxito.');   
-
-        res.redirect("/visits/" + req.visit.id);
+    Sequelize.Promise.all([
+        // Comprobar que existe ls fabrica seleccionada:
+        models.Company.findById(req.body.companyId),
+        // Comprobar que existe el tipo de objetivo seleccionado:
+        models.TargetType.findById(req.body.targettypeId)
+    ])
+    .spread(function (company, targettype) {
+        var errors = [];
+        if (!company) {
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "company", 'No se ha especificado ninguna fábrica existente.'));
+        }
+        if (!targettype) {
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "targettype", 'No se ha especificado ningún tipo de objetivo existente.'));
+        }
+        if (errors.length) {
+            throw new Sequelize.ValidationError("Errores de Validación personalizados", errors);
+        }
     })
-    .catch(Sequelize.ValidationError, function(error) {
+    .then(function () {
+        // Guarda en la tabla Targets el nuevo objetivo.
+        return models.Target.create(target)
+        .then(function (target) {
+            req.flash('success', 'Objetivo creado con éxito.');
+
+            res.redirect("/visits/" + req.visit.id);
+        });
+    })
+    .catch(Sequelize.ValidationError, function (error) {
         req.flash('error', 'Errores en el formulario:');
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
-        };
-  
+        }
+
         infoOfTargetTypesCompanies()
-        .spread(function(targettypes, companies) {
-            res.render('targets/new', { target: target,
-                                        visit: req.visit,
-                                        targettypes:    targettypes, 
-                                        companies:      companies });
+        .spread(function (targettypes, companies) {
+            res.render('targets/new', {
+                target: target,
+                visit: req.visit,
+                targettypes: targettypes,
+                companies: companies
+            });
         });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         req.flash('error', 'Error al crear un objetivo: ' + error.message);
         next(error);
-    }); 
+    });
 };
 
 
@@ -179,30 +205,56 @@ exports.update = function(req, res, next) {
 
     req.target.success      = success;
     req.target.notes        = req.body.notes.trim();
-    req.target.TargetTypeId = req.body.targettypeId;
-    req.target.CompanyId    = req.body.companyId;
+    req.target.TargetTypeId = Number(req.body.targettypeId) || 0;
+    req.target.CompanyId    = Number(req.body.companyId) || 0;
 
-    req.target.save({fields: ["success", "notes", "TargetTypeId", "CompanyId"]})
-    .then(function(target) {
 
-        req.flash('success', 'Objetivo editado con éxito.'); 
-
-        res.redirect("/visits/" + req.visit.id);
+    Sequelize.Promise.all([
+        // Comprobar que existe ls fabrica seleccionada:
+        models.Company.findById(req.body.companyId),
+        // Comprobar que existe el tipo de objetivo seleccionado:
+        models.TargetType.findById(req.body.targettypeId)
+    ])
+    .spread(function (company, targettype) {
+        var errors = [];
+        if (!company) {
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "company", 'No se ha especificado ninguna fábrica existente.'));
+        }
+        if (!targettype) {
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "targettype", 'No se ha especificado ningún tipo de objetivo existente.'));
+        }
+        if (errors.length) {
+            throw new Sequelize.ValidationError("Errores de Validación personalizados", errors);
+        }
     })
-    .catch(Sequelize.ValidationError, function(error) {
+    .then(function () {
+        // Guarda el target en la BBDD
+        return req.target.save({fields: ["success", "notes", "TargetTypeId", "CompanyId"]})
+        .then(function (target) {
+
+            req.flash('success', 'Objetivo editado con éxito.');
+
+            res.redirect("/visits/" + req.visit.id);
+        });
+    })
+    .catch(Sequelize.ValidationError, function (error) {
 
         req.flash('error', 'Errores en el formulario:');
         for (var i in error.errors) {
             req.flash('error', error.errors[i].value);
-        };
+        }
 
         infoOfTargetTypesCompanies()
-        .spread(function(targettypes, companies) {
-            res.render('targets/edit', {  target: req.target,
-                                            visit: req.visit });
+        .spread(function (targettypes, companies) {
+            res.render('targets/edit', {
+                target: req.target,
+                visit: req.visit,
+                targettypes: targettypes,
+                companies: companies
+            });
         });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         req.flash('error', 'Error al editar un objetivo: ' + error.message);
         next(error);
     });

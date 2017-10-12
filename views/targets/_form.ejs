@@ -1,9 +1,34 @@
 
+<script>
+function validateForm() {
+
+    var msgs = [];
+
+    var cid = document.getElementById('companyId').value;
+    if (cid === "0") {
+        msgs.push('- Debe seleccionar una fábrica.');
+    }
+
+    var ttid = document.getElementById('targettypeId').value;
+    if (ttid === "0") {
+        msgs.push('- Debe seleccionar un tipo de objetivo.');
+    }
+
+    if (msgs.length) {
+        alert("Existen errores:\n" + msgs.join("\n"));
+        return false;
+    } else {
+        return true;
+    }
+}
+</script>
+
+
 <ul>
 
 	<li>
 		<b>Fábrica</b>:
-		<select name="companyId">
+		<select name="companyId" id="companyId" >
 
 		    <option value="0"  <%= target.CompanyId === 0 ? "selected" : "" %> > 
     				Seleccione una fábrica
@@ -21,7 +46,7 @@
 
 	<li>
 		<b>Tipo de Objetivo</b>:
-		<select name="targettypeId">
+		<select name="targettypeId" id="targettypeId" >
 
 		    <option value="0"  <%= target.TargetTypeId === 0 ? "selected" : "" %> > 
     				Seleccione un tipo
@@ -39,10 +64,14 @@
 
 	<li>
 		<label><b>Estado</b>:</label>
-
-		Pendiente: <input type="radio" name="success" value="nulo" <%= target.success === null ? "checked" : "" %> >  -
-    	Cumplido:  <input type="radio" name="success" value="si"   <%= target.success === true   ? "checked" : "" %> >  -
-    	Fallido:   <input type="radio" name="success" value="no"   <%= target.success === false   ? "checked" : "" %> > 
+		<ul>
+			<li> Pendiente: <input type="radio" name="success"
+								   value="nulo" <%= target.success === null ? "checked" : "" %> ></li>
+			<li> Cumplido: <input type="radio" name="success"
+								  value="si" <%= target.success === true ? "checked" : "" %> ></li>
+			<li> Fallido: <input type="radio" name="success"
+								 value="no" <%= target.success === false ? "checked" : "" %> ></li>
+		</ul>
 	</li>
 
 

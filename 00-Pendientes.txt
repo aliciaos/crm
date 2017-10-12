@@ -1,5 +1,6 @@
 
-Al editar una visita que no pueda cambiarse el cliente.
+Al editar una visita que no pueda cambiarse el cliente. ¿ok?
+Al editar un target que no pueda cambiarse la fabrica ni el tipo de objetivo. ¿ok?
 
 Evitar que queden huerfanos. Por ejemplo no dejar que se pueda borrar un cliente si existen visitas de él.
 

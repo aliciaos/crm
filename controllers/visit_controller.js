@@ -398,13 +398,13 @@ exports.new = function (req, res, next) {
     })
     .spread(function (salesmen, customers) {
 
-        var visit = models.Visit.build({
+        var visit = {
             plannedFor: moment(),
             fulfilledAt: null,
             notes: "",
             CustomerId: customerId,
             SalesmanId: salesmanId
-        });
+        };
 
         res.render('visits/new', {
             visit: visit,
