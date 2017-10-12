@@ -134,31 +134,33 @@ exports.edit = function(req, res, next) {
 exports.update = function(req, res, next) {
 
     // req.user.username  = req.body.user.username; // No se permite su edicion
-    req.user.password  = req.body.user.password;
 
-    // El password no puede estar vacio
-    if ( ! req.body.user.password) { 
-        req.flash('error', "El campo Password debe rellenarse.");
-        return res.render('users/edit', {user: req.user});
+    var fields_to_update = [];
+
+    // ¿Cambio el password?
+    if (req.body.user.password) {
+        console.log('Hay que actualizar el password');
+        req.user.password = req.body.user.password;
+        fields_to_update.push('salt');
+        fields_to_update.push('password');
     }
 
-    req.user.save({fields: ["password", "salt"]})
-        .then(function(user) {
-            req.flash('success', 'Usuario actualizado con éxito.');
-            res.redirect('/users/' + user.id);
-        })
-        .catch(Sequelize.ValidationError, function(error) {
+    req.user.save({fields: fields_to_update})
+    .then(function (user) {
+        req.flash('success', 'Usuario actualizado con éxito.');
+        res.redirect('/users/' + user.id);
+    })
+    .catch(Sequelize.ValidationError, function (error) {
+        req.flash('error', 'Errores en el formulario:');
+        for (var i in error.errors) {
+            req.flash('error', error.errors[i].value);
+        }
 
-            req.flash('error', 'Errores en el formulario:');
-            for (var i in error.errors) {
-                req.flash('error', error.errors[i].value);
-            };
-
-            res.render('users/edit', {user: req.user});
-        })
-        .catch(function(error) {
-            next(error);
-        });
+        res.render('users/edit', {user: req.user});
+    })
+    .catch(function (error) {
+        next(error);
+    });
 };
 
 //-----------------------------------------------------------

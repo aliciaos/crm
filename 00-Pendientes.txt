@@ -14,7 +14,6 @@ Pensar en esto:
          o Que los clientes no se puedan cambviar nunca.
          o Solo un administrador puede cambiar el vendedor.
 
-Error: Al crear un usuario no se comprueba que paswword y confirm_password son iguales.
 
 Poner en produccion: adaptar req.session
 
@@ -31,8 +30,6 @@ Pensar cuales son los campos de un objetivo que puede editar un vendedor.
 Puede un vendedor borrar un objetivo en una visita?
 
 Que un vendedor marque una visita como borrada, pero que no se borre en realidad hasta que lo haga el administrador.
-
-Al editar un usuario, que no sea necesario cambiar el password.
 
 Que pueda editarse el nombre de un user.
 
