@@ -59,7 +59,7 @@ exports.index = function(req, res, next) {
         options.offset = pagination.offset;
         options.limit = pagination.limit;
 
-        options.order.push( ['username'] );
+        options.order.push( ['login'] );
 
         return models.User.findAll(options);
     })
@@ -78,7 +78,7 @@ exports.show = function(req, res, next) {
 
 // GET /users/new
 exports.new = function(req, res, next) {
-    var user = { username: "",
+    var user = { login: "",
                  password: "" };
 
     res.render('users/new', { user: user });
@@ -87,15 +87,15 @@ exports.new = function(req, res, next) {
 
 // POST /users
 exports.create = function(req, res, next) {
-    var user = models.User.build({ username: req.body.user.username,
+    var user = models.User.build({ login: req.body.user.login,
                                    password: req.body.user.password
                                 });
 
     // El login debe ser unico:
-    models.User.find({where: {username: req.body.user.username}})
+    models.User.find({where: {login: req.body.user.login}})
     .then(function(existing_user) {
         if (existing_user) {
-            var emsg = "El usuario \""+ req.body.user.username +"\" ya existe."
+            var emsg = "El usuario \""+ req.body.user.login +"\" ya existe."
             req.flash('error', emsg);
             res.render('users/new', { user: user });
         } else {
@@ -104,7 +104,7 @@ exports.create = function(req, res, next) {
             user.token = authentication.createToken();
 
             // Guardar en la BBDD
-            return user.save({fields: ["username", "token", "password", "salt"]})
+            return user.save({fields: ["login", "token", "password", "salt"]})
                 .then(function(user) { // Renderizar pagina de usuarios
                     req.flash('success', 'Usuario creado con éxito.');
                     res.redirect("/users/" + user.id);
@@ -133,7 +133,7 @@ exports.edit = function(req, res, next) {
 // PUT /users/:id
 exports.update = function(req, res, next) {
 
-    // req.user.username  = req.body.user.username; // No se permite su edicion
+    // req.user.login  = req.body.user.login; // No se permite su edicion
 
     var fields_to_update = [];
 

@@ -24,11 +24,11 @@
 
     <li>
         <% if ( !user.id) { %>
-        <label for="preg" class="rem"><b>Nombre</b>:</label>
-        <input type="text" id="username" name="user[username]" value="<%= user.username %>" autocomplete="off"/>
+        <label for="preg" class="rem"><b>Login</b>:</label>
+        <input type="text" id="login" name="user[login]" value="<%= user.login %>" autocomplete="off"/>
         <p>
             <% } else { %>
-            <b>Nombre</b>: <%= user.username %>
+            <b>Login</b>: <%= user.login %>
             <% } %>
     </li>
 </ul>

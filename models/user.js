@@ -5,10 +5,10 @@ var crypto = require('crypto');
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('User',
         {
-            username: {
+            login: {
                 type: DataTypes.STRING,
                 unique: true,
-                validate: {notEmpty: {msg: "Falta username"}}
+                validate: {notEmpty: {msg: "Falta login"}}
             },
             token: {
                 type: DataTypes.STRING,

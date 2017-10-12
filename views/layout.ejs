@@ -11,10 +11,10 @@
             <% if (!session.user) { %>
             <a href="/session">Entrar</a>
             <% } else { %>
-            <a href="/users/<%= session.user.id %>"><span id="loginname"><%= session.user.username %></span></a>
+            <a href="/users/<%= session.user.id %>"><span id="loginname"><%= session.user.login %></span></a>
             <a href="/session?_method=DELETE">Salir</a>
 
-            <% if (session.user.username === "admin") { %>
+            <% if (session.user.login === "admin") { %>
             <% } %>
             <% } %>
         </div>
@@ -48,13 +48,13 @@
 
             <a href="/reports">Informes</a>
 
-            <% if (session.user.username === "admin") { %>
+            <% if (session.user.login === "admin") { %>
                 <a href="/users">Usuarios</a>
             <% } %>
 
             <a href="/posts">Posts</a>
 
-            <% if (session.user.username === "admin") { %>
+            <% if (session.user.login === "admin") { %>
                 <a href="/trash">Papelera</a>
             <% } %>
         <% } %>

@@ -83,16 +83,16 @@ exports.show = function (req, res, next) {
 
 
 // Auxiliar
-// Devuelve una promesa que al cumplirse devuelve un array con el username de todos los
+// Devuelve una promesa que al cumplirse devuelve un array con el login de todos los
 // usuarios (User)) y que se usa para construir un formulario de seleccion.
 function infoOfUsers() {
 
-    return models.User.findAll({order: [['username']]})
+    return models.User.findAll({order: [['login']]})
     .then(function (users) {
         return users.map(function (user) {
             return {
                 id: user.id,
-                name: user.username
+                name: user.login
             };
         });
     });

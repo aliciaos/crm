@@ -102,7 +102,7 @@ exports.adminAndNotMyselfRequired = function(req, res, next){
  */
 var authenticate = function(login, password) {
     
-    return models.User.findOne({where: {username: login}})
+    return models.User.findOne({where: {login: login}})
         .then(function(user) {
             if (user && user.verifyPassword(password)) {
                 return user;
@@ -131,11 +131,11 @@ exports.create = function(req, res, next) {
     authenticate(login, password)
         .then(function(user) {
             if (user) {
-    	        // Crear req.session.user y guardar campos id y username
+    	        // Crear req.session.user y guardar campos id y login
     	        // La sesión se define por la existencia de: req.session.user
                 // Tambien guardo la hora de expiracion de la sesion por no actividad.
     	        req.session.user = {id:user.id, 
-                                    username:user.username,
+                                    login:user.login,
                                     isAdmin:user.isAdmin,
                                     expires: Date.now() + maxIdleTime };
 

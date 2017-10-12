@@ -241,7 +241,7 @@ exports.index = function (req, res, next) {
         countOptions.include.push({
             model: models.User,
             as: "Fans",
-            attributes: ['id', 'username'],
+            attributes: ['id', 'login'],
             where: {id: req.session.user.id}
         });
     } else {
@@ -250,7 +250,7 @@ exports.index = function (req, res, next) {
         countOptions.include.push({
             model: models.User,
             as: "Fans",
-            attributes: ['id', 'username']
+            attributes: ['id', 'login']
         });
     }
 
@@ -748,7 +748,7 @@ exports.printIndex = function (req, res, next) {
         options.include.push({
             model: models.User,
             as: "Fans",
-            attributes: ['id', 'username'],
+            attributes: ['id', 'login'],
             where: {id: req.session.user.id}
         });
     } else {
@@ -757,7 +757,7 @@ exports.printIndex = function (req, res, next) {
         options.include.push({
             model: models.User,
             as: "Fans",
-            attributes: ['id', 'username']
+            attributes: ['id', 'login']
         });
     }
 
