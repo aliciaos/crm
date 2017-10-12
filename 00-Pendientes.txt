@@ -1,4 +1,13 @@
 
+Eliminar la tabla de vendedores e integrarla en la de usuarios.
+  * Pasos Terminados:
+
+  * Pasos Pendientes:
+    - Renombrar el campo username de User por login.
+    - Crear nuevos campos en la tabla de usuarios: isSalesman, name,  PhotoId.
+    - Meter las funcionalidades del controlador y vistas de los vendedores en los usuarios
+
+
 Si hace login un usuario que no es vendedor, le sale el boto de "Mis visitas", y al pulsarlo le salen todas las visitas existentes.
 
 Al editar una visita que no pueda cambiarse el cliente. ¿ok?
