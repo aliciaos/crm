@@ -8,7 +8,13 @@ var moment = require('moment');
 
 // Autoload el user asociado a :userId
 exports.load = function(req, res, next, userId) {
-    models.User.findById(userId)
+    models.User.findById(userId,
+        {
+            include: [
+                {model: models.Attachment, as: 'Photo'}
+            ],
+            order: [['login']]
+        })
         .then(function(user) {
             if (user) {
                 req.user = user;

@@ -81,6 +81,12 @@ User.hasOne(Salesman);
 Salesman.belongsTo(Attachment, {as: "Photo", foreignKey: 'PhotoId'});
 Attachment.hasOne(Salesman, {foreignKey: 'PhotoId'});
 
+
+User.belongsTo(Attachment, {as: "Photo", foreignKey: 'PhotoId'});
+Attachment.hasOne(User, {foreignKey: 'PhotoId'});
+
+
+
 // Favoritos:
 //   Un Usuario tiene muchas visitas favoritas.
 //   Una visita tiene muchos fans (los usuarios que la han marcado como favorita)
