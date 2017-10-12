@@ -2,8 +2,12 @@
 Eliminar la tabla de vendedores e integrarla en la de usuarios.
   * Pasos Terminados:
     - Renombrar el campo username de User por login.
+    - Crear nuevos campos en la tabla de usuarios: isSalesman, fullname,  PhotoId.
   * Pasos Pendientes:
-    - Crear nuevos campos en la tabla de usuarios: isSalesman, name,  PhotoId.
+    - Actualizar el modelo User.
+    - Copiar los datos de la tabla Salesmen en la tabla Users.
+    - Eliminar el modelo Salesmen.
+    - Actualizar rutas.
     - Meter las funcionalidades del controlador y vistas de los vendedores en los usuarios
 
 

@@ -26,7 +26,15 @@ module.exports = function (sequelize, DataTypes) {
             salt: {
                 type: DataTypes.STRING
             },
+            fullname: {
+                type: DataTypes.STRING,
+                validate: {notEmpty: {msg: "Falta el nombre y apellidos del usuario."}}
+            },
             isAdmin: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
+            },
+            isSalesman: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false
             }
