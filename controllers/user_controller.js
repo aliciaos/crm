@@ -37,7 +37,7 @@ exports.index = function(req, res, next) {
 
         // Paginacion:
 
-        var items_per_page = 6;
+        var items_per_page = 25;
 
         // La pagina a mostrar viene en la query
         var pageno = parseInt(req.query.pageno) || 1;

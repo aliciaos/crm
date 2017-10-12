@@ -1,4 +1,6 @@
 
+Si hace login un usuario que no es vendedor, le sale el boto de "Mis visitas", y al pulsarlo le salen todas las visitas existentes.
+
 Al editar una visita que no pueda cambiarse el cliente. ¿ok?
 Al editar un target que no pueda cambiarse la fabrica ni el tipo de objetivo. ¿ok?
 
