@@ -1,26 +1,26 @@
 
 <script>
-function validateForm() {
+    function validateForm() {
 
-    var msgs = [];
+        var msgs = [];
 
-    var cid = document.getElementById('companyId').value;
-    if (cid === "0") {
-        msgs.push('- Debe seleccionar una fábrica.');
+        var cid = document.getElementById('companyId').value;
+        if (cid === "0") {
+            msgs.push('- Debe seleccionar una fábrica.');
+        }
+
+        var ttid = document.getElementById('targettypeId').value;
+        if (ttid === "0") {
+            msgs.push('- Debe seleccionar un tipo de objetivo.');
+        }
+
+        if (msgs.length) {
+            alert("Existen errores:\n" + msgs.join("\n"));
+            return false;
+        } else {
+            return true;
+        }
     }
-
-    var ttid = document.getElementById('targettypeId').value;
-    if (ttid === "0") {
-        msgs.push('- Debe seleccionar un tipo de objetivo.');
-    }
-
-    if (msgs.length) {
-        alert("Existen errores:\n" + msgs.join("\n"));
-        return false;
-    } else {
-        return true;
-    }
-}
 </script>
 
 

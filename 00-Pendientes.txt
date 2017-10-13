@@ -5,10 +5,16 @@ Eliminar la tabla de vendedores e integrarla en la de usuarios.
     - Crear nuevos campos en la tabla de usuarios: isSalesman, fullname,  PhotoId.
     - Actualizar el modelo User.
     - Copiar los datos de la tabla Salesmen en la tabla Users.
-  * Pasos Pendientes:
     - Eliminar el modelo Salesmen.
-    - Actualizar rutas.
     - Meter las funcionalidades del controlador y vistas de los vendedores en los usuarios
+    - Adaptar visitas.
+    - Adaptar fabricas.
+  * Pasos Pendientes:
+    - Adaptar estadisticas.
+    - Adaptar blog.
+    - Adaptar papelera de reciclaje.
+    - Actualizar rutas.
+
 
 Si hace login un usuario que no es vendedor, le sale el boto de "Mis visitas", y al pulsarlo le salen todas las visitas existentes.
 

@@ -1,11 +1,38 @@
 
 
+<script>
+    function validateForm() {
+
+        return true;
+
+        var msgs = [];
+
+        var ttid = document.getElementById('targetTypeId').value;
+        if (ttid === "0") {
+            msgs.push('- Debe seleccionar un tipo de objetivo.');
+        }
+
+        var sid = document.getElementById('salesmanId').value;
+        if (sid === "0") {
+            msgs.push('- Debe seleccionar un vendedor.');
+        }
+
+        if (msgs.length) {
+            alert("Existen errores:\n" + msgs.join("\n"));
+            return false;
+        } else {
+            return true;
+        }
+    }
+</script>
+
+
 <form method="post" action="/companies/<%= company.id %>/visits" >
 
     <h1>
         Crear Visitas para los Clientes de <%= company.name %>:
 
-        <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" />
+        <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return validateForm()" />
         <a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
     </h1>
 
@@ -13,7 +40,7 @@
 
         <li>
             <b>Vendedor</b>:
-            <select name="salesmanId">
+            <select name="salesmanId" id="salesmanId" >
 
                 <option value="0"  <%= !locals.salesmanId ? "selected" : "" %> >
                     Seleccione un vendedor
@@ -22,7 +49,7 @@
                 <% for (var i in locals.salesmenInfo) { %>
                     <% var salesmanInfo = salesmenInfo[i]; %>
                     <option value="<%= salesmanInfo.id %>"  <%= salesmanInfo.id == locals.salesmanId ? "selected" : "" %> >
-                        <%= salesmanInfo.name %>
+                        <%= salesmanInfo.fullname %>
                     </option>
                 <% } %>
             </select>
@@ -47,7 +74,7 @@
 
         <li>
             <b>Tipo de Objetivo</b>:
-            <select name="targetTypeId">
+            <select name="targetTypeId" id="targetTypeId" >
 
                 <option value="0"  <%= !locals.targetTypeId ? "selected" : "" %> >
                     Seleccione un tipo de objetivo
@@ -71,7 +98,7 @@
 
     </ul>
 
-    <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" />
+    <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return validateForm()" />
     <a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
 
 </form>
