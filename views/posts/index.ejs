@@ -35,41 +35,39 @@
 
 <% for (var i in posts) { %>
 <% var post = posts[i]; %>
-<% var authorName = post.Author && post.Author.login; %>
-<% var salesman = post.Author && post.Author.Salesman; %>
-<% var salesmanName = salesman && salesman.name; %>
-<% var salesmanId = salesman && salesman.id; %>
-<% var authorPhotoUrl = salesman && salesman.Photo && salesman.Photo.url || ""; %>
+<% var authorId = post.Author && post.Author.id || 0; %>
+<% var authorLogin = post.Author && post.Author.login || ""; %>
+<% var authorFullName = post.Author && post.Author.fullname || ""; %>
+<% var authorPhotoUrl = post.Author && post.Author.Photo && post.Author.Photo.url || ""; %>
 
 <article class="post">
 
     <div class="right">
-
-        <div class="vcenter">
-
-            <% if (salesmanName) { %>
-            <% if (session.user.isAdmin) { %>
-            <a href="/salesmen/<%= salesmanId %>"> <%= salesmanName %> </a>
-            <% } else { %>
-            <%= salesmanName %>
-            <% } %>
-            <% } else if (authorName) { %>
-            <%= authorName %>
-            <% } else { %>
-            <span class='toberepared'><em>sin autor</em></span>
-            <% } %>
-
-            <% if (authorPhotoUrl) { %>
-            <img src="<%= authorPhotoUrl %>" width="30px"/>
-            <% } else { %>
-            <img src="/images/face.png" width="30px"/>
-            <% } %>
-        </div>
-
         <small>
             <%= post.updatedAt.toLocaleDateString() %>
         </small>
     </div>
+
+    <div class="vcenter right clear">
+
+        <% if (authorId) { %>
+        <% if (session.user.isAdmin) { %>
+        <a href="/users/<%= authorId %>"> <%= authorFullName %> </a>
+        <% } else { %>
+        <%= authorFullName %>
+        <% } %>
+        <% } else { %>
+        <span class='toberepared'><em>sin autor</em></span>
+        <% } %>
+
+        <% if (authorPhotoUrl) { %>
+        <img src="<%= authorPhotoUrl %>" width="30px"/>
+        <% } else { %>
+        <img src="/images/face.png" width="30px"/>
+        <% } %>
+    </div>
+
+
 
     <header class="post">
         <h3 class="post">

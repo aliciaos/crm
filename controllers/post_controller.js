@@ -12,7 +12,7 @@ var cloudinary_upload_options = {
     async: true,
     folder: "/crm/" + (process.env.CLOUDINARY_SUBFOLDER || "iweb") + "/posts",
     resource_type: "auto",
-    tags: ['core', 'decoversia', 'crm']
+    tags: ['core', 'iweb', 'crm']
 };
 
 
@@ -25,11 +25,7 @@ exports.load = function (req, res, next, postId) {
                 {
                     model: models.User,
                     as: 'Author',
-                    include: {
-                        model: models.Salesman,
-                        as: "Salesman",
-                        include: [{model: models.Attachment, as: 'Photo'}]
-                    }
+                    include: [{model: models.Attachment, as: 'Photo'}]
                 },
                 {
                     model: models.Comment,
@@ -37,11 +33,7 @@ exports.load = function (req, res, next, postId) {
                     include: [{
                         model: models.User,
                         as: 'Author',
-                        include: {
-                            model: models.Salesman,
-                            as: "Salesman",
-                            include: [{model: models.Attachment, as: 'Photo'}]
-                        }
+                        include: [{model: models.Attachment, as: 'Photo'}]
                     }]
                 },
                 {
@@ -147,11 +139,7 @@ exports.index = function (req, res, next) {
             {
                 model: models.User,
                 as: 'Author',
-                include: {
-                    model: models.Salesman,
-                    as: "Salesman",
-                    include: [{model: models.Attachment, as: 'Photo'}]
-                }
+                include: [{model: models.Attachment, as: 'Photo'}]
             }
         ];
 

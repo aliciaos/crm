@@ -11,10 +11,10 @@ Eliminar la tabla de vendedores e integrarla en la de usuarios.
     - Adaptar fabricas.
     - Adaptar estadisticas.
     - Adaptar papelera de reciclaje.
-  * Pasos Pendientes:
     - Adaptar blog.
-    - Actualizar rutas.
 
+
+Que en Cloudinary, se metan las fotos en un subdirectorio llamado faces, y los adjuntos del blog en un subdirectorio llamado blog/authorlogin.
 
 Si hace login un usuario que no es vendedor, le sale el boto de "Mis visitas", y al pulsarlo le salen todas las visitas existentes.
 

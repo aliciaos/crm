@@ -7,26 +7,28 @@
 <% for (var i in comments) { %>
 <% var comment = comments[i]; %>
 
-<% var authorName = comment.Author && comment.Author.login; %>
-<% var salesman = comment.Author && comment.Author.Salesman; %>
-<% var salesmanName = salesman && salesman.name; %>
-<% var salesmanId = salesman && salesman.id; %>
-<% var authorPhotoUrl = salesman && salesman.Photo && salesman.Photo.url || ""; %>
+<% var authorId = comment.Author && comment.Author.id || 0; %>
+<% var authorLogin = comment.Author && comment.Author.login || ""; %>
+<% var authorFullName = comment.Author && comment.Author.fullname || ""; %>
+<% var authorPhotoUrl = comment.Author && comment.Author.Photo && comment.Author.Photo.url || ""; %>
 
 
 <article class="comment">
 
     <div class="right">
-        <div class="vcenter">
+        <small>
+            <%= post.updatedAt.toLocaleDateString() %>
+        </small>
+    </div>
 
-            <% if (salesmanName) { %>
+    <div class="vcenter right clear">
+
+            <% if (authorId) { %>
             <% if (session.user.isAdmin) { %>
-            <a href="/salesmen/<%= salesmanId %>"> <%= salesmanName %> </a>
+            <a href="/users/<%= authorId %>"> <%= authorFullName %> </a>
             <% } else { %>
-            <%= salesmanName %>
+            <%= authorFullName %>
             <% } %>
-            <% } else if (authorName) { %>
-            <%= authorName %>
             <% } else { %>
             <span class='toberepared'><em>sin autor</em></span>
             <% } %>
@@ -37,11 +39,6 @@
             <img src="/images/face.png" width="30px"/>
             <% } %>
         </div>
-
-        <small>
-            <%= post.updatedAt.toLocaleDateString() %>
-        </small>
-    </div>
 
 
 

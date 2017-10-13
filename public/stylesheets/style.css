@@ -73,6 +73,10 @@ a:active {
     float: left;
 }
 
+.clear {
+    clear: both;
+}
+
 :focus {
     background-color: yellow;
     color: blue;
