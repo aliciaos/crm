@@ -137,6 +137,7 @@ exports.create = function(req, res, next) {
                 req.session.user = {
                     id: user.id,
                     login: user.login,
+                    fullname: user.fullname,
                     isAdmin: user.isAdmin,
                     isSalesman: user.isSalesman,
                     expires: Date.now() + maxIdleTime

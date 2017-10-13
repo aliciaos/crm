@@ -1,50 +1,36 @@
 
-Que las autorizaciones se hagan por session.user.isAdmin, y quitar los session.user.name == "admin".
 
-Si hace login un usuario que no es vendedor, le sale el boton de "Mis visitas", y al pulsarlo le salen todas las visitas existentes.
-
-Al editar una visita que no pueda cambiarse el cliente. ¿ok?
-Al editar un target que no pueda cambiarse la fabrica ni el tipo de objetivo. ¿ok?
-
-Evitar que queden huerfanos. Por ejemplo no dejar que se pueda borrar un cliente si existen visitas de él.
+Pensar cuales son los campos de una visita o de un objetivo que puede editar un vendedor o un administrador:
+   - ¿Solo un administrador puede cambiar el vendedor de una visita existente? Ahora puede cualquiera.
+   - ¿Solo un administrador puede cambiar el cliente de una visita existente? Ahora puede cualquiera.
+   - Cualquiera puede editar las observaciones de las visitas y objetivos.
+     Idea: Un administrador puede editar las observaciones de las vistas y los targets, y un no-administrador solo puede añadir texto al final de la observacion.
+   - Al editar un target que no pueda cambiarse la fabrica ni el tipo de objetivo. ¿ok?
+   - Un administrador puede crear visitas para cualquier vendedor, pero un usuario No administrador y que sea vendedor solo puede crearse visitas para el mismo.
+   - Los administradores pueden editar cualquier visita, y los vendedores solo pueden editar las suyas.
+   - ¿Puede un vendedor borrar un objetivo en una visita?
+       o Que un vendedor marque una visita como borrada, pero que no se borre en realidad hasta que lo haga el administrador.
 
 Pensar en esto:
    - Seria interesante que las visitas tuvieran un campo AuthorId que indicara quien fue el usuario que creo la visita. Pero si se edita, ¿que pasa con AuthorId?
 
-   - Cualquier usuario que pueda entrar en el portal puede crear nuevas visitas para cualquier vendedor. Esto hay que quitarlo y cambiarlo por lo siguiente:
-      * Un administrador puede crear visitas para cualquier vendedor, pero un usuario No administrador y que sea vendedor solo puede crearse visitas para el mismo.
-      * Los administradores pueden editar cualquier visita, y los vendedores solo pueden editar las suyas.
-      * Un usuario solo puede editar las visitas de las que el es el vendedor. Pero al editarlas puede cambiar al cliente y el vendedor. ¿Queremos esto?
-         o Que los clientes no se puedan cambviar nunca.
-         o Solo un administrador puede cambiar el vendedor.
-
-
 Poner en produccion: adaptar req.session
-
 
 Otro estado de los objetivos de una visita: Cancelado.
     - Esto me fastidia porque tengo un booleano (null, true, false)
 
 Poder ordenar los listados (index.ejs) por varios criterios.
 
-Pensar cuales son los campos de una visita que puede editar un vendedor.
+Que pueda editarse el login de un user.
 
-Pensar cuales son los campos de un objetivo que puede editar un vendedor.
-
-Puede un vendedor borrar un objetivo en una visita?
-
-Que un vendedor marque una visita como borrada, pero que no se borre en realidad hasta que lo haga el administrador.
-
-Que pueda editarse el nombre de un user.
-
-Gestion de documentos (attachments) con gestion por etiqutas.
+Gestion de documentos (attachments) con gestion por etiquetas.
 
 Crear una base de datos para hacer pruebas de sobrecarga.
     - Analizar la complejidad de los informes de eficiencia.
 
 Listar visitas pendientes, o con tareas pendientes.
 
-Listar historial de visitas a una fabrica (de todos los clientes).
+Listar historial de visitas de una fabrica (de todos los clientes).
 
 Geolocalizacion.
 
@@ -54,7 +40,9 @@ Bootstrap
 
 Poder editar varias visitas de forma rapida usando AJAX (o algo similar).
 
-Falta por hacer: Control de huerfanos al sacar cosas de la papelera. Ejemplo: Que pasa si restauro una visita y su vendedor ha sido borrado y no ha sido restaurado.
+Evitar que queden huerfanos. Por ejemplo no dejar que se pueda borrar un cliente si existen visitas de él.
+
+Control de huerfanos al sacar cosas de la papelera. Ejemplo: Que pasa si restauro una visita y su vendedor ha sido borrado y no ha sido restaurado.
    - Adjuntos de los posts.
    - Comentarios de los posts.
 

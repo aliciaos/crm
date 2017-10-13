@@ -357,22 +357,9 @@ exports.new = function (req, res, next) {
 
     // Proponer al usuario logeado como vendedor.
     // Si el usuario logeado no es un vendedor, no hay propuesta.
-    var salesmanId = 0;
+    var salesmanId = req.session.user.isSalesman ? req.session.user.id : 0;
 
-    // Uso una promesa para buscar el vendedor asociado al usuario logeado.
-    new Sequelize.Promise(function (resolve, reject) {
-
-        // Nota que si estoy aqui, estoy logeado.
-
-        return models.User.findById(req.session.user.id)
-        .then(function (user) {
-            salesmanId = user && user.isSalesman && user.id || 0;
-            resolve();
-        });
-    })
-    .then(function () {
-        return infoOfSalesmenCustomers();
-    })
+    infoOfSalesmenCustomers()
     .spread(function (salesmen, customers) {
 
         var visit = {
@@ -512,10 +499,10 @@ exports.update = function (req, res, next) {
     .spread(function (customer, salesman) {
         var errors = [];
         if (!customer) {
-            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "customer", 'No se ha especificado ningún cliente existente.'));
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "customer", 'El cliente especificado no existe.'));
         }
         if (!salesman) {
-            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "salesman", 'No se ha especificado ningún vendedor existente.'));
+            errors.push(new Sequelize.ValidationErrorItem("Formulario incompleto.", "Validation Error", "salesman", 'El vendedor especificado no existe.'));
         }
         if (errors.length) {
             throw new Sequelize.ValidationError("Errores de Validación personalizados", errors);
