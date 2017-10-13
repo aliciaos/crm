@@ -30,7 +30,7 @@ router.all('*',sessionController.deleteExpiredUserSession);
 // Autoload de parametros
 router.param('userId', userController.load);
 router.param('companyId', companyController.load);  
-router.param('salesmanId', salesmanController.load);  
+//router.param('salesmanId', salesmanController.load);
 router.param('customerId', customerController.load);    
 router.param('targettypeId', targettypeController.load);    
 router.param('visitId', visitController.load);    
@@ -85,21 +85,37 @@ router.all('*', sessionController.loginRequired);
 //-----------------------------------------------------------
 
 
-// Definición de rutas de cuentas
+// Definición de rutas de cuentas/usuarios
 router.get('/users',
-    userController.index);   // listado usuarios
+    sessionController.adminRequired,
+    userController.indexAll);   // listado de todos los usuarios
+
+router.get('/users/salesmen',
+    sessionController.adminRequired,
+    userController.indexSalesmen);  // Listado de los usuarios vendedores
+
+router.get('/users/admins',
+    sessionController.adminRequired,
+    userController.indexAdmins);  // Listado de los usuarios administradores
+
+
 router.get('/users/:userId(\\d+)',
+    sessionController.adminOrMyselfRequired,
     userController.show);    // ver un usuario
 
 router.get('/users/new',
+    sessionController.adminRequired,
     userController.new);     // formulario crear usuario
 router.post('/users',
+    sessionController.adminRequired,
+    upload.single('photo'),
     userController.create);     // registrar usuario
 router.get('/users/:userId(\\d+)/edit',
     sessionController.adminOrMyselfRequired,
     userController.edit);     // editar información de cuenta
 router.put('/users/:userId(\\d+)',
     sessionController.adminOrMyselfRequired,
+    upload.single('photo'),
     userController.update);   // actualizar información de cuenta
 router.delete('/users/:userId(\\d+)',
     sessionController.adminAndNotMyselfRequired,
@@ -140,32 +156,6 @@ router.get('/companies/:companyId(\\d+)/visits/new',
 router.post('/companies/:companyId(\\d+)/visits',
     companyController.visitsCreate);
 
-
-
-// Definicion de rutas para los vendedores
-router.get('/salesmen',
-    sessionController.adminRequired,
-    salesmanController.index);
-router.get('/salesmen/:salesmanId(\\d+)',
-    sessionController.adminRequired,
-    salesmanController.show);
-router.get('/salesmen/new',
-    sessionController.adminRequired,
-    salesmanController.new);
-router.post('/salesmen',
-    sessionController.adminRequired,
-    upload.single('photo'),
-    salesmanController.create);
-router.get('/salesmen/:salesmanId(\\d+)/edit',
-    sessionController.adminRequired,
-    salesmanController.edit);
-router.put('/salesmen/:salesmanId(\\d+)',
-    sessionController.adminRequired,
-    upload.single('photo'),
-    salesmanController.update);
-router.delete('/salesmen/:salesmanId(\\d+)',
-    sessionController.adminRequired,
-    salesmanController.destroy);
 
 
 // Definicion de rutas para los clientes
@@ -272,11 +262,13 @@ router.delete('/visits/:visitId(\\d+)',
 router.get('/customers/:customerId(\\d+)/visits',
     visitController.index);
 
+/*
 router.get('/salesmen/:salesmanId(\\d+)/visits',
     visitController.index);
 
 router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits',
     visitController.index);
+*/
 
 router.get('/users/:userId(\\d+)/visits',
     visitController.indexUser);
@@ -307,12 +299,13 @@ router.get('/visits/print',
 router.get('/customers/:customerId(\\d+)/visits/print',
     visitController.printIndex);
 
+/*
 router.get('/salesmen/:salesmanId(\\d+)/visits/print',
     visitController.printIndex);
 
 router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits/print',
     visitController.printIndex);
-
+*/
 
 //----------------------------------------------------
 // Blog

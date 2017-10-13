@@ -32,8 +32,10 @@ var Company = sequelize.import(path.join(__dirname,'company'));
 // Importar la definicion de Customer de customer.js
 var Customer = sequelize.import(path.join(__dirname,'customer'));
 
+/*
 // Importar la definicion de Salesman de salesman.js
-var Salesman = sequelize.import(path.join(__dirname,'salesman'));
+// var Salesman = sequelize.import(path.join(__dirname,'salesman'));
+*/
 
 // Importar la definicion de TargetType de target_type.js
 var TargetType = sequelize.import(path.join(__dirname,'targettype'));
@@ -63,8 +65,8 @@ var Comment = sequelize.import(path.join(__dirname,'comment'));
 Visit.belongsTo(Customer);
 Customer.hasMany(Visit);
 
-Visit.belongsTo(Salesman, {as: "Salesman", foreignKey: 'SalesmanId'});
-Salesman.hasMany(Visit);
+Visit.belongsTo(User, {as: "Salesman", foreignKey: 'SalesmanId'});
+User.hasMany(Visit, {as: "Visits", foreignKey: 'SalesmanId'});
 
 Target.belongsTo(Company);
 Company.hasMany(Target);
@@ -75,11 +77,11 @@ Visit.hasMany(Target);
 Target.belongsTo(TargetType);
 TargetType.hasMany(Target);
 
-Salesman.belongsTo(User);
-User.hasOne(Salesman);
+// Salesman.belongsTo(User);
+// User.hasOne(Salesman);
 
-Salesman.belongsTo(Attachment, {as: "Photo", foreignKey: 'PhotoId'});
-Attachment.hasOne(Salesman, {foreignKey: 'PhotoId'});
+// Salesman.belongsTo(Attachment, {as: "Photo", foreignKey: 'PhotoId'});
+// Attachment.hasOne(Salesman, {foreignKey: 'PhotoId'});
 
 
 User.belongsTo(Attachment, {as: "Photo", foreignKey: 'PhotoId'});
@@ -114,7 +116,7 @@ Post.belongsToMany(Attachment, {through: 'PostAttachments'});
 
 exports.Company		= Company;
 exports.Customer    = Customer;
-exports.Salesman	= Salesman;
+// exports.Salesman	= Salesman;
 exports.TargetType	= TargetType;
 exports.Target 		= Target;
 exports.Visit		= Visit;

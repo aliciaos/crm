@@ -25,16 +25,49 @@
     <li>
         <% if ( !user.id) { %>
         <label for="preg" class="rem"><b>Login</b>:</label>
-        <input type="text" id="login" name="user[login]" value="<%= user.login %>" autocomplete="off"/>
+        <input type="text" id="login" name="login" value="<%= user.login %>" autocomplete="off"/>
+        <% } else { %>
+        <b>Login</b>: <%= user.login %>
+        <% } %>
+    </li>
+
+
+    <li>
+        <b for="photo">Fotografía:</b></label>
+        <input type="file" id="photo" accept="image/*" name="photo"/>
         <p>
-            <% } else { %>
-            <b>Login</b>: <%= user.login %>
+
+            <% if (!user.isNewRecord) { %>
+            <label>Mantener fotografía actual:</label>
+            <input type="checkbox" name="keepphoto" value="1" checked>
             <% } %>
     </li>
-</ul>
 
 
-<ul>
+    <li>
+        <label><b>Nombre y Apellidos:</b></label>
+        <input type="text" name="fullname" value="<%= user.fullname %>" placeholder="Nombre" autocomplete="off"
+               autofocus/>
+    </li>
+
+    <li class="vcenter">
+        <label><b>Administrador</b>:</label>
+        <% if (session.user && session.user.isAdmin) { %>
+            <input type="checkbox" name="isAdmin" value="1" <%= user.isAdmin ? 'checked' : '' %> >
+        <% } else { %>
+        <%= user.isAdmin ? 'Si' : 'No' %>
+        <% } %>
+    </li>
+
+    <li class="vcenter">
+        <label><b>Vendedor</b>:</label>
+        <% if (session.user && session.user.isAdmin) { %>
+        <input type="checkbox" name="isSalesman" value="1" <%= user.isSalesman ? 'checked' : '' %> >
+        <% } else { %>
+        <%= user.isSalesman ? 'Si' : 'No' %>
+        <% } %>
+    </li>
+
     <li>
         <% if (!user.id) { %>
         <b>Password</b>: Introduzca el nuevo password dos veces.
@@ -45,7 +78,7 @@
         <ul>
             <li>
                 <label for="user_password" class="rem"><b>Nuevo Password</b>:</label>
-                <input type="password" id="user_password" name="user[password]"/>
+                <input type="password" id="user_password" name="password"/>
             </li>
 
             <li>
@@ -54,4 +87,5 @@
             </li>
         </ul>
     </li>
+
 </ul>

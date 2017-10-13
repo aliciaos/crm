@@ -1,6 +1,6 @@
 
 
-<form method="post" action="/users/<%= user.id %>?_method=PUT" >      
+<form method="post" action="/users/<%= user.id %>?_method=PUT" enctype="multipart/form-data" >
 
 	<h1>
     	Editar Usuario
@@ -12,4 +12,6 @@
       
     <% include _form.ejs %>
 
+	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return confirmPassword()" />
+	<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
 </form>

@@ -1,5 +1,5 @@
 <h1> 
-    Usuarios 
+    <%= title %>
 
     <a href="/goback"><img class="icon" src="/icons/back.png"></a>
 
@@ -16,10 +16,16 @@
 
     <tr>
         <th>
+            Nombre
+        </th>
+        <th>
             Login
         </th>
         <th>
             Administrador
+        </th>
+        <th>
+            Vendedor
         </th>
         <th>
         
@@ -27,20 +33,35 @@
     </tr>
 
     <% for (var i in users) { %>
-
- 
+<% var user = users[i] %>
 
     <tr>
 
-      <td>
-          <a href="/users/<%= users[i].id %>" > <%= users[i].login %> </a>
+        <td>
+            <div class="vcenter">
+                <% if (user.Photo) { %>
+                <img src="<%= user.Photo.url %>" width="30px" />
+                <% } else { %>
+                <img src="/images/face.png" width="30px" />
+                <% } %>
+                <a href="/users/<%= user.id %>"> <%= user.fullname %> </a>
+            </div>
+        </td>
+
+        <td>
+          <a href="/users/<%= user.id %>" > <%= user.login %> </a>
       </td>
 
       <td> 
-        <%= users[i].isAdmin ? "Si" : "" %>
+        <%= user.isAdmin ? "Si" : "" %>
       </td>
 
-      <% if (session.user) { %>
+
+        <td>
+            <%= user.isSalesman ? "Si" : "" %>
+        </td>
+
+        <% if (session.user) { %>
         <td>
           <% if (session.user.isAdmin && session.user.id !== users[i].id) { %>
             <a href="/users/<%= users[i].id %>?_method=DELETE" 
