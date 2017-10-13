@@ -15,10 +15,16 @@
             Borrado
         </th>
         <th>
+            Login
+        </th>
+        <th>
             Nombre
         </th>
         <th>
             Administrador
+        </th>
+        <th>
+            Vendedor
         </th>
         <th>
 
@@ -38,7 +44,24 @@
         </td>
 
         <td>
+            <div class="vcenter">
+
+                <% if (user.Photo) { %>
+                <img src="<%= user.Photo.url %>" width="30px"/>
+                <% } else { %>
+                <img src="/images/face.png" width="30px"/>
+                <% } %>
+
+                <%= user.fullname %>
+            </div>
+        </td>
+
+        <td>
             <%= user.isAdmin ? "Si" : "" %>
+        </td>
+
+        <td>
+            <%= user.isSalesman ? "Si" : "" %>
         </td>
 
         <td>

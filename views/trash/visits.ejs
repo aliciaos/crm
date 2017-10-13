@@ -43,7 +43,7 @@
         <% var customerCode = visit.Customer && visit.Customer.code || ""; %>
         <% var customerId = visit.Customer && visit.Customer.id || 0; %>
 
-        <% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
+        <% var salesmanName = visit.Salesman && visit.Salesman.fullname || ""; %>
         <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 
         <tr>

@@ -9,10 +9,10 @@ Eliminar la tabla de vendedores e integrarla en la de usuarios.
     - Meter las funcionalidades del controlador y vistas de los vendedores en los usuarios
     - Adaptar visitas.
     - Adaptar fabricas.
-  * Pasos Pendientes:
     - Adaptar estadisticas.
-    - Adaptar blog.
     - Adaptar papelera de reciclaje.
+  * Pasos Pendientes:
+    - Adaptar blog.
     - Actualizar rutas.
 
 

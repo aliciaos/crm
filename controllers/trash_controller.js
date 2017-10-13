@@ -19,8 +19,7 @@ exports.index = function (req, res, next) {
         models.Customer.count(options),     // Contar clientes
         models.Visit.count(options),        // Contar visitas
         models.Company.count(options),      // Contar fabricas
-        models.TargetType.count(options),   // Contar vendedores
-        models.Salesman.count(options),     // Contar targettypes
+        models.TargetType.count(options),   // Contar targettypes
         models.User.count(options),         // Contar usuarios
         models.Post.count(options)          // Contar posts
     ])
@@ -28,7 +27,6 @@ exports.index = function (req, res, next) {
                       visitsCount,
                       companiesCount,
                       targettypesCount,
-                      salesmenCount,
                       usersCount,
                       postsCount) {
 
@@ -37,7 +35,6 @@ exports.index = function (req, res, next) {
             visitsCount: visitsCount,
             companiesCount: companiesCount,
             targettypesCount: targettypesCount,
-            salesmenCount: salesmenCount,
             usersCount: usersCount,
             postsCount: postsCount
         });
@@ -222,106 +219,6 @@ exports.customerDestroy = function (req, res, next) {
 
 //-----------------------------------------------------------
 
-// GET /trash/salesmen
-exports.salesmen = function (req, res, next) {
-
-    var options = {
-        paranoid: false,
-        where: {deletedAt: {$not: null}},
-        include: [
-            {model: models.Attachment, as: 'Photo'}
-        ]
-    };
-
-    options.order = [['deletedAt', 'DESC']];
-
-    //----------------
-
-    models.Salesman.findAll(options)
-    .then(function (salesmen) {
-        res.render('trash/salesmen', {
-            salesmen: salesmen,
-            moment: moment
-        });
-    })
-    .catch(function (error) {
-        next(error);
-    });
-};
-
-
-//-----------------------------------------------------------
-
-// POST /trash/salesmen/:salesmanId_wal
-exports.salesmanRestore = function (req, res, next) {
-
-    var salesmanId = req.params["salesmanId_wal"];
-
-    var options = {where: {id: salesmanId}};
-
-    // Restaurar (sacar de la papelera) el vendedor:
-    models.Salesman.restore(options)
-    .then(function () {
-        req.flash('success', 'Vendedor restaurado con éxito.');
-        res.redirect("/reload");
-    })
-    .catch(function (error) {
-        req.flash('error', 'Error al restaurar un vendedor: ' + error.message);
-        next(error);
-    });
-};
-
-//-----------------------------------------------------------
-
-// DELETE /trash/salesmen/:salesmanId_wal
-exports.salesmanDestroy = function (req, res, next) {
-
-    var salesmanId = req.params["salesmanId_wal"];
-
-    // Buscar el vendedor borrado y cargar tambien su foto:
-    models.Salesman.findById(salesmanId, {
-        include: [
-            {model: models.Attachment, as: 'Photo'}
-        ],
-        paranoid: false,
-    })
-    .then(function (salesman) {
-        if (!salesman) {
-            throw new Error('No existe ningún vendedor borrado con Id=' + salesmanId);
-        }
-
-        // ¿Hay foto?
-        if (!salesman.Photo) {
-            return salesman;
-        }
-
-        // Borrar la foto en Cloudinary.
-        cloudinary.api.delete_resources(salesman.Photo.public_id);
-
-        // Borrar el attachment.
-        return salesman.Photo.destroy()
-        .then(function () {
-            return salesman;
-        });
-    })
-    .then(function (salesman) {
-        // borrar el vendedor:
-
-        return salesman.destroy({force: true});
-    })
-    .then(function () {
-        req.flash('success', 'Vendedor destruido con éxito.');
-        res.redirect("/reload");
-    })
-    .catch(function (error) {
-        req.flash('error', 'Error al destruir un vendedor: ' + error.message);
-        next(error);
-    });
-};
-
-//-----------------------------------------------------------
-
-
 // GET /trash/targettypes
 exports.targettypes = function (req, res, next) {
 
@@ -346,7 +243,6 @@ exports.targettypes = function (req, res, next) {
         next(error);
     });
 };
-
 
 //-----------------------------------------------------------
 
@@ -393,16 +289,17 @@ exports.targettypeDestroy = function (req, res, next) {
     });
 };
 
-
 //-----------------------------------------------------------
-
 
 // GET /trash/users
 exports.users = function (req, res, next) {
 
     var options = {
         paranoid: false,
-        where: {deletedAt: {$not: null}}
+        where: {deletedAt: {$not: null}},
+        include: [
+            {model: models.Attachment, as: 'Photo'}
+        ]
     };
 
     options.order = [['deletedAt', 'DESC']];
@@ -450,13 +347,37 @@ exports.userDestroy = function (req, res, next) {
 
     var userId = req.params["userId_wal"];
 
-    var options = {
-        where: {id: userId},
-        force: true
-    };
+    // Buscar el usuario borrado y cargar tambien su foto:
+    models.User.findById(userId, {
+        include: [
+            {model: models.Attachment, as: 'Photo'}
+        ],
+        paranoid: false,
+    })
+    .then(function (user) {
+        if (!user) {
+            throw new Error('No existe ningún usuario borrado con Id=' + userId);
+        }
 
-    // Destruir definitivamente (no se guarda en la papelera) un usuario:
-    models.User.destroy(options)
+        // ¿Hay foto?
+        if (!user.Photo) {
+            return user;
+        }
+
+        // Borrar la foto en Cloudinary.
+        cloudinary.api.delete_resources(user.Photo.public_id);
+
+        // Borrar el attachment.
+        return user.Photo.destroy()
+        .then(function () {
+            return user;
+        });
+    })
+    .then(function (user) {
+        // borrar el usuario:
+
+        return user.destroy({force: true});
+    })
     .then(function () {
         req.flash('success', 'Usuario destruido con éxito.');
         res.redirect("/reload");
@@ -466,7 +387,6 @@ exports.userDestroy = function (req, res, next) {
         next(error);
     });
 };
-
 
 //-----------------------------------------------------------
 
@@ -504,7 +424,7 @@ exports.visits = function (req, res, next) {
             models.Target,
             models.Customer,
             {
-                model: models.Salesman,
+                model: models.User,
                 as: "Salesman",
                 include: [{model: models.Attachment, as: 'Photo'}]
             }

@@ -400,17 +400,6 @@ router.post('/trash/companies/:companyId_wal(\\d+)',   // wal = without auto loa
     trashController.companyRestore);
 
 
-router.get("/trash/salesmen",
-    sessionController.adminRequired,
-    trashController.salesmen);
-router.delete('/trash/salesmen/:salesmanId_wal(\\d+)',   // wal = without auto loading
-    sessionController.adminRequired,
-    trashController.salesmanDestroy);
-router.post('/trash/salesmen/:salesmanId_wal(\\d+)',   // wal = without auto loading
-    sessionController.adminRequired,
-    trashController.salesmanRestore);
-
-
 router.get("/trash/targettypes",
     sessionController.adminRequired,
     trashController.targettypes);
