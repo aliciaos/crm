@@ -241,6 +241,13 @@ exports.update = function (req, res, next) {
     .then(function (user) {
         req.flash('success', 'Usuario actualizado con éxito.');
 
+        // Actualizar la informacion de la session si user es el usuario logueado.
+        if (req.session.user && req.session.user.id == user.id) {
+            req.session.user.fullname = user.fullname;
+            req.session.user.isAdmin = user.isAdmin;
+            req.session.user.isSalesman = user.isSalesman;
+        }
+
         if (req.body.keepphoto) {
             return user;
         }

@@ -12,7 +12,7 @@ var cloudinary_upload_options = {
     async: true,
     folder: "/crm/" + (process.env.CLOUDINARY_SUBFOLDER || "iweb") + "/posts",
     resource_type: "auto",
-    tags: ['core', 'iweb', 'crm']
+    tags: ['core', 'iweb', 'cdps', 'crm']
 };
 
 

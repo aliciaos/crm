@@ -131,13 +131,16 @@ exports.create = function(req, res, next) {
     authenticate(login, password)
         .then(function(user) {
             if (user) {
-    	        // Crear req.session.user y guardar campos id y login
-    	        // La sesión se define por la existencia de: req.session.user
+                // Crear req.session.user y guardar campos id y login
+                // La sesión se define por la existencia de: req.session.user
                 // Tambien guardo la hora de expiracion de la sesion por no actividad.
-    	        req.session.user = {id:user.id, 
-                                    login:user.login,
-                                    isAdmin:user.isAdmin,
-                                    expires: Date.now() + maxIdleTime };
+                req.session.user = {
+                    id: user.id,
+                    login: user.login,
+                    isAdmin: user.isAdmin,
+                    isSalesman: user.isSalesman,
+                    expires: Date.now() + maxIdleTime
+                };
 
                 res.redirect("/goback");
             } else {
