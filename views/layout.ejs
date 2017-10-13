@@ -19,7 +19,7 @@
             <% } %>
         </div>
         <h1>
-            <a href="/"> <img src="<%= process.env.CRM_LOGO || '/images/dvr.png' %>" height="40px" class="left" /> </a>
+            <a href="/"> <img src="<%= process.env.CRM_LOGO || '/images/logo.png' %>" height="40px" class="left" /> </a>
             <%= process.env.CRM_TITLE || "CRM" %>
 
         </h1>
@@ -30,7 +30,7 @@
         <% if (session.user) { %>
 
             <% if (!session.user.isAdmin) { %>
-                <a href="/users/<%= session.user.id %>/visits">Mis visitas</a>
+                <a href="/salesmen/<%= session.user.id %>/visits">Mis visitas</a>
             <% } %>
 
             <a href="/customers">Clientes</a>
@@ -48,8 +48,8 @@
             <a href="/reports">Informes</a>
 
             <% if (session.user.login === "admin") { %>
-                <a href="/users/salesmen">Vendedores</a>
-                <a href="/users/admins">Admininstradores</a>
+                <a href="/salesmen">Vendedores</a>
+                <a href="/admins">Admininstradores</a>
                 <a href="/users">Usuarios</a>
             <% } %>
 
@@ -105,7 +105,7 @@
   </section>
 
   <footer class="version">
-        <small>Versión: 12 Octubre 2017</small>
+        <small>Versión: 13 Octubre 2017</small>
   </footer>
 
   </body>

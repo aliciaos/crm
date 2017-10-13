@@ -53,13 +53,13 @@ exports.indexAll = function (req, res, next) {
     index(req, res, next, {}, "Usuarios")
 };
 
-// GET /users/salesmen
+// GET /salesmen
 exports.indexSalesmen = function (req, res, next) {
 
     index(req, res, next, {isSalesman: true}, "Vendedores")
 };
 
-// GET /users/admins
+// GET /admins
 exports.indexAdmins = function (req, res, next) {
 
     index(req, res, next, {isAdmin: true}, "Administradores")

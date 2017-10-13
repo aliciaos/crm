@@ -1,5 +1,4 @@
 
-return;
 
 var models = require('../models');
 var Sequelize = require('sequelize');
@@ -12,14 +11,15 @@ var Sequelize = require('sequelize');
 // Devuelve su id y nombre.
 exports.getAllSalesmenInfo = function () {
 
-    return models.Salesman.findAll({
-        order: [['name']]
+    return models.User.findAll({
+        where: {isSalesman: true},
+        order: [['fullname']]
     })
     .then(function (salesmen) {
         return salesmen.map(function (salesman) {
             return {
                 id: salesman.id,
-                name: salesman.name
+                fullname: salesman.fullname
             };
         });
     });

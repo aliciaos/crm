@@ -7,7 +7,7 @@ var paginate = require('./paginate').paginate;
 
 var companyHelper = require("../helpers/company");
 var customerHelper = require("../helpers/customer");
-var salesmanHelper = require("../helpers/salesman");
+var userHelper = require("../helpers/user");
 
 //-----------------------------------------------------------
 
@@ -27,7 +27,7 @@ exports.load = function (req, res, next, visitId) {
                 },
                 models.Customer,
                 {
-                    model: models.Salesman,
+                    model: models.User,
                     as: "Salesman",
                     include: [{model: models.Attachment, as: 'Photo'}]
                 }
@@ -53,13 +53,11 @@ exports.load = function (req, res, next, visitId) {
 
 // MW que permite el paso solamente si:
 //   - el usuario logeado es admin,
-//   - la visita no tiene vendedor,
-//   - o el vendedor de la visita esta asociado al usuario logeado.
-exports.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required = function (req, res, next) {
+//   - o el vendedor de la visita es el usuario logeado.
+exports.admin_Or_SalesmanIsLoggedUser_Required = function (req, res, next) {
 
     if (req.session.user.isAdmin ||
-        !req.visit.Salesman ||
-        req.visit.Salesman.UserId === req.session.user.id) {
+        req.visit.SalesmanId === req.session.user.id) {
         next();
     } else {
         console.log('Ruta prohibida: el usuario logeado no es el vendedor referenciado, ni un administrador.');
@@ -70,33 +68,12 @@ exports.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required = function (req, re
 //-----------------------------------------------------------
 
 
-// GET /users/:userId/visits
-//
-// Visitas de un User.
-// Hay que buscar el vendedor asociado al user indicado,
-// pero puede que no exista un vendedor.
-exports.indexUser = function (req, res, next) {
-
-    models.Salesman.findOne({
-        where: {UserId: req.user.id}
-    })
-    .then(function (salesman) {
-        if (salesman) {
-            res.redirect("/salesmen/" + salesman.id + "/visits");
-        } else {
-            res.redirect("/visits");
-        }
-    })
-    .catch(function (error) {
-        next(error);
-    });
-};
-
-
 // GET /visits
 // GET /customers/:customerId/visits
-// GET /salesmen/:salesmanId/visits
-// GET /salesmen/:salesmanId/customers/:customerId/visits
+// GET /users/:userId/visits
+// GET /salesmen/:userId/visits
+// GET /users/:userId/customers/:customerId/visits
+// GET /salesmen/:userId/customers/:customerId/visits
 exports.index = function (req, res, next) {
 
     var countOptions = {};
@@ -195,8 +172,8 @@ exports.index = function (req, res, next) {
     }
 
 
-    // Visitas de un vendedor especificado en la URL:
-    if (!req.salesman) {
+    // Visitas de un vendedor (:userid es una variable de la URL cargada con autoload):
+    if (!req.user) {
         if (searchsalesman) {
             var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
 
@@ -210,15 +187,15 @@ exports.index = function (req, res, next) {
 
             // CUIDADO: Estoy retocando el include existente.
             countOptions.include.push({
-                model: models.Salesman,
+                model: models.User,
                 as: "Salesman",
-                where: {name: likeCondition},
+                where: {fullname: likeCondition},
                 include: [{model: models.Attachment, as: 'Photo'}]
             });
         } else {
             // CUIDADO: Estoy retocando el include existente.
             countOptions.include.push({
-                model: models.Salesman,
+                model: models.User,
                 as: "Salesman",
                 include: [{model: models.Attachment, as: 'Photo'}]
             });
@@ -226,9 +203,9 @@ exports.index = function (req, res, next) {
     } else {
         // CUIDADO: Estoy retocando el include existente.
         countOptions.include.push({
-            model: models.Salesman,
+            model: models.User,
             as: "Salesman",
-            where: {id: req.salesman.id},
+            where: {id: req.user.id},
             include: [{model: models.Attachment, as: 'Photo'}]
         });
     }
@@ -300,7 +277,7 @@ exports.index = function (req, res, next) {
         companyHelper.getAllCompaniesInfo()
         .then(function (companiesInfo) {
 
-            res.render('visits/indexlong.ejs', {
+            res.render('visits/index.ejs', {
                 visits: visits,
                 companiesInfo: companiesInfo,
                 moment: moment,
@@ -311,7 +288,7 @@ exports.index = function (req, res, next) {
                 searchfavourites: searchfavourites,
                 searchCompanyId: searchCompanyId,
                 customer: req.customer,
-                salesman: req.salesman
+                salesman: req.user
             });
         });
     })
@@ -359,14 +336,14 @@ exports.show = function (req, res, next) {
 
 // Auxiliar
 // Devuelve una promesa que al cumplirse devuelve un array con la siguiente informacion:
-//   - vendedores: id y nombre de todos los vendedores.
+//   - vendedores: id y nombre de todos los usuarios vendedores.
 //   - clientes:  id, codigo y nombre de todos los clientes.
 // Esta informacion se usa para construir formularios de seleccion, y seleccionar un valor
 // en ellos.
 function infoOfSalesmenCustomers() {
 
     return Sequelize.Promise.all([
-        salesmanHelper.getAllSalesmenInfo(),
+        userHelper.getAllSalesmenInfo(),
         customerHelper.getUnarchivedCustomersInfo()
     ]);
 }
@@ -379,7 +356,7 @@ exports.new = function (req, res, next) {
     var customerId = Number(req.query.customerId) || 0;
 
     // Proponer al usuario logeado como vendedor.
-    // No siempre puede hacerse esto.
+    // Si el usuario logeado no es un vendedor, no hay propuesta.
     var salesmanId = 0;
 
     // Uso una promesa para buscar el vendedor asociado al usuario logeado.
@@ -387,9 +364,9 @@ exports.new = function (req, res, next) {
 
         // Nota que si estoy aqui, estoy logeado.
 
-        return models.Salesman.findOne({where: {UserId: req.session.user.id}})
-        .then(function (salesman) {
-            salesmanId = salesman && salesman.id || 0;
+        return models.User.findById(req.session.user.id)
+        .then(function (user) {
+            salesmanId = user && user.isSalesman && user.id || 0;
             resolve();
         });
     })
@@ -443,7 +420,7 @@ exports.create = function (req, res, next) {
         // Comprobar que existe el cliente seleccionado:
         models.Customer.findById(req.body.customerId),
         // Comprobar que existe el vendedor seleccionado:
-        models.Salesman.findById(req.body.salesmanId)
+        models.User.findById(req.body.salesmanId)
     ])
     .spread(function (customer, salesman) {
         var errors = [];
@@ -530,7 +507,7 @@ exports.update = function (req, res, next) {
         // Comprobar que existe el cliente seleccionado:
         models.Customer.findById(req.body.customerId),
         // Comprobar que existe el vendedor seleccionado:
-        models.Salesman.findById(req.body.salesmanId)
+        models.User.findById(req.body.salesmanId)
     ])
     .spread(function (customer, salesman) {
         var errors = [];
@@ -601,8 +578,10 @@ exports.destroy = function (req, res, next) {
 
 // GET /visits/print
 // GET /customers/:customerId/visits/print
-// GET /salesmen/:salesmanId/visits/print
-// GET /salesmen/:salesmanId/customers/:customerId/visits/print
+// GET /users/:userId/visits/print
+// GET /salesmen/:userId/visits/print
+// GET /users/:userId/customers/:customerId/visits/print
+// GET /salesmen/:userId/customers/:customerId/visits/print
 exports.printIndex = function (req, res, next) {
 
     var options = {};
@@ -702,8 +681,8 @@ exports.printIndex = function (req, res, next) {
     }
 
 
-    // Visitas de un vendedor:
-    if (!req.salesman) {
+    // Visitas de un vendedor (:userId es una variable de la ruta cargada con autoload):
+    if (!req.user) {
         if (searchsalesman) {
             var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
 
@@ -717,7 +696,7 @@ exports.printIndex = function (req, res, next) {
 
             // CUIDADO: Estoy retocando el include existente.
             options.include.push({
-                model: models.Salesman,
+                model: models.User,
                 as: "Salesman",
                 where: {name: likeCondition},
                 include: [{model: models.Attachment, as: 'Photo'}]
@@ -725,7 +704,7 @@ exports.printIndex = function (req, res, next) {
         } else {
             // CUIDADO: Estoy retocando el include existente.
             options.include.push({
-                model: models.Salesman,
+                model: models.User,
                 as: "Salesman",
                 include: [{model: models.Attachment, as: 'Photo'}]
             });
@@ -733,9 +712,9 @@ exports.printIndex = function (req, res, next) {
     } else {
         // CUIDADO: Estoy retocando el include existente.
         options.include.push({
-            model: models.Salesman,
+            model: models.User,
             as: "Salesman",
-            where: {id: req.salesman.id},
+            where: {id: req.user.id},
             include: [{model: models.Attachment, as: 'Photo'}]
         });
     }
@@ -793,7 +772,7 @@ exports.printIndex = function (req, res, next) {
                 searchfavourites: searchfavourites,
                 searchCompanyId: searchCompanyId,
                 customer: req.customer,
-                salesman: req.salesman
+                salesman: req.user
             });
         });
     })

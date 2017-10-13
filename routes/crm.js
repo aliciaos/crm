@@ -8,7 +8,6 @@ var userController = require('../controllers/user_controller');
 var sessionController = require('../controllers/session_controller');
 
 var companyController = require('../controllers/company_controller');
-var salesmanController = require('../controllers/salesman_controller');
 var customerController = require('../controllers/customer_controller');
 var targettypeController = require('../controllers/targettype_controller');
 var visitController = require('../controllers/visit_controller');
@@ -90,11 +89,11 @@ router.get('/users',
     sessionController.adminRequired,
     userController.indexAll);   // listado de todos los usuarios
 
-router.get('/users/salesmen',
+router.get('/salesmen',
     sessionController.adminRequired,
     userController.indexSalesmen);  // Listado de los usuarios vendedores
 
-router.get('/users/admins',
+router.get('/admins',
     sessionController.adminRequired,
     userController.indexAdmins);  // Listado de los usuarios administradores
 
@@ -216,25 +215,25 @@ router.delete('/targettypes/:targettypeId(\\d+)',
 
 // Definicion de rutas para los objetivos de las visitas
 router.get(   '/visits/:visitId(\\d+)/targets',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     targetController.index);
 router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     targetController.show);
 router.get('/visits/:visitId(\\d+)/targets/new',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     targetController.new);
 router.post('/visits/:visitId(\\d+)/targets',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     targetController.create);
 router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)/edit',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     targetController.edit);
 router.put('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     targetController.update);
 router.delete('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     targetController.destroy);
 
 
@@ -249,29 +248,28 @@ router.get('/visits/new',
 router.post('/visits',
     visitController.create);
 router.get('/visits/:visitId(\\d+)/edit',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     visitController.edit);
 router.put('/visits/:visitId(\\d+)',
-    visitController.admin_Or_NoSalesman_Or_SalesmanIsLoggedUser_Required,
+    visitController.admin_Or_SalesmanIsLoggedUser_Required,
     visitController.update);
 router.delete('/visits/:visitId(\\d+)',
     sessionController.adminRequired,
     visitController.destroy);
 
 
+router.get('/users/:userId(\\d+)/visits',
+    visitController.index);
+router.get('/salesmen/:userId(\\d+)/visits',
+    visitController.index);
+
 router.get('/customers/:customerId(\\d+)/visits',
     visitController.index);
 
-/*
-router.get('/salesmen/:salesmanId(\\d+)/visits',
+router.get('/users/:userId(\\d+)/customers/:customerId(\\d+)/visits',
     visitController.index);
-
-router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits',
+router.get('/salesmen/:userId(\\d+)/customers/:customerId(\\d+)/visits',
     visitController.index);
-*/
-
-router.get('/users/:userId(\\d+)/visits',
-    visitController.indexUser);
 
 
 // Definicion de rutas para los informes
@@ -299,13 +297,15 @@ router.get('/visits/print',
 router.get('/customers/:customerId(\\d+)/visits/print',
     visitController.printIndex);
 
-/*
-router.get('/salesmen/:salesmanId(\\d+)/visits/print',
+router.get('/users/:userId(\\d+)/visits/print',
+    visitController.printIndex);
+router.get('/salesmen/:userId(\\d+)/visits/print',
     visitController.printIndex);
 
-router.get('/salesmen/:salesmanId(\\d+)/customers/:customerId(\\d+)/visits/print',
+router.get('/users/:userId(\\d+)/customers/:customerId(\\d+)/visits/print',
     visitController.printIndex);
-*/
+router.get('/salesmen/:userId(\\d+)/customers/:customerId(\\d+)/visits/print',
+    visitController.printIndex);
 
 //----------------------------------------------------
 // Blog

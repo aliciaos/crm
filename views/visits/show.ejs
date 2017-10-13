@@ -1,9 +1,8 @@
 
 
-<% var salesmanName = visit.Salesman ? visit.Salesman.name : "SIN VENDEDOR"; %>
+<% var salesmanName = visit.Salesman ? visit.Salesman.fullname : "SIN VENDEDOR"; %>
 <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 <% var salesmanId = visit.Salesman && visit.Salesman.id || 0; %>
-<% var salesmanUserId = visit.Salesman && visit.Salesman.UserId || 0; %>
 
 <% var customerCode = visit.Customer ? visit.Customer.code : "" %>
 <% var customerName = visit.Customer ? visit.Customer.name : "" %>
@@ -28,7 +27,7 @@
 
     <a href="/goback"><img class="icon" src="/icons/back.png"></a>
 
-    <% if (session.user && session.user.isAdmin || !salesmanId || salesmanUserId === session.user.id) { %>
+    <% if (session.user && session.user.isAdmin || salesmanId === session.user.id) { %>
 	<a href="/visits/<%= visit.id %>/edit"><img class="icon" src="/icons/edit.png"></a>
  	<% } %>
 
@@ -75,7 +74,7 @@
 
 <%  var targets = visit.Targets %>
 
-<% locals.readwrite = session.user && session.user.isAdmin || !salesmanId || salesmanUserId === session.user.id; %>
+<% locals.readwrite = session.user && session.user.isAdmin || salesmanId === session.user.id; %>
 
 <hr />
 	<%- include ../targets/index.ejs %>

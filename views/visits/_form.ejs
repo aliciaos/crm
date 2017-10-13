@@ -56,7 +56,7 @@
 			<% for (var i in salesmen) { %>
 				<% var salesman = salesmen[i]; %>
     			<option value="<%= salesman.id %>"  <%= salesman.id === visit.SalesmanId ? "selected" : "" %> > 
-    				<%= salesman.name %>  
+    				<%= salesman.fullname %>
     			</option>
     		<% } %>
 		</select>

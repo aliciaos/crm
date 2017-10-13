@@ -33,7 +33,7 @@ var Company = sequelize.import(path.join(__dirname,'company'));
 var Customer = sequelize.import(path.join(__dirname,'customer'));
 
 /*
-// Importar la definicion de Salesman de salesman.js
+// Importar la definicion de Salesman de user.js
 // var Salesman = sequelize.import(path.join(__dirname,'salesman'));
 */
 

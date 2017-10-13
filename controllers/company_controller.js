@@ -4,7 +4,7 @@ var Sequelize = require('sequelize');
 var moment = require('moment');
 
 var customerHelper = require("../helpers/customer");
-var salesmanHelper = require("../helpers/salesman");
+var salesmanHelper = require("../helpers/user");
 var targetTypeHelper = require("../helpers/targettype");
 
 //-----------------------------------------------------------

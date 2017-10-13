@@ -123,10 +123,9 @@
 
 
 
-<% var salesmanName = visit.Salesman && visit.Salesman.name || ""; %>
+<% var salesmanName = visit.Salesman && visit.Salesman.fullname || ""; %>
 <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 <% var salesmanId = visit.Salesman && visit.Salesman.id || 0; %>
-<% var salesmanUserId = visit.Salesman && visit.Salesman.UserId || 0; %>
 
 <div class="boxItem">
 
