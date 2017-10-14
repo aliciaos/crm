@@ -5,7 +5,8 @@ var models = require('../models');
 // Middleware: Se requiere pasar el token de acceso en la query de la peticion.
 //
 // Si se ha pasado el token, se busca al usuario asociado al token pasado en la query
-// y se crea el objeto req.token comn el valor {userId: <id del usuario>}.
+// y se crea el objeto req.token con los valores:
+//     userId: <id del usuario>
 //
 exports.tokenRequired = function (req, res, next) {
 
@@ -16,7 +17,9 @@ exports.tokenRequired = function (req, res, next) {
         models.User.findOne({where: {token: token}})
         .then(function(user) {
             if (user) {
-                req.token = { userId: user.id };
+                req.token = {
+                    userId: user.id
+                };
                 next();
             } else {
                 // Autenticación ha fallado

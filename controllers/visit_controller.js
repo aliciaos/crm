@@ -91,31 +91,25 @@ exports.index = function (req, res, next) {
     var searchfavourites = req.query.searchfavourites || "";
 
 
-    // Busquedas por fecha de planificacion: entre dos fechas
-    var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
-    if (searchdateafter && !momentafter.isValid()) {
-        req.flash("error", "La fecha " + searchdateafter + " no es válida.");
-        momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
-    }
-
-    var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
-    if (searchdatebefore && !momentbefore.isValid()) {
-        req.flash("error", "La fecha " + searchdatebefore + " no es válida.");
-        momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
-    }
-
-    if (searchdateafter !== "") {
-        if (searchdatebefore !== "") {
-            countOptions.where.plannedFor = {$between: [momentafter.toDate(), momentbefore.toDate()]};
-        } else {
-            countOptions.where.plannedFor = {$gte: momentafter.toDate()};
+    // Busquedas por fecha de planificacion: despues de una fecha
+    if (searchdateafter) {
+        var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
+        if (!momentafter.isValid()) {
+            req.flash("error", "La fecha " + searchdateafter + " no es válida.");
+            momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
         }
-    } else {
-        if (searchdatebefore !== "") {
-            countOptions.where.plannedFor = {$lte: momentbefore.toDate()};
-        }
+        countOptions.where.plannedFor = {$gte: momentafter.toDate()};
     }
 
+    // Busquedas por fecha de planificacion: antes de una fecha
+    if (searchdatebefore) {
+        var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
+        if (!momentbefore.isValid()) {
+            req.flash("error", "La fecha " + searchdatebefore + " no es válida.");
+            momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
+        }
+        countOptions.where.plannedFor = {$lte: momentbefore.toDate()};
+    }
 
 
     // Visitas de un cliente especificado en la URL:

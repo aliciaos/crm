@@ -6,19 +6,18 @@ var models = require('../models');
 // Autoload el cliente asociado a :customerId
 exports.load = function (req, res, next, customerId) {
 
-    models.Customer.findById(
-        customerId,
-        {
-            include: [
-                {
-                    model: models.Company,
-                    as: "MainCompanies",
-                    attributes: ['id', 'name']
-                }
-            ],
-            order: [[{model: models.Company, as: "MainCompanies"}, 'name', 'ASC']]
-        }
-    )
+    models.Customer.findById(customerId, {
+        include: [
+            {
+                model: models.Company,
+                as: "MainCompanies",
+                attributes: ['id', 'name'],
+                through: {attributes: ['CustomerId']}
+            }
+        ],
+        order: [[{model: models.Company, as: "MainCompanies"}, 'name', 'ASC']],
+        attributes: {exclude: ['archived', 'createdAt', 'updatedAt', 'deletedAt']}
+    })
     .then(function (customer) {
         if (customer) {
             req.customer = customer;
@@ -41,8 +40,9 @@ exports.index = function (req, res, next) {
 
     var options = {
         where: {archived: false},
-        order: [['name']]
-    };
+        order: [['name']],
+        attributes: { exclude: ['archived', 'createdAt', 'updatedAt', 'deletedAt'] }
+};
 
     models.Customer.findAll(options)
     .then(function (customers) {
@@ -54,3 +54,13 @@ exports.index = function (req, res, next) {
         next(error);
     });
 };
+
+//-----------------------------------------------------------
+
+// GET /api/customers/:customerId
+exports.show = function (req, res, next) {
+    res.json(req.customer);
+};
+
+
+//-----------------------------------------------------------

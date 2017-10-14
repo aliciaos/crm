@@ -22,11 +22,23 @@ exports.load = function(req, res, next, targetId) {
 //-----------------------------------------------------------
 
 
-// GET /api/targets
+// GET /api/visits/:visitId/targets
 exports.index = function (req, res, next) {
 
     var options = {
-        order: [['CompanyId']]
+        include: [
+            {
+                model: models.Company,
+                attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']}
+            },
+            {
+                model: models.TargetType,
+                attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']}
+            }
+        ],
+        order: [['CompanyId']],
+        attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']},
+        where: {VisitId: req.visit.id}
     };
 
     //----------------
@@ -39,8 +51,6 @@ exports.index = function (req, res, next) {
         next(error);
     });
 };
-
-
 
 //-----------------------------------------------------------
 

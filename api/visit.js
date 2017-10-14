@@ -9,7 +9,9 @@ var moment = require('moment');
 // Autoload la visita asociada a :visitId
 exports.load = function (req, res, next, visitId) {
 
-    models.Visit.findById(visitId)
+    models.Visit.findById(visitId, {
+        attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']}
+    })
     .then(function (visit) {
         if (visit) {
             req.visit = visit;
@@ -50,90 +52,75 @@ exports.salesmanIsLoggedUser_Required = function (req, res, next) {
 
 //-----------------------------------------------------------
 
-// GET /users/:userId/visits
-//
-// Visitas de un User.
-// Hay que buscar el vendedor asociado al user indicado,
-// pero puede que no exista un vendedor.
-exports.indexUser = function (req, res, next) {
-
-    models.Salesman.findOne({
-        where: {UserId: req.user.id}
-    })
-    .then(function (salesman) {
-        if (salesman) {
-            res.redirect("/api/salesmen/" + salesman.id + "/visits?token=" + req.query.token);
-        } else {
-            res.json([]);
-        }
-    })
-    .catch(function (error) {
-        next(error);
-    });
-};
-
-
-// GET /users/logged/visits
-exports.indexLoggedUser = function (req, res, next) {
-
-    // TODO: deberia cambiarse en la ruta la palabra logged por withToken
-    var tokenUserId = req.token.userId;
-
-    models.Salesman.findOne({
-        where: {UserId: tokenUserId}
-    })
-    .then(function (salesman) {
-        if (salesman) {
-            res.redirect("/api/salesmen/" + salesman.id + "/visits?token=" + req.query.token);
-        } else {
-            res.json([]);
-        }
-    })
-    .catch(function (error) {
-        next(error);
-    });
-};
-
-
-// GET /visits
-// GET /customers/:customerId/visits
-// GET /salesmen/:salesmanId/visits
-// GET /salesmen/:salesmanId/customers/:customerId/visits
-exports.index = function (req, res, next) {
+// GET /visits/flattened
+// GET /customers/:customerId/visits/flattened
+// GET /users/:userId/visits/flattened
+// GET /salesmen/:userId/visits/flattened
+// GET /users/:userId/customers/:customerId/visits/flattened
+// GET /salesmen/:userId/customers/:customerId/visits/flattened
+exports.indexFlattened = function (req, res, next) {
 
     var options = {};
-    options.where = {};
+    options.where = {$and: []};
     options.include = [];
     options.order = [];
 
     //----------------
 
-    var searchcustomer = req.query.searchcustomersits
-        || '';
+
+    var searchdateafter = req.query.searchdateafter || '';
+    var searchdatebefore = req.query.searchdatebefore || '';
+    var searchcustomer = req.query.searchcustomer || '';
     var searchCompanyId = req.query.searchCompanyId || "";
     var searchsalesman = req.query.searchsalesman || '';
     var searchfavourites = req.query.searchfavourites || "";
+
+
+    // Busquedas por fecha de planificacion: despues de una fecha
+    if (searchdateafter !== "") {
+        var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
+        if (!momentafter.isValid()) {
+            console.log("Error: La fecha " + searchdateafter + " no es válida.");
+            momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
+        }
+        options.where.$and.push({plannedFor: {$gte: momentafter.toDate()}});
+    }
+
+    // Busquedas por fecha de planificacion: antes de una fecha
+    if (searchdatebefore !== "") {
+        var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
+        if (!momentbefore.isValid()) {
+            console.log("Error: La fecha " + searchdatebefore + " no es válida.");
+            momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
+        }
+        options.where.$and.push({plannedFor: {$lte: momentbefore.toDate()}});
+    }
+
+
 
 
     // Visitas de un cliente especificado en la URL:
     if (!req.customer) {
 
         // Incluir los clientes no archivados:
-        var customeInclude = {
+        var customerInclude = {
             model: models.Customer,
             where: {
                 $and: [{
                     archived: false
                 }]
-            }
+            },
+            attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
         };
 
         // Filtrar: Clientes de la fabrica especificada en la query:
         if (searchCompanyId) {
-            customeInclude.include = [{
+            customerInclude.include = [{
                 model: models.Company,
                 as: "MainCompanies",
-                where: {id: searchCompanyId}
+                where: {id: searchCompanyId},
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                through: {attributes: ['CustomerId']}
             }];
         }
 
@@ -149,27 +136,28 @@ exports.index = function (req, res, next) {
                 likeCondition = {$like: search_like};
             }
 
-            customeInclude.where.$and.push({
+            customerInclude.where.$and.push({
                 $or: [
                     {code: likeCondition},
                     {name: likeCondition}
                 ]
             });
         }
-        options.include.push(customeInclude);
+        options.include.push(customerInclude);
 
     } else {
         options.include.push({
             model: models.Customer,
             where: {
                 id: req.customer.id
-            }
+            },
+            attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
         });
     }
 
 
     // Visitas de un vendedor especificado en la URL:
-    if (!req.salesman) {
+    if (!req.user) {
         if (searchsalesman) {
             var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
 
@@ -183,26 +171,41 @@ exports.index = function (req, res, next) {
 
             // CUIDADO: Estoy retocando el include existente.
             options.include.push({
-                model: models.Salesman,
+                model: models.User,
                 as: "Salesman",
-                where: {name: likeCondition},
-                include: [{model: models.Attachment, as: "Photo"}]
+                where: {fullname: likeCondition},
+                attributes: { exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt'] },
+                include: [{
+                    model: models.Attachment,
+                    as: "Photo",
+                    attributes: ['id', 'url', 'mime']
+                }]
             });
         } else {
             // CUIDADO: Estoy retocando el include existente.
             options.include.push({
-                model: models.Salesman,
+                model: models.User,
                 as: "Salesman",
-                include: [{model: models.Attachment, as: "Photo"}]
+                attributes: { exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt'] },
+                include: [{
+                    model: models.Attachment,
+                    as: "Photo",
+                    attributes: ['id', 'url', 'mime']
+                }]
             });
         }
     } else {
         // CUIDADO: Estoy retocando el include existente.
         options.include.push({
-            model: models.Salesman,
+            model: models.User,
             as: "Salesman",
-            where: {id: req.salesman.id},
-            include: [{model: models.Attachment, as: "Photo"}]
+            where: {id: req.user.id},
+            attributes: { exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt'] },
+            include: [{
+                model: models.Attachment,
+                as: "Photo",
+                attributes: ['id', 'url', 'mime']
+            }]
         });
     }
 
@@ -214,42 +217,53 @@ exports.index = function (req, res, next) {
         options.include.push({
             model: models.User,
             as: "Fans",
-            where: {id: req.token.userId}
+            where: {id: req.token.userId},
+            attributes: ['id', 'fullname'],
+            through: {attributes: ['UserId']}
         });
     } else {
 
         // CUIDADO: Estoy retocando el include existente.
         options.include.push({
             model: models.User,
-            as: "Fans"
+            as: "Fans",
+            attributes: ['id', 'fullname'],
+            through: {attributes: ['UserId']}
         });
     }
-
 
     //----------------
 
 
     options.include.push({
         model: models.Target,
+        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
         include: [
             {
-                model: models.Company
+                model: models.Company,
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
             },
             {
-                model: models.TargetType
+                model: models.TargetType,
+                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
             }
         ]
     });
 
     options.order.push(['plannedFor', 'DESC']);
+    options.attributes = { exclude: ['createdAt', 'updatedAt', 'deletedAt'] };
 
     models.Visit.findAll(options)
     .then(function (visits) {
 
+        console.log("Num Visitas =", visits.length);
+
         // Marcar las visitas que son favoritas
         visits.forEach(function (visit) {
-            visit.favourite = visit.Fans.some(function (fan) {
+            visit.set("favourite", visit.Fans.some(function (fan) {
                 return fan.id == req.token.userId;
+            }), {
+                raw: true
             });
         });
 
@@ -260,7 +274,198 @@ exports.index = function (req, res, next) {
     });
 };
 
+//-----------------------------------------------------------
 
+// GET /visits
+// GET /customers/:customerId/visits
+// GET /users/:userId/visits
+// GET /salesmen/:userId/visits
+// GET /users/:userId/customers/:customerId/visits
+// GET /salesmen/:userId/customers/:customerId/visits
+exports.index = function (req, res, next) {
+
+    var options = {};
+    options.where = {$and: []};
+    options.include = [];
+    options.order = [];
+
+    //----------------
+
+    var searchdateafter = req.query.searchdateafter || '';
+    var searchdatebefore = req.query.searchdatebefore || '';
+    var searchcustomer = req.query.searchcustomer || '';
+    var searchCompanyId = req.query.searchCompanyId || "";
+    var searchsalesman = req.query.searchsalesman || '';
+    var searchfavourites = req.query.searchfavourites || "";
+
+
+    // Busquedas por fecha de planificacion: despues de una fecha
+    if (searchdateafter !== "") {
+        var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
+        if (!momentafter.isValid()) {
+            console.log("Error: La fecha " + searchdateafter + " no es válida.");
+            momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
+        }
+        options.where.$and.push({plannedFor: {$gte: momentafter.toDate()}});
+    }
+
+    // Busquedas por fecha de planificacion: antes de una fecha
+    if (searchdatebefore !== "") {
+        var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
+        if (!momentbefore.isValid()) {
+            console.log("Error: La fecha " + searchdatebefore + " no es válida.");
+            momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
+        }
+        options.where.$and.push({plannedFor: {$lte: momentbefore.toDate()}});
+    }
+
+
+    // Visitas de un cliente especificado en la URL:
+    if (!req.customer) {
+
+        // Incluir los clientes no archivados:
+        var customerInclude = {
+            model: models.Customer,
+            where: {
+                $and: [{
+                    archived: false
+                }]
+            },
+            attributes: []
+        };
+
+        // Filtrar: Clientes de la fabrica especificada en la query:
+        if (searchCompanyId) {
+            customerInclude.include = [{
+                model: models.Company,
+                as: "MainCompanies",
+                where: {id: searchCompanyId},
+                attributes: []
+            }];
+        }
+
+        // Filtrar: Codigo y nombre del cliente.
+        if (searchcustomer) {
+            var search_like = "%" + searchcustomer.replace(/ +/g, "%") + "%";
+
+            var likeCondition;
+            if (!!process.env.DATABASE_URL && /^postgres:/.test(process.env.DATABASE_URL)) {
+                // el operador $iLike solo funciona en pastgres
+                likeCondition = {$iLike: search_like};
+            } else {
+                likeCondition = {$like: search_like};
+            }
+
+            customerInclude.where.$and.push({
+                $or: [
+                    {code: likeCondition},
+                    {name: likeCondition}
+                ]
+            });
+        }
+        options.include.push(customerInclude);
+
+    } else {
+        options.where.$and.push({CustomerId: req.customer.id});
+    }
+
+
+    // Visitas de un vendedor especificado en la URL:
+    if (!req.user) {
+        if (searchsalesman) {
+            var search_like = "%" + searchsalesman.replace(/ +/g, "%") + "%";
+
+            var likeCondition;
+            if (!!process.env.DATABASE_URL && /^postgres:/.test(process.env.DATABASE_URL)) {
+                // el operador $iLike solo funciona en pastgres
+                likeCondition = {$iLike: search_like};
+            } else {
+                likeCondition = {$like: search_like};
+            }
+
+            // CUIDADO: Estoy retocando el include existente.
+            options.include.push({
+                model: models.User,
+                as: "Salesman",
+                where: {fullname: likeCondition},
+                attributes: []
+            });
+        }
+    } else {
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.User,
+            as: "Salesman",
+            where: {id: req.user.id},
+            attributes: []
+        });
+    }
+
+
+    // Filtrar por mis visitas favoritas
+    if (searchfavourites) {
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.User,
+            as: "Fans",
+            where: {id: req.token.userId},
+            attributes: [['id', 'SalesmanId']],
+            through: {attributes: ['UserId']}
+        });
+    } else {
+
+        // CUIDADO: Estoy retocando el include existente.
+        options.include.push({
+            model: models.User,
+            as: "Fans",
+            where: {id: req.token.userId},
+            required: false,  // Para que incluya todas las visitas, aunque no sean mis favoritas.
+            attributes: [['id', 'SalesmanId']],
+            through: {attributes: ['UserId']}
+        });
+    }
+
+
+
+    //----------------
+
+    options.order.push(['plannedFor', 'DESC']);
+    options.attributes = { exclude: ['createdAt', 'updatedAt', 'deletedAt'] };
+
+    models.Visit.findAll(options)
+    .then(function (visits) {
+
+        console.log("Num Visitas =", visits.length);
+
+        // Marcar las visitas que son favoritas
+        visits.forEach(function (visit) {
+
+            visit.set("favourite", visit.Fans.some(function (fan) {
+
+                return fan.get("SalesmanId") == req.token.userId;
+            }), {
+                raw: true
+            });
+           delete visit.dataValues.Fans;
+
+        });
+
+        res.json(visits);
+    })
+    .catch(function (error) {
+        next(error);
+    });
+};
+
+//-----------------------------------------------------------
+
+// GET /visits/:visitId
+exports.show = function (req, res, next) {
+    res.json(req.visit);
+};
+
+//-----------------------------------------------------------
 
 // PUT /visits/:visitId
 //
@@ -300,3 +505,6 @@ exports.update = function (req, res, next) {
         next(error);
     });
 };
+
+//-----------------------------------------------------------
+

@@ -6,7 +6,7 @@ Pensar cuales son los campos de una visita o de un objetivo que puede editar un 
    - Cualquiera puede editar las observaciones de las visitas y objetivos.
      Idea: Un administrador puede editar las observaciones de las vistas y los targets, y un no-administrador solo puede añadir texto al final de la observacion.
    - Al editar un target que no pueda cambiarse la fabrica ni el tipo de objetivo. ¿ok?
-   - Un administrador puede crear visitas para cualquier vendedor, pero un usuario No administrador y que sea vendedor solo puede crearse visitas para el mismo.
+   - Un administrador puede crear visitas para cualquier vendedor, pero un usuario No administrador y que sea vendedor solo puede crearse visitas para el mismo (o para todos).
    - Los administradores pueden editar cualquier visita, y los vendedores solo pueden editar las suyas.
    - ¿Puede un vendedor borrar un objetivo en una visita?
        o Que un vendedor marque una visita como borrada, pero que no se borre en realidad hasta que lo haga el administrador.

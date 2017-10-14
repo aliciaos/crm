@@ -214,7 +214,7 @@ router.delete('/targettypes/:targettypeId(\\d+)',
 
 
 // Definicion de rutas para los objetivos de las visitas
-router.get(   '/visits/:visitId(\\d+)/targets',
+router.get('/visits/:visitId(\\d+)/targets',
     visitController.admin_Or_SalesmanIsLoggedUser_Required,
     targetController.index);
 router.get('/visits/:visitId(\\d+)/targets/:targetId(\\d+)',
