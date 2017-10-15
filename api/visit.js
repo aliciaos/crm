@@ -78,20 +78,20 @@ exports.indexFlattened = function (req, res, next) {
 
     // Busquedas por fecha de planificacion: despues de una fecha
     if (searchdateafter !== "") {
-        var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
+        var momentafter = moment(searchdateafter + " 08:00", "YYYY-MM-DD");
         if (!momentafter.isValid()) {
             console.log("Error: La fecha " + searchdateafter + " no es válida.");
-            momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
+            momentafter = moment("01-01-1900 08:00", "YYYY-MM-DD");
         }
         options.where.$and.push({plannedFor: {$gte: momentafter.toDate()}});
     }
 
     // Busquedas por fecha de planificacion: antes de una fecha
     if (searchdatebefore !== "") {
-        var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
+        var momentbefore = moment(searchdatebefore + " 08:00", "YYYY-MM-DD");
         if (!momentbefore.isValid()) {
             console.log("Error: La fecha " + searchdatebefore + " no es válida.");
-            momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
+            momentbefore = moment("31-12-9999 08:00", "YYYY-MM-DD");
         }
         options.where.$and.push({plannedFor: {$lte: momentbefore.toDate()}});
     }
@@ -301,20 +301,20 @@ exports.index = function (req, res, next) {
 
     // Busquedas por fecha de planificacion: despues de una fecha
     if (searchdateafter !== "") {
-        var momentafter = moment(searchdateafter + " 08:00", "DD-MM-YYYY");
+        var momentafter = moment(searchdateafter + " 08:00", "YYYY-MM-DD");
         if (!momentafter.isValid()) {
             console.log("Error: La fecha " + searchdateafter + " no es válida.");
-            momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
+            momentafter = moment("01-01-1900 08:00", "YYYY-MM-DD");
         }
         options.where.$and.push({plannedFor: {$gte: momentafter.toDate()}});
     }
 
     // Busquedas por fecha de planificacion: antes de una fecha
     if (searchdatebefore !== "") {
-        var momentbefore = moment(searchdatebefore + " 08:00", "DD-MM-YYYY");
+        var momentbefore = moment(searchdatebefore + " 08:00", "YYYY-MM-DD");
         if (!momentbefore.isValid()) {
             console.log("Error: La fecha " + searchdatebefore + " no es válida.");
-            momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
+            momentbefore = moment("31-12-9999 08:00", "YYYY-MM-DD");
         }
         options.where.$and.push({plannedFor: {$lte: momentbefore.toDate()}});
     }
@@ -475,7 +475,7 @@ exports.update = function (req, res, next) {
     // Poner null si no hay fecha de realizacion
     var momentFulfilledAt = null;
     if (req.body.fulfilledAt && req.body.fulfilledAt.trim()) {
-        momentFulfilledAt = moment(req.body.fulfilledAt + " 08:00", "DD-MM-YYYY");
+        momentFulfilledAt = moment(req.body.fulfilledAt + " 08:00", "YYYY-MM-DD");
     }
     req.visit.fulfilledAt = momentFulfilledAt;
 
