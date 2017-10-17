@@ -23,7 +23,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session({secret: "Decoversia 2016",
+app.use(session({secret: "CRM 2017",
                  resave: false,
                  saveUninitialized: true}));
 app.use(methodOverride('_method', {methods: ["POST", "GET"]}));
