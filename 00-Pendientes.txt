@@ -47,5 +47,3 @@ Control de huerfanos al sacar cosas de la papelera. Ejemplo: Que pasa si restaur
 Boton para cerrar una visita y que ya no pueda cambiarse.
 
 Favoritos en los posts.
-
-El codigo para subir ficheros a cloudinary esta repetido en posts y users. Hacer limpieza, eliminar repetidos, usar la version v2 de uploader. ...

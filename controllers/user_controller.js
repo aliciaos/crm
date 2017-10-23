@@ -175,7 +175,12 @@ exports.create = function (req, res, next) {
                 }
 
                 // Salvar la imagen en Cloudinary
-                return uploadResourceToCloudinary(req)
+                var attachmentHelper = require("../helpers/attachment.js");
+                return attachmentHelper.uploadResourceToCloudinary(req.file.path, cloudinary_image_options)
+                .catch(function (error) {
+                    req.flash('error', 'No se ha podido salvar la fotografía: ' + error.message);
+                    throw error;
+                })
                 .then(function (uploadResult) {
                     // Crear nuevo attachment en la BBDD.
                     return createAttachment(req, uploadResult, user);
@@ -266,7 +271,12 @@ exports.update = function (req, res, next) {
         }
 
         // Salvar la foto nueva en Cloudinary
-        return uploadResourceToCloudinary(req)
+        var attachmentHelper = require("../helpers/attachment.js");
+        return attachmentHelper.uploadResourceToCloudinary(req.file.path, cloudinary_image_options)
+        .catch(function (error) {
+            req.flash('error', 'No se ha podido salvar la fotografía: ' + error.message);
+            throw error;
+        })
         .then(function (uploadResult) {
             // Actualizar el attachment en la BBDD.
             return updateAttachment(req, uploadResult, user);
@@ -405,33 +415,6 @@ function updateAttachment(req, uploadResult, user) {
     });
 }
 
-
-/**
- * Crea una promesa para subir una imagen nueva a Cloudinary.
- * Tambien borra la imagen original.
- *
- * Si puede subir la imagen la promesa se satisface y devuelve el public_id y
- * la url del recurso subido.
- * Si no puede subir la imagen, la promesa tambien se cumple pero devuelve null.
- *
- * @return Devuelve una Promesa.
- */
-function uploadResourceToCloudinary(req) {
-    return new Promise(function (resolve, reject) {
-        cloudinary.uploader.upload(
-            req.file.path,
-            function (result) {
-                if (!result.error) {
-                    resolve({public_id: result.public_id, url: result.secure_url});
-                } else {
-                    req.flash('error', 'No se ha podido salvar la fotografía: ' + result.error.message);
-                    resolve(null);
-                }
-            },
-            cloudinary_image_options
-        );
-    })
-}
 
 //------------------------------------------------
 

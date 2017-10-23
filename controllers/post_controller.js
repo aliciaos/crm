@@ -285,6 +285,10 @@ exports.createAttachment = function (req, res, next) {
     // Salvar la imagen en Cloudinary
     var attachmentHelper = require("../helpers/attachment.js");
     return attachmentHelper.uploadResourceToCloudinary(req.file.path, cloudinary_upload_options)
+    .catch(function (error) {
+        req.flash('error', 'No se ha podido subir el adjunto a Cloudinary: ' + error.message);
+        throw error;
+    })
     .then(function (uploadResult) {
 
         fs.unlink(req.file.path); // borrar la imagen subida a ./uploads
@@ -313,7 +317,6 @@ exports.createAttachment = function (req, res, next) {
 
         fs.unlink(req.file.path); // borrar la imagen subida a ./uploads
 
-        req.flash('error', 'No se ha podido subir el adjunto a Cloudinary: ' + error.message);
         next(error);
     });
 };
