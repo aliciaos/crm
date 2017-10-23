@@ -14,8 +14,6 @@ Pensar cuales son los campos de una visita o de un objetivo que puede editar un 
 Pensar en esto:
    - Seria interesante que las visitas tuvieran un campo AuthorId que indicara quien fue el usuario que creo la visita. Pero si se edita, ¿que pasa con AuthorId?
 
-Poner en produccion: adaptar req.session
-
 Otro estado de los objetivos de una visita: Cancelado.
     - Esto me fastidia porque tengo un booleano (null, true, false)
 

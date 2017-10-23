@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
 var partials = require('express-partials');
 var flash = require('express-flash');
 var methodOverride = require('method-override');
@@ -23,13 +24,27 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session({secret: "CRM 2017",
-                 resave: false,
-                 saveUninitialized: true}));
+
+// Configuracion de la session para almacenarla en BBDD usando Sequelize.
+var models = require("./models");
+var sessionStore = new SequelizeStore({
+    db: models.sequelize,
+    table: 'Session'
+});
+app.use(session({
+    secret: "CRM 2017",
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: true
+}));
+
 app.use(methodOverride('_method', {methods: ["POST", "GET"]}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(partials());
 app.use(flash());
+
+
+
 
 // Helper dinamico:
 app.use(function(req, res, next) {

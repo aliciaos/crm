@@ -6,16 +6,14 @@
     "start": "heroku local:start",
     "start_old": "node ./bin/www",
     "supervisor": "./node_modules/.bin/supervisor ./bin/www",
-
     "migrate_local": "./node_modules/.bin/sequelize db:migrate --url sqlite://$(pwd)/crm.sqlite",
-    "seed_local":    "./node_modules/.bin/sequelize db:seed:all --url sqlite://$(pwd)/crm.sqlite",
-
-    "open_heroku":       "heroku open --app dcrmt",
+    "seed_local": "./node_modules/.bin/sequelize db:seed:all --url sqlite://$(pwd)/crm.sqlite",
+    "open_heroku": "heroku open --app dcrmt",
     "migrate_heroku": "heroku run --app dcrmt ./node_modules/.bin/sequelize db:migrate --url \\$DATABASE_URL",
-    "seed_heroku":    "heroku run --app dcrmt ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
-    "reset_heroku":   "heroku pg:reset DATABASE --app dcrmt",
-    "mon_heroku":     "heroku --app dcrmt maintenance:on",
-    "moff_heroku":    "heroku --app dcrmt maintenance:off"
+    "seed_heroku": "heroku run --app dcrmt ./node_modules/.bin/sequelize db:seed:all --url \\$DATABASE_URL",
+    "reset_heroku": "heroku pg:reset DATABASE --app dcrmt",
+    "mon_heroku": "heroku --app dcrmt maintenance:on",
+    "moff_heroku": "heroku --app dcrmt maintenance:off"
   },
   "engines": {
     "node": "7.10.1",
@@ -24,6 +22,7 @@
   "dependencies": {
     "body-parser": "~1.15.2",
     "cloudinary": "^1.7.0",
+    "connect-session-sequelize": "^5.0.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
     "ejs": "~2.5.2",
