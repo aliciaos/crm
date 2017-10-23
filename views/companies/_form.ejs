@@ -1,36 +1,57 @@
+<ul>
+	<li>
+		<label>Nombre:</label>
+		<input type="text" name="name" value="<%= company.name %>" placeholder="Nombre" autocomplete="off" autofocus/>
+	</li>
 
-	<label>Nombre:</label>
-	<input type="text" name="name" value="<%= company.name %>" placeholder="Nombre"  autocomplete="off" autofocus /> <p>
+	<li>
+		<label>Web 1:</label>
+		<input type="text" name="web1" value="<%= company.web1 %>" placeholder="URL" size="60" autocomplete="off"/>
+	</li>
 
-	<h2>
+	<li>
+		<label>Web 2:</label>
+		<input type="text" name="web2" value="<%= company.web2 %>" placeholder="URL" size="60" autocomplete="off"/>
+	</li>
+
+	<li>
+		<label>Observaciones:</label>
+		<br/>
+		<textarea type="text" name="notes" placeholder="Observaciones" rows="5"
+				  cols="80"><%= company.notes %></textarea>
+	</li>
+
+</ul>
+
+<h2>
 	Clientes:
-	</h2>
+</h2>
 
-	<ul>
-        <% for (var i in allCustomers) { %>
-        <% var customer = allCustomers[i]; %>
+<ul>
+    <% for (var i in allCustomers) { %>
+    <% var customer = allCustomers[i]; %>
 
-		<li>
-			<input type="checkbox" name="customerIds[]" value="<%= customer.id %>" id="customer<%= customer.id %>" >
-            <%=  customer.code %> - <%=  customer.name %>
-		</li>
+	<li>
+		<input type="checkbox" name="customerIds[]" value="<%= customer.id %>" id="customer<%= customer.id %>">
+        <%= customer.code %> - <%= customer.name %>
+	</li>
 
-        <% } %>
-	</ul>
+    <% } %>
+</ul>
 
-	<!-- Seleccionar (check) los clientes de la fabrica -->
+<!-- Seleccionar (check) los clientes de la fabrica -->
 
-	<script>
-        <% for (var i in customerIds) { %>
-        <% var customerId = customerIds[i]; %>
+<script>
+    <% for (var i in customerIds) { %>
+    <% var customerId = customerIds[i]; %>
 
-        var element = document.getElementById("customer<%= customerId %>");
-        if (element) {
-            element.checked = true;
-        }
+    var element = document.getElementById("customer<%= customerId %>");
+    if (element) {
+        element.checked = true;
+    }
 
-        <% } %>
-	</script>
+    <% } %>
+</script>
 
 
 

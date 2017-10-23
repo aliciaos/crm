@@ -37,6 +37,21 @@ module.exports = function (sequelize, DataTypes) {
             isSalesman: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false
+            },
+            phone1: {
+                type: DataTypes.STRING
+            },
+            phone2: {
+                type: DataTypes.STRING
+            },
+            email1: {
+                type: DataTypes.STRING
+            },
+            email2: {
+                type: DataTypes.STRING
+            },
+            notes: {
+                type: DataTypes.TEXT
             }
         },
         {

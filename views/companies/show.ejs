@@ -13,6 +13,18 @@
     <li>
         <b>Nombre</b>: <%= company.name %>
     </li>
+
+    <li>
+        <b>Web 1</b>: <%= company.web1 %>
+    </li>
+
+    <li>
+        <b>Web 2</b>: <%= company.web2 %>
+    </li>
+
+    <li>
+        <b>Observaciones</b>:  <%- escapeText(company.notes) %>
+    </li>
 </ul>
 
 

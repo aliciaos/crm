@@ -78,7 +78,12 @@ exports.show = function (req, res, next) {
 // GET /companies/new
 exports.new = function (req, res, next) {
 
-    var company = models.Company.build({name: ""});
+    var company = models.Company.build({
+        name: "",
+        web1: "",
+        web2: "",
+        notes: ""
+    });
 
     customerHelper.getUnarchivedCustomersInfo()
     .then(function (allCustomers) {
@@ -98,7 +103,12 @@ exports.new = function (req, res, next) {
 // POST /companies/create
 exports.create = function (req, res, next) {
 
-    var company = {name: req.body.name.trim()};
+    var company = {
+        name: req.body.name.trim(),
+        web1: req.body.web1.trim(),
+        web2: req.body.web2.trim(),
+        notes: req.body.notes.trim()
+    };
 
     // Ids de los clientes de la fabrica
     var customerIds = req.body.customerIds || [];
@@ -169,10 +179,13 @@ exports.edit = function (req, res, next) {
 exports.update = function (req, res, next) {
 
     req.company.name = req.body.name.trim();
+    req.company.web1 = req.body.web1.trim();
+    req.company.web2 = req.body.web2.trim();
+    req.company.notes = req.body.notes.trim();
 
     var customerIds = req.body.customerIds || [];
 
-    req.company.save({fields: ["name"]})
+    req.company.save({fields: ["name", "web1", "web2", "notes"]})
     .then(function (company) {
 
         req.flash('success', 'Fábrica editada con éxito.');

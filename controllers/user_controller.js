@@ -134,7 +134,12 @@ exports.new = function (req, res, next) {
         password: "",
         fullname: "",
         isAdmin: false,
-        isSalesman: true
+        isSalesman: true,
+        phone1: "",
+        phone2: "",
+        email1: "",
+        email2: "",
+        notes: ""
     });
 
     res.render('users/new', {user: user});
@@ -149,7 +154,12 @@ exports.create = function (req, res, next) {
         password: req.body.password,
         fullname: req.body.fullname,
         isAdmin: req.body.isAdmin || false,
-        isSalesman: req.body.isSalesman || false
+        isSalesman: req.body.isSalesman || false,
+        phone1: req.body.phone1.trim(),
+        phone2: req.body.phone2.trim(),
+        email1: req.body.email1.trim(),
+        email2: req.body.email2.trim(),
+        notes: req.body.notes.trim()
     };
 
     // El login debe ser unico:
@@ -229,8 +239,13 @@ exports.update = function (req, res, next) {
     req.user.fullname = req.body.fullname;
     req.user.isAdmin = req.body.isAdmin || false;
     req.user.isSalesman = req.body.isSalesman || false;
+    req.user.phone1 = req.body.phone1.trim();
+    req.user.phone2 = req.body.phone2.trim();
+    req.user.email1 = req.body.email1.trim();
+    req.user.email2 = req.body.email2.trim();
+    req.user.notes = req.body.notes.trim();
 
-    var fields_to_update = ["fullname"];
+    var fields_to_update = ["fullname", "phone1", "phone2", "email1", "email2", "notes" ];
 
     if (req.session.user && req.session.user.isAdmin) {
         fields_to_update.push("isAdmin");

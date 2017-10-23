@@ -8,6 +8,15 @@ module.exports = function (sequelize, DataTypes) {
                 type: DataTypes.STRING,
                 unique: true,
                 validate: {notEmpty: {msg: "Falta el nombre de la fábrica."}}
+            },
+            web1: {
+                type: DataTypes.STRING
+            },
+            web2: {
+                type: DataTypes.STRING
+            },
+            notes: {
+                type: DataTypes.TEXT
             }
         },
         {

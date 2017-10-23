@@ -55,4 +55,22 @@
     Generar nuevo token: <a href="/users/<%= user.id %>/token?_method=PUT"><img class="icon"
                                                                                 src="/icons/reload.png"></a>
     <% } %>
+
+    <li>
+        <b>Teléfono</b>: <%= user.phone1 %>
+    </li>
+    <li>
+        <b>Otro Teléfono</b>:  <%= user.phone2 %>
+    </li>
+
+    <li>
+        <b>Correo Electrónico</b>: <%= user.email1 %>
+    </li>
+    <li>
+        <b>Otro Correo Electrónico</b>: <%= user.email2 %>
+    </li>
+
+    <li>
+        <b>Observaciones</b>:  <%- escapeText(user.notes) %>
+    </li>
 </ul>

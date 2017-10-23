@@ -66,8 +66,8 @@ function index(req, res, next, where) {
 
 
     models.User.findAll(options)
-    .then(function (salesmen) {
-        res.json(salesmen);
+    .then(function (user) {
+        res.json(user);
     })
     .catch(function (error) {
         next(error);

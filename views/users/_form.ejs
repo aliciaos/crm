@@ -69,6 +69,35 @@
     </li>
 
     <li>
+        <label>Teléfono:</label>
+        <input type="text" name="phone1" value="<%= user.phone1 %>" placeholder="Teléfono" autocomplete="off"/>
+    </li>
+
+
+    <li>
+        <label>Otro Teléfono:</label>
+        <input type="text" name="phone2" value="<%= user.phone2 %>" placeholder="Teléfono" autocomplete="off"/>
+    </li>
+
+    <li>
+        <label>Correo Electrónico:</label>
+        <input type="text" name="email1" value="<%= user.email1 %>" placeholder="email" size="50"
+               autocomplete="off"/>
+    </li>
+
+    <li>
+        <label>Otro Correo Electrónico:</label>
+        <input type="text" name="email2" value="<%= user.email2 %>" placeholder="email" size="50"
+               autocomplete="off"/>
+    </li>
+
+    <li>
+        <label>Observaciones:</label>
+        <br />
+        <textarea type="text" name="notes" placeholder="Observaciones" rows="5" cols="80"><%= user.notes %></textarea>
+    </li>
+
+    <li>
         <% if (!user.id) { %>
         <b>Password</b>: Introduzca el nuevo password dos veces.
         <% } else { %>
