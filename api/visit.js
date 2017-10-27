@@ -110,7 +110,7 @@ exports.indexFlattened = function (req, res, next) {
                     archived: false
                 }]
             },
-            attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+            attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']}
         };
 
         // Filtrar: Clientes de la fabrica especificada en la query:
@@ -119,7 +119,7 @@ exports.indexFlattened = function (req, res, next) {
                 model: models.Company,
                 as: "MainCompanies",
                 where: {id: searchCompanyId},
-                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+                attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']},
                 through: {attributes: ['CustomerId']}
             }];
         }
@@ -151,7 +151,7 @@ exports.indexFlattened = function (req, res, next) {
             where: {
                 id: req.customer.id
             },
-            attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+            attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']}
         });
     }
 
@@ -174,7 +174,7 @@ exports.indexFlattened = function (req, res, next) {
                 model: models.User,
                 as: "Salesman",
                 where: {fullname: likeCondition},
-                attributes: { exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt'] },
+                attributes: {exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt']},
                 include: [{
                     model: models.Attachment,
                     as: "Photo",
@@ -186,7 +186,7 @@ exports.indexFlattened = function (req, res, next) {
             options.include.push({
                 model: models.User,
                 as: "Salesman",
-                attributes: { exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt'] },
+                attributes: {exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt']},
                 include: [{
                     model: models.Attachment,
                     as: "Photo",
@@ -200,7 +200,7 @@ exports.indexFlattened = function (req, res, next) {
             model: models.User,
             as: "Salesman",
             where: {id: req.user.id},
-            attributes: { exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt'] },
+            attributes: {exclude: ['token', 'password', 'salt', 'createdAt', 'updatedAt', 'deletedAt']},
             include: [{
                 model: models.Attachment,
                 as: "Photo",
@@ -237,21 +237,22 @@ exports.indexFlattened = function (req, res, next) {
 
     options.include.push({
         model: models.Target,
-        attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] },
+        attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']},
         include: [
             {
                 model: models.Company,
-                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+                attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']}
             },
             {
                 model: models.TargetType,
-                attributes: { exclude: ['createdAt', 'updatedAt', 'deletedAt'] }
+                attributes: {exclude: ['createdAt', 'updatedAt', 'deletedAt']}
             }
         ]
     });
 
     options.order.push(['plannedFor', 'DESC']);
-    options.attributes = { exclude: ['createdAt', 'updatedAt', 'deletedAt'] };
+    options.order.push([{model: models.User, as: "Salesman"}, "fullname"]);
+    options.attributes = {exclude: ['createdAt', 'updatedAt', 'deletedAt']};
 
     models.Visit.findAll(options)
     .then(function (visits) {
@@ -390,6 +391,13 @@ exports.index = function (req, res, next) {
                 where: {fullname: likeCondition},
                 attributes: []
             });
+        } else {
+            // Necesario para hacer la busqueda ordenando por el nombre
+            options.include.push({
+                model: models.User,
+                as: "Salesman",
+                attributes: []
+            });
         }
     } else {
         // CUIDADO: Estoy retocando el include existente.
@@ -427,11 +435,13 @@ exports.index = function (req, res, next) {
     }
 
 
-
     //----------------
 
-    options.order.push(['plannedFor', 'DESC']);
-    options.attributes = { exclude: ['createdAt', 'updatedAt', 'deletedAt'] };
+    //options.order.push(['plannedFor', 'DESC']);
+    options.order.push(['plannedFor']);
+    options.order.push([{model: models.User, as: "Salesman"}, "fullname", 'DESC']);
+
+    options.attributes = {exclude: ['createdAt', 'updatedAt', 'deletedAt']};
 
     models.Visit.findAll(options)
     .then(function (visits) {
@@ -447,7 +457,7 @@ exports.index = function (req, res, next) {
             }), {
                 raw: true
             });
-           delete visit.dataValues.Fans;
+            delete visit.dataValues.Fans;
 
         });
 

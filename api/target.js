@@ -6,7 +6,9 @@ var Sequelize = require('sequelize');
 // Autoload el objetivo asociado a :targetId
 exports.load = function(req, res, next, targetId) {
 
-    models.Target.findById(targetId)
+    models.Target.findById(targetId, {
+        attributes: {exclude: ['archived', 'createdAt', 'updatedAt', 'deletedAt']}
+    })
     .then(function(target) {
         if (target) {
             req.target = target;
@@ -54,6 +56,13 @@ exports.index = function (req, res, next) {
 
 //-----------------------------------------------------------
 
+
+// GET /api/targets/:targetId
+exports.show = function (req, res, next) {
+    res.json(req.target);
+};
+
+//-----------------------------------------------------------
 
 // PUT /visits/:visitId/targets/:targetId
 exports.update = function(req, res, next) {

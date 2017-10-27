@@ -34,6 +34,11 @@ exports.load = function(req, res, next, userId) {
     });
 };
 
+// Forzar un autoload del usuario asociado al token pasado en la query de la pericion HTTP
+exports.loadToken = function(req, res, next) {
+
+    exports.load(req, res, next, req.token.userId);
+};
 
 //-----------------------------------------------------------
 
@@ -66,8 +71,8 @@ function index(req, res, next, where) {
 
 
     models.User.findAll(options)
-    .then(function (user) {
-        res.json(user);
+    .then(function (users) {
+        res.json(users);
     })
     .catch(function (error) {
         next(error);

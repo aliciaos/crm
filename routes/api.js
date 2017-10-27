@@ -9,6 +9,7 @@ var visitApi = require('../api/visit');
 var targetApi = require('../api/target');
 var targetTypeApi = require('../api/targetType');
 var userApi = require('../api/user');
+var postApi = require('../api/post');
 
 //-----------------------------------------------------------
 
@@ -30,6 +31,7 @@ router.param('companyId',    companyApi.load);
 router.param('visitId',      visitApi.load);
 router.param('targetId',     targetApi.load);
 router.param('targettypeId', targetTypeApi.load);
+router.param('postId',       postApi.load);
 
 //-----------------------------------------------------------
 
@@ -105,11 +107,15 @@ router.get('/salesmen/:userId(\\d+)/customers/:customerId(\\d+)/visits',
 
 //-----------------------------------------------------------
 
+// Definicion de rutas para los objetivos
 router.get('/visits/:visitId(\\d+)',
     visitApi.show);
 
 router.get('/visits/:visitId(\\d+)/targets',
     targetApi.index);
+
+router.get('/targets/:targetId(\\d+)',
+    targetApi.show);
 
 //-----------------------------------------------------------
 
@@ -133,6 +139,26 @@ router.get('/targetTypes',
 
 router.get('/targetTypes/:targettypeId(\\d+)',
     targetTypeApi.show);
+
+//-----------------------------------------------------------
+
+router.get('/users/tokenOwner',
+    userApi.loadToken,
+    userApi.show);
+
+
+router.get('/users/tokenOwner/visits',
+    userApi.loadToken,
+    visitApi.index);
+
+//-----------------------------------------------------------
+
+// Definicion de rutas del blog
+router.get('/posts',
+    postApi.index);
+
+router.get('/posts/:postId(\\d+)',
+    postApi.show);
 
 //-----------------------------------------------------------
 
