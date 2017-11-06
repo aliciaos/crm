@@ -26,15 +26,15 @@ Gestion de documentos (attachments) con gestion por etiquetas.
 Crear una base de datos para hacer pruebas de sobrecarga.
     - Analizar la complejidad de los informes de eficiencia.
 
-Listar visitas pendientes, o con tareas pendientes.
+Listar visitas pendientes, o con tareas pendientes o fallidas.
+
+Papelera: boton para borrar todo de golpe.
 
 Listar historial de visitas de una fabrica (de todos los clientes).
 
 Geolocalizacion.
 
 Unir dos visitas.
-
-Bootstrap
 
 Poder editar varias visitas de forma rapida usando AJAX (o algo similar).
 

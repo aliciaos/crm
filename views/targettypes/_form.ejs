@@ -1,8 +1,16 @@
 
-	<label>Nombre:</label>
-	<input type="text" name="name" value="<%= targettype.name %>" placeholder="Nombre"  autocomplete="off" autofocus /> <p>
-
-
-
-
+<div class="form-row">
+    <div class="form-group col">
+        <label for="name">Nombre:</label>
+        <input type="text"
+               class="form-control"
+               id="name"
+               name="name"
+               value="<%= targettype.name %>"
+               placeholder="Nombre"
+               autocomplete="off"
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+</div>
 

@@ -1,19 +1,24 @@
 
+<script src="/javascripts/misc_form.js"></script>
 
+<form id="myForm" method="post" action="/visits/<%= visit.id %>?_method=PUT" >
 
-<form method="post" action="/visits/<%= visit.id %>?_method=PUT" >
+	<div class="row">
+		<h1 class="text-center">
+			Editar Visita
 
-	<h1>
-		Editar Visita
+			<a href="#" onclick="return validateForm() && submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
 
-    	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return validateForm()" />
-		<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
-	</h1>
+			<a href="/reload"><span class="oi oi-circle-x h3"></span></a>
+
+		</h1>
+	</div>
 
     <% include _form.ejs %>
 
-   	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return validateForm()" />
-	<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
+	<a href="#" onclick="return validateForm() && submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+	<a href="/reload"><span class="oi oi-circle-x h3"></span></a>
 
 </form>
 

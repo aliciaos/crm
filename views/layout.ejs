@@ -1,110 +1,212 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="es">
+<head>
     <title>CRM</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
 
-    <header class="vcenter">
-        <div class="login right">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+    <!-- Temas de Bootswatch: minty, yeti, lumen, celurean, cosmo, ... -->
+    <!-- <link rel="stylesheet" href="/stylesheets/bootstrap_yeti.min.css" crossorigin="anonymous"> -->
+
+   <!-- Ionic -->
+    <link href="/open-iconic/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
+
+    <!-- Old CSS -->
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+</head>
+<body>
+
+<div class="container-fluid">
+
+    <div class="row justify-content-between">
+        <div class="col-sm-auto">
+            <a href="/"> <img src="<%= process.env.CRM_LOGO_URL || '/images/logo.png' %>" height="40px" class="left"/> </a>
+        </div>
+
+        <div class="col-sm-auto">
+            <h1><%= process.env.CRM_TITLE || "CRM" %></h1>
+
+        </div>
+
+        <div class="col-sm-auto">
             <% if (!session.user) { %>
-                <a href="/session">Entrar</a>
+            <a href="/session"><span class="oi oi-account-login"></span> Entrar</a>
             <% } else { %>
-                <a href="/users/<%= session.user.id %>"><span id="loginname"><%= session.user.login %></span></a>
-                <small>(<%= session.user.fullname %>)</small>
-                <a href="/session?_method=DELETE">Salir</a>
+            <a href="/users/<%= session.user.id %>"><span id="loginname" class="oi oi-person text-info">  <%= session.user.login %> </span></a>
+            <small>(<%= session.user.fullname %>)</small>
+            <a href="/session?_method=DELETE"><span class="oi oi-account-logout"></span> Salir </a>
             <% } %>
         </div>
-        <h1>
-            <a href="/"> <img src="<%= process.env.CRM_LOGO_URL || '/images/logo.png' %>" height="40px" class="left" /> </a>
-            <%= process.env.CRM_TITLE || "CRM" %>
-
-        </h1>
-    </header>
-
-    <nav>
-        .
-        <% if (session.user) { %>
-
-            <% if (session.user.isSalesman) { %>
-                <a href="/salesmen/<%= session.user.id %>/visits">Mis visitas</a>
-            <% } %>
-
-            <a href="/customers">Clientes</a>
-
-            <a href="/visits">Visitas</a>
-
-            <% if (session.user.isAdmin || true) { %>
-                <a href="/companies">Fábricas</a>
-            <% } %>
-
-            <% if (session.user.isAdmin) { %>
-                <a href="/targettypes">Objetivos</a>
-            <% } %>
-
-            <a href="/reports">Informes</a>
-
-            <% if (session.user.isAdmin) { %>
-                <a href="/salesmen">Vendedores</a>
-                <a href="/admins">Admininstradores</a>
-                <a href="/users">Usuarios</a>
-            <% } %>
-
-            <a href="/posts">Blog</a>
-
-            <% if (session.user.isAdmin) { %>
-                <a href="/trash">Papelera</a>
-            <% } %>
-        <% } %>
+    </div>
 
 
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary py-0 my-1" role="navigation">
 
-    </nav>
+        <!--
+        <a class="navbar-brand" href="/"> <img src="<%= process.env.CRM_LOGO_URL || '/images/logo.png' %>" height="40px" class="left"/>  <%= process.env.CRM_TITLE || "CRM" %></a>
+        -->
 
-    <section>
-            <% if (messages.info) { %>
-               <article id='flashinfo'>
-                 <h3>Información de interés:</h3>
-                 <ul>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto  navbar-dark bg-primary ">
+
+                <% if (session.user) { %>
+
+                    <a class="nav-item nav-link <%= url.match(/^\/visit/) ? 'active' : '' %>" href="/visits"><span
+                                class="oi oi-list-rich"></span> Visitas <span class="sr-only">(current)</a>
+
+                    <% if (session.user.isSalesman) { %>
+                    <a class="nav-item nav-link <%= url.match(/^\/sales/) ? 'active' : '' %>"
+                       href="/salesmen/<%= session.user.id %>/visits"><span class="oi oi-list-rich"></span> Mis visitas</a>
+                    <% } %>
+
+                    <a class="nav-item nav-link <%= url.match(/^\/custo/) ? 'active' : '' %>" href="/customers"> <span
+                                class="oi oi-map-marker"></span> Clientes</a>
+
+                    <% if (session.user.isAdmin || true) { %>
+                    <a class="nav-item nav-link <%= url.match(/^\/compa/) ? 'active' : '' %>" href="/companies"><span
+                                class="oi oi-tags"></span> Fábricas</a>
+                    <% } %>
+
+                    <% if (session.user.isAdmin) { %>
+                    <a class="nav-item nav-link <%= url.match(/^\/targettypes/) ? 'active' : '' %>"
+                       href="/targettypes"><span class="oi oi-target"></span> Objetivos</a>
+                    <% } %>
+
+                    <a class="nav-item nav-link <%= url.match(/^\/repor/) ? 'active' : '' %>" href="/reports"><span
+                                class="oi oi-pie-chart"></span> Informes</a>
+
+                    <% if (session.user.isAdmin) { %>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="oi oi-people"></span> Usuarios
+                        </a>
+                        <div class="dropdown-menu bg-primary" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item text-light" href="/salesmen"><span class="oi oi-person"></span>
+                                Vendedores</a>
+                            <a class="dropdown-item text-light" href="/admins"><span class="oi oi-wrench"></span>
+                                Admininstradores</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-light" href="/users"><span class="oi oi-infinity"></span> Todos</a>
+                        </div>
+                    </li>
+                    <% } %>
+
+                    <li class="nav-item">
+                        <a class="nav-link <%= url.match(/^\/posts/) ? 'active' : '' %>" href="/posts"><span
+                                    class="oi oi-chat"></span> Blog</a>
+                    </li>
+
+                    <% if (session.user.isAdmin) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/trash"><span class="oi oi-trash"></span> Papelera</a>
+                    </li>
+                    <% } %>
+                <% } else { %>
+                    <br />
+                <% } %>
+            </ul>
+
+        </div><!-- /.navbarSupportedContent -->
+    </nav><!-- /.navbar -->
+
+    <% if (messages.info) { %>
+    <div class="row-fluid">
+        <div class="col-md-12">
+            <div class='alert alert-info alert-dismissible fade show'  role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class='alert-heading'>Información de interés:</h3>
+                <ul>
                     <% for (var i in messages.info) { %>
-                      <li> <%= messages.info[i] %> </li>
+                    <li> <%= messages.info[i] %> </li>
                     <% } %>
-                 </ul>
-               </article>
-            <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <% } %>
 
-            <% if (messages.success) { %>
-               <article id='flashsuccess'>
-                 <h3>Tareas completadas con éxito:</h3>
-                 <ul>
+    <% if (messages.success) { %>
+    <div class="row-fluid">
+        <div class="col-md-12">
+            <div class='alert alert-success alert-dismissible fade show' role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class='alert-heading'>Tareas completadas con éxito:</h3>
+                <ul>
                     <% for (var i in messages.success) { %>
-                       <li> <%= messages.success[i] %> </li>
+                    <li> <%= messages.success[i] %> </li>
                     <% } %>
-                 </ul>
-               </article>
-            <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <% } %>
 
-            <% if (messages.error) { %>
-               <article id='flasherror'>
-                 <h3>Errores encontrados:</h3>
-                 <ul>
+    <% if (messages.error) { %>
+    <div class="row-fluid">
+        <div class="col-md-12">
+            <div class='alert alert-danger alert-dismissible fade show' role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class='alert-heading'>Errores encontrados:</h3>
+                <ul>
                     <% for (var i in messages.error) { %>
-                      <li> <%= messages.error[i] %> </li>
+                    <li> <%= messages.error[i] %> </li>
                     <% } %>
-                 </ul>
-               </article>
-            <% } %>
-    </section>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <% } %>
 
+    <div class="row-fluid">
+        <div class="col-md-12">
+            <%- body %>
+        </div>
+    </div>
 
-  <section>
-    <div> <%- body %> </div>
-  </section>
+    <div class="row-fluid">
+        <div class="col-xs-12">
+            <hr>
 
-  <footer class="version">
-        <small>Versión: 28 Octubre 2017</small>
-  </footer>
+            <footer>
+                <p class="text-info text-right">
+                    <small>Versión: 12 Noviembre 2017</small>
+                </p>
+            </footer>
+        </div>
+    </div>
 
-  </body>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"
+        integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
+        integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+
+</body>
 </html>

@@ -1,37 +1,33 @@
 
-<script src="/javascripts/misc_form.js"></script>
+<div class="row justify-content-between">
 
-<form method="get" action="<%= url %>" id="filterForm" class="right filters">
+    <div class="col-sm-auto">
 
-    <div class="vcenter">
-        Filtros:
-        <input type="image" class="icon" src="/icons/find.png" border="0" alt="Submit" />
+        <div class="row justify-content-between">
+            <h1 class="text-center">
+                <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
 
-        <input type="image" class="icon right" src="/icons/cancel.png" border="0"
-               onClick="cleanupForm('filterForm')" />
+                Blog:
 
+                <a href="/posts/new"><span class="oi oi-plus h3"></span></a>
+            </h1>
+        </div>
+
+        <div class="row justify-content-between">
+            <% if (locals.paginate_control) { %>
+            <%- paginate_control %>
+            <% } %>
+        </div>
     </div>
 
-    <label>Contenido:</label>
-    <input type="text" name="searchContent" value="<%= locals.searchContent || '' %>"
-           placeholder="texto a buscar"
-           size="30" autocomplete="off"/>
-
-</form>
-
-<h1>
-    Posts:
-
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
-
-    <a href="/posts/new"><img class="icon" src="/icons/add.png"></a>
-</h1>
+    <div class="col-sm-auto">
+        <% include _filter.ejs %>
+    </div>
+</div>
 
 
-<% if (locals.paginate_control) { %>
-<%- paginate_control %>
-<% } %>
-
+<div class=" clearfix">
+</div>
 
 <% for (var i in posts) { %>
 <% var post = posts[i]; %>
@@ -40,46 +36,48 @@
 <% var authorFullName = post.Author && post.Author.fullname || ""; %>
 <% var authorPhotoUrl = post.Author && post.Author.Photo && post.Author.Photo.url || ""; %>
 
-<article class="post">
+<div class="card bg-light my-2">
 
-    <div class="right">
-        <small>
-            <%= post.updatedAt.toLocaleDateString() %>
-        </small>
-    </div>
+    <div class="card-body">
 
-    <div class="vcenter right clear">
+        <div class="float-right">
+            <div class="row justify-content-end">
+                <% if (authorPhotoUrl) { %>
+                <img src="<%= authorPhotoUrl %>" class="rounded-circle" width="50px" width="50px" height="50px"/>
+                <% } else { %>
+                <img src="/images/face.png" class="rounded-circle" width="50px"/>
+                <% } %>
+            </div>
 
-        <% if (authorId) { %>
-        <% if (session.user.isAdmin) { %>
-        <a href="/users/<%= authorId %>"> <%= authorFullName %> </a>
-        <% } else { %>
-        <%= authorFullName %>
-        <% } %>
-        <% } else { %>
-        <span class='toberepared'><em>sin autor</em></span>
-        <% } %>
+            <div class="row justify-content-end">
+                <% if (authorId) { %>
+                <% if (session.user.isAdmin) { %>
+                <a href="/users/<%= authorId %>"> <%= authorFullName %> </a>
+                <% } else { %>
+                <%= authorFullName %>
+                <% } %>
+                <% } else { %>
+                <span class='text-danger'><em>sin autor</em></span>
+                <% } %>
+            </div>
+        </div>
 
-        <% if (authorPhotoUrl) { %>
-        <img src="<%= authorPhotoUrl %>" width="30px"/>
-        <% } else { %>
-        <img src="/images/face.png" width="30px"/>
-        <% } %>
-    </div>
-
-
-
-    <header class="post">
-        <h3 class="post">
+        <h2 class="card-title">
             <a href='/posts/<%= post.id %>'> <%= post.title %> </a>
-        </h3>
-    </header>
+        </h2>
 
-    <p class="small">
-        <%= post.body.slice(0, 300) %> ...
-    </p>
 
-</article>
+        <h6 class="card-subtitle mb-2 text-muted">
+            <%= post.updatedAt.toLocaleDateString() %>
+        </h6>
+
+
+        <p class="card-text">
+            <%= post.body.slice(0, 400) %> ...
+        </p>
+
+    </div>
+</div>
 
 <% } %>
 

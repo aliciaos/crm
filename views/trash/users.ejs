@@ -1,36 +1,40 @@
-<h1>
-    Usuarios Eliminados:
+<div class="row">
+    <h1 class="text-center">
+        <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
 
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
-</h1>
+        Usuarios Eliminados:
+    </h1>
+</div>
 
 <% if (locals.paginate_control) { %>
 <%- paginate_control %>
 <% } %>
 
-<table>
-
-    <tr>
-        <th>
+<table  class='table table-striped table-bordered table-sm'>
+    <thead>
+    <tr class="table-primary">
+        <th scope="col">
             Borrado
         </th>
-        <th>
+        <th scope="col">
             Login
         </th>
-        <th>
+        <th scope="col">
             Nombre
         </th>
-        <th>
+        <th scope="col">
             Administrador
         </th>
-        <th>
+        <th scope="col">
             Vendedor
         </th>
-        <th>
+        <th scope="col">
 
         </th>
     </tr>
+    </thead>
 
+    <tbody>
     <% for (var i in users) { %>
     <% var user = users[i]; %>
 
@@ -44,7 +48,7 @@
         </td>
 
         <td>
-            <div class="vcenter">
+            <div>
 
                 <% if (user.Photo) { %>
                 <img src="<%= user.Photo.url %>" width="30px"/>
@@ -66,18 +70,19 @@
 
         <td>
             <% if (session.user && session.user.isAdmin) { %>
-            <a href="/trash/users/<%= user.id %>?_method=POST"><img class="icon" src="/icons/restore.png"></a>
+            <a href="/trash/users/<%= user.id %>?_method=DELETE"
+               onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE el usuario: <%= user.login %>?');"><span class="oi oi-delete h4"></a>
             <% } %>
 
-
             <% if (session.user && session.user.isAdmin) { %>
-            <a href="/trash/users/<%= user.id %>?_method=DELETE"
-               onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE el usuario: <%= user.login %>?');"><img class="icon" src="/icons/kill.png"></a>
+            <a href="/trash/users/<%= user.id %>?_method=POST"><span class="oi oi-loop-circular h4"></span></a>
             <% } %>
         </td>
     </tr>
 
     <% } %>
+    </tbody>
+
 </table>
 
 

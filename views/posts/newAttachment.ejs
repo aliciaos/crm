@@ -1,18 +1,34 @@
-<form method='post' action='/posts/<%= post.id %>/attachments' enctype='multipart/form-data'>
 
-    <h1>
-        Añadir Nuevo Adjunto:
+<script src="/javascripts/misc_form.js"></script>
 
-        <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit"/>
-        <a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
-    </h1>
+<form id="myForm" method='post' action='/posts/<%= post.id %>/attachments' enctype='multipart/form-data'>
 
-    <label for="attachment">Seleccione la imagen, película o el documento a adjuntar (máximo 20MB):</label>
+    <div class="row">
+        <h1 class="text-center">
+            Añadir Nuevo Adjunto:
 
-    <br/>
+            <a href="#" onclick="submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
 
-    <input type="file" id="attachment" name="attachment" />
+            <a href="/goback"><span class="oi oi-circle-x h3"></a>
+        </h1>
+    </div>
 
+
+
+    <div class="form-row my-3">
+        <div class="form-group col">
+            <label for="attachment">
+                Seleccione la imagen, película o el documento a adjuntar (máximo 20MB):
+            </label>
+            <input type="file" class="form-control-file" id="attachment" name="attachment">
+        </div>
+    </div>
+
+
+
+    <a href="#" onclick="submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+    <a href="/goback"><span class="oi oi-circle-x h3"></a>
 
 </form>
 

@@ -1,44 +1,48 @@
-<h1> 
-    <%= title %>
+<div class="row">
+    <h1 class="text-center">
+        <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
 
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
+        <%= title %>
 
-    <% if (session.user) { %>
-      <a href="/users/new"><img class="icon" src="/icons/add.png"></a>
-    <% }; %>
-</h1>
+        <% if (session.user) { %>
+        <a href="/users/new"><span class="oi oi-plus h3"></span></a>
+        <% }; %>
+    </h1>
+</div>
 
 <%  if (locals.paginate_control) { %>
   <%- paginate_control %>
 <% } %>
 
-<table>
-
-    <tr>
-        <th>
+<table  class='table table-striped table-bordered table-sm'>
+    <thead>
+    <tr class="table-primary">
+        <th scope="col">
             Nombre
         </th>
-        <th>
+        <th scope="col">
             Login
         </th>
-        <th>
+        <th scope="col">
             Administrador
         </th>
-        <th>
+        <th scope="col">
             Vendedor
         </th>
-        <th>
+        <th scope="col">
         
         </th>
     </tr>
+    </thead>
 
+    <tbody>
     <% for (var i in users) { %>
 <% var user = users[i] %>
 
     <tr>
 
         <td>
-            <div class="vcenter">
+            <div>
                 <% if (user.Photo) { %>
                 <img src="<%= user.Photo.url %>" width="30px" />
                 <% } else { %>
@@ -66,7 +70,7 @@
           <% if (session.user.isAdmin && session.user.id !== users[i].id) { %>
             <a href="/users/<%= users[i].id %>?_method=DELETE" 
                onClick="return confirm('Borrar cuenta: <%= users[i].login %>');">
-               <img class="icon" src="/icons/basura.png">
+                <span class="oi oi-trash h5"></span>
             </a> 
           <% } %>
         </td>
@@ -74,6 +78,8 @@
     </tr>
 
   <%  }; %>
+    </tbody>
+
 </table>
 
 

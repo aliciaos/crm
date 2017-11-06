@@ -1,9 +1,6 @@
 
-
 <script>
-    function validateForm() {
-
-        return true;
+    function validateForm(formId) {
 
         var msgs = [];
 
@@ -21,36 +18,40 @@
             alert("Existen errores:\n" + msgs.join("\n"));
             return false;
         } else {
+            document.getElementById(formId).submit();
             return true;
         }
     }
 </script>
 
 
-<form method="post" action="/companies/<%= company.id %>/visits" >
+<form id="myForm" method="post" action="/companies/<%= company.id %>/visits">
 
-    <h1>
-        Crear Visitas para los Clientes de <%= company.name %>:
+    <div class="row">
+        <h1 class="text-center">
+            Crear Visitas para los Clientes de <%= company.name %>:
 
-        <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return validateForm()" />
-        <a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
-    </h1>
+            <a href="#" onclick="return validateForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+            <a href="/goback"><span class="oi oi-circle-x h3"></span></a>
+        </h1>
+    </div>
 
     <ul>
 
         <li>
             <b>Vendedor</b>:
-            <select name="salesmanId" id="salesmanId" >
+            <select name="salesmanId" id="salesmanId">
 
-                <option value="0"  <%= !locals.salesmanId ? "selected" : "" %> >
+                <option value="0" <%= !locals.salesmanId ? "selected" : "" %> >
                     Seleccione un vendedor
                 </option>
 
                 <% for (var i in locals.salesmenInfo) { %>
-                    <% var salesmanInfo = salesmenInfo[i]; %>
-                    <option value="<%= salesmanInfo.id %>"  <%= salesmanInfo.id == locals.salesmanId ? "selected" : "" %> >
-                        <%= salesmanInfo.fullname %>
-                    </option>
+                <% var salesmanInfo = salesmenInfo[i]; %>
+                <option value="<%= salesmanInfo.id %>" <%= salesmanInfo.id == locals.salesmanId ? "selected" : "" %> >
+                    <%= salesmanInfo.fullname %>
+                </option>
                 <% } %>
             </select>
         </li>
@@ -62,44 +63,45 @@
                    pattern="\d\d-\d\d-\d\d\d\d"
                    placeholder="dd-mm-aaaa"
                    size="11"
-                   autocomplete="off" />
+                   autocomplete="off"/>
         </li>
 
         <li>
             <label>Observaciones de las Visitas:</label>
-            <br />
+            <br/>
             <textarea type="text" name="visitsNotes" placeholder="Observaciones" rows="5"
                       cols="80"><%= locals.visitsNotes %></textarea>
         </li>
 
         <li>
             <b>Tipo de Objetivo</b>:
-            <select name="targetTypeId" id="targetTypeId" >
+            <select name="targetTypeId" id="targetTypeId">
 
-                <option value="0"  <%= !locals.targetTypeId ? "selected" : "" %> >
+                <option value="0" <%= !locals.targetTypeId ? "selected" : "" %> >
                     Seleccione un tipo de objetivo
                 </option>
 
                 <% for (var i in locals.targetTypesInfo) { %>
-                    <% var targetTypeInfo = targetTypesInfo[i]; %>
-                    <option value="<%= targetTypeInfo.id %>"  <%= targetTypeInfo.id == locals.targetTypeId ? "selected" : "" %> >
-                        <%= targetTypeInfo.name %>
-                    </option>
+                <% var targetTypeInfo = targetTypesInfo[i]; %>
+                <option value="<%= targetTypeInfo.id %>" <%= targetTypeInfo.id == locals.targetTypeId ? "selected" : "" %> >
+                    <%= targetTypeInfo.name %>
+                </option>
                 <% } %>
             </select>
         </li>
 
         <li>
             <label>Observaciones del Objetivo:</label>
-            <br />
+            <br/>
             <textarea type="text" name="targetTypesNotes" placeholder="Observaciones" rows="5"
                       cols="80"><%= locals.targetTypesNotes %></textarea>
         </li>
 
     </ul>
 
-    <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return validateForm()" />
-    <a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
+    <a href="#" onclick="return validateForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+    <a href="/goback"><span class="oi oi-circle-x h3"></span></a>
 
 </form>
 

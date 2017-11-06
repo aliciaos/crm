@@ -1,0 +1,25 @@
+
+<script src="/javascripts/misc_form.js"></script>
+
+
+<div class="card border-primary my-2">
+    <div class="card-body p-1 m-1">
+        <form id="myForm" method="get" action="<%= url %>" id="filterForm" >
+
+            <h4 class="card-title">
+                Filtros:
+
+                <a href="#" onclick="submitForm('myForm')"><span class="oi oi-magnifying-glass h3"></span></a>
+
+                <a href="#" onClick="cleanupForm('filterForm'); return false"><span
+                            class="oi oi-circle-x h3"></span></a>
+            </h4>
+
+            <label>Contenido:</label>
+            <input type="text" name="searchContent" value="<%= locals.searchContent || '' %>"
+                   placeholder="texto a buscar"
+                   size="30" autocomplete="off"/>
+
+        </form>
+    </div>
+</div>

@@ -1,14 +1,16 @@
+<div class="row">
+    <h1 class="text-center">
+        <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
 
-<h1> 
-    Tipo de Objetivo: 
+        Tipo de Objetivo:
 
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
+        <a href="/targettypes/<%= targettype.id %>/edit"><span class="oi oi-pencil h3"></span></a>
+    </h1>
+</div>
 
-    <a href="/targettypes/<%= targettype.id %>/edit"><img class="icon" src="/icons/edit.png"></a>
-</h1>
+<form>
 
-<ul>
-    <li>
-        <b>Nombre</b>: <%= targettype.name %>
-    </li>
-</ul>
+    <% var customerShowView = true; %>
+
+    <% include _form.ejs %>
+</form>

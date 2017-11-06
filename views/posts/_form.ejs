@@ -1,8 +1,25 @@
-<label for="post_title">Titulo:</label><br/>
-<input type="text" id="post_title" name="title" size='80' value='<%= post.title %>'/>
 
-<br/>
+<div class="form-row">
+    <div class="form-group col">
+        <label for="post_title">Título:</label>
+        <input type="text"
+               class="form-control"
+               id="post_title"
+               name="title"
+               value="<%= post.title %>"
+               placeholder="Título"
+               autocomplete="off"/>
+    </div>
+</div>
 
-<label for="post_body">Contenido:</label><br/>
-<textarea id="post_body" name="body" rows="20" cols="80"><%= post.body %></textarea>
-
+<div class="form-row">
+    <div class="form-group col">
+        <label for="post_body">Contenido:</label>
+        <textarea type="text"
+                  class="form-control"
+                  id="post_body"
+                  name="body"
+                  placeholder="Introduzca aquí el contenido del post"
+                  rows="15"><%= post.body %></textarea>
+    </div>
+</div>

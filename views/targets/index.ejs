@@ -1,15 +1,13 @@
+<div class="row">
+    <h1 class="text-center">
+        Objetivos:
 
+        <% if (locals.readwrite) { %>
+        <a href="/visits/<%= visit.id %>/targets/new"><span class="oi oi-plus h3"></span></a>
+        <% } %>
 
-<h2> 
-    Objetivos: 
-
-    <% if (locals.readwrite) { %>
-        <a href="/visits/<%= visit.id %>/targets/new">
-            <img class="icon" src="/icons/add.png">
-        </a>
-    <% } %>
-
-</h2>
+    </h1>
+</div>
 
 <%- include _index.ejs %>
 

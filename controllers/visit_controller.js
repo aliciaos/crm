@@ -3,7 +3,7 @@ var Sequelize = require('sequelize');
 
 var moment = require('moment');
 
-var paginate = require('./paginate').paginate;
+var paginate = require('../helpers/paginate').paginate;
 
 var companyHelper = require("../helpers/company");
 var customerHelper = require("../helpers/customer");

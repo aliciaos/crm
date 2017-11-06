@@ -24,12 +24,12 @@
 </script>
 
 
-<ul>
-	<li>
-		<b>Cliente</b>:
+<div class="form-group">
+	<label for="customerId">Cliente:</label>
 
-
-		<select name="customerId" id="customerId" >
+		<select name="customerId"
+				class="form-control"
+				id="customerId" >
 
 		    <option value="0"  <%= visit.CustomerId === 0 ? "selected" : "" %> > 
     				Seleccione un cliente  
@@ -42,13 +42,14 @@
     			</option>
     		<% } %>
 		</select>
-	</li>
+</div>
 
+<div class="form-group">
+	<label for="salesmanId">Vendedor:</label>
 
-
-	<li>
-		<b>Vendedor</b>: 
-		<select name="salesmanId" id="salesmanId" >
+		<select name="salesmanId"
+				class="form-control"
+				id="salesmanId" >
 
 		    <option value="0"  <%= visit.SalesmanId === 0 ? "selected" : "" %> > 
     				Seleccione un vendedor  
@@ -61,32 +62,43 @@
     			</option>
     		<% } %>
 		</select>
-	</li>
+</div>
 
-	<li>
-		<label><b>Fecha planificación</b> (dd-mm-aaaa):</label>
-		<input type="text" name="plannedFor" 
-		       value="<%= moment(visit.plannedFor).format("DD-MM-YYYY") %>" 
+<div class="form-group">
+	<label for="plannedFor">Fecha planificación (dd-mm-aaaa):</label>
+
+		<input type="text"
+			   class="form-control"
+			   id="plannedFor"
+			   name="plannedFor"
+		       value="<%= moment(visit.plannedFor).format("DD-MM-YYYY") %>"
 		       pattern="\d\d-\d\d-\d\d\d\d"
 		       placeholder="dd-mm-aaaa" 
 		       autocomplete="off" />
-	</li>
+</div>
 
-	<li>
+<div class="form-group">
+	<label for="fulfilledAt">Fecha realización (dd-mm-aaaa):</label>
 
-		<% var fulfillAtValue = !!visit.fulfilledAt ? moment(visit.fulfilledAt).format("DD-MM-YYYY") : ""; %>
+    <% var fulfillAtValue = !!visit.fulfilledAt ? moment(visit.fulfilledAt).format("DD-MM-YYYY") : ""; %>
 
-		<label><b>Fecha realización</b> (dd-mm-aaaa):</label>
-		<input type="text" name="fulfilledAt" 
-		       value="<%= fulfillAtValue %>" 
+		<input type="text"
+			   class="form-control"
+			   id="fulfilledAt"
+			   name="fulfilledAt"
+		       value="<%= fulfillAtValue %>"
 		       pattern="\d\d-\d\d-\d\d\d\d"
 		       placeholder="dd-mm-aaaa" 
 		       autocomplete="off" />
-	</li>
+</div>
 
-	<li>
-		<label>Observaciones:</label>
-		<br />
-		<textarea type="text" name="notes" placeholder="Observaciones" rows="5" cols="80"><%= visit.notes %></textarea>
-	</li>
-</ul>
+<div class="form-group">
+	<label for="notes">Observaciones:</label>
+
+		<textarea type="text"
+				  class="form-control"
+				  id="notes"
+				  name="notes"
+				  placeholder="Observaciones"
+				  rows="5"><%= visit.notes %></textarea>
+</div>

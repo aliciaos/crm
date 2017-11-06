@@ -1,42 +1,72 @@
-<h1>
-    Posts:
 
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
-</h1>
+<div class="row">
+    <h1 class="text-center">
+        <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
 
-
-<% for (var i in posts) { %>
-
-<% var post = posts[i]; %>
-
-<article class="post">
-    <header class="post">
-
-        <h3 class="post">
-            <a href='/posts/<%= post.id %>'> <%= post.title %> </a>
-        </h3>
-
-        <em> <%= post.Author && post.Author.login || "Sin autor" %> </em>
-
-    </header>
-
-    <p class="small">
-        <%= post.body.slice(0,300) %> ...
-    </p>
-
-    <footer>
-
-        <% if (session.user && session.user.isAdmin) { %>
-        <a href="/trash/posts/<%= post.id %>?_method=POST"><img class="icon" src="/icons/restore.png"></a>
-        <% } %>
+        Artículos Eliminados:
+    </h1>
+</div>
 
 
-        <% if (session.user && session.user.isAdmin) { %>
-        <a href="/trash/posts/<%= post.id %>?_method=DELETE"
-           onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE el post: <%= post.name %>?');"><img class="icon" src="/icons/kill.png"></a>
-        <% } %>
 
-    </footer>
-</article>
+<table  class='table table-striped table-bordered table-sm'>
+    <thead>
+    <tr class="table-primary">
+        <th scope="col">
+            Borrado
+        </th>
+        <th scope="col">
+            Título
+        </th>
+        <th scope="col">
+            Autor
+        </th>
+        <th scope="col">
+            Contenido
+        </th>
+        <th scope="col">
 
-<%  } %>
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <% for (var i in posts) { %>
+    <% var post = posts[i]; %>
+
+
+        <tr>
+            <td>
+                <%= moment(post.deletedAt).format("DD-MM-YYYY") %>
+            </td>
+
+            <td>
+                <%= post.title %>
+            </td>
+
+            <td>
+                <%= post.Author && post.Author.login || "Sin autor" %>
+            </td>
+
+            <td>
+                <%= post.body.slice(0,300) %> ...
+            </td>
+
+            <td>
+                <% if (session.user && session.user.isAdmin) { %>
+                <a href="/trash/posts/<%= post.id %>?_method=DELETE"
+                   onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE el post: <%= post.name %>?');"><span class="oi oi-delete h4"></a>
+                <% } %>
+
+                <% if (session.user && session.user.isAdmin) { %>
+                <a href="/trash/posts/<%= post.id %>?_method=POST"><span class="oi oi-loop-circular h4"></span></a>
+                <% } %>
+            </td>
+        </tr>
+
+    <% } %>
+    </tbody>
+
+</table>
+

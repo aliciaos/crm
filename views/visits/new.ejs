@@ -1,17 +1,23 @@
 
-<form method="post" action="/visits" >
+<script src="/javascripts/misc_form.js"></script>
 
-	<h1>
-  		Crear Visita: 
+<form id="myForm" method="post" action="/visits" >
 
-    	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return validateForm()" />
-		<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
-	</h1>
+	<div class="row">
+		<h1 class="text-center">
+			Crear Visita:
+
+			<a href="#" onclick="return validateForm() && submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+			<a href="/goback"><span class="oi oi-circle-x h3"></span></a>
+		</h1>
+	</div>
 
 	<% include _form.ejs %>
 
-   	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return validateForm()" />
-	<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
+	<a href="#" onclick="return validateForm() && submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+	<a href="/goback"><span class="oi oi-circle-x h3"></span></a>
 
 </form>
 

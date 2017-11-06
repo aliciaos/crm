@@ -1,6 +1,6 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
-var paginate = require('./paginate').paginate;
+var paginate = require('../helpers/paginate').paginate;
 var authentication = require('../helpers/authentication');
 var cloudinary = require('cloudinary');
 var fs = require('fs');

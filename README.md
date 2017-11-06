@@ -30,7 +30,7 @@ Aplicar migraciones:
     
 Ejecutar seeder
 
-    $ npm run-scripts seed_local
+    $ npm run-script seed_local
     
 Ejecutar el servidor:
 

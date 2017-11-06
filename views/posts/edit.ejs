@@ -1,18 +1,23 @@
 
-<form method='post' action='/posts/<%= post.id %>?_method=PUT'>
+<script src="/javascripts/misc_form.js"></script>
 
+<form id="myForm" method='post' action='/posts/<%= post.id %>?_method=PUT'>
 
-    <h1>
-        Editar Post
+    <div class="row">
+        <h1 class="text-center">
+            Editar Post
 
-        <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" />
-        <a href="/reload"><img class="icon" src="/icons/cancel.png"></a>
-    </h1>
+            <a href="#" onclick="submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+            <a href="/reload"><span class="oi oi-circle-x h3"></span></a>
+        </h1>
+    </div>
 
     <% include _form.ejs %>
 
-    <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" />
-    <a href="/reload"><img class="icon" src="/icons/cancel.png"></a>
+    <a href="#" onclick="submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+    <a href="/reload"><span class="oi oi-circle-x h3"></span></a>
 
 </form>
 

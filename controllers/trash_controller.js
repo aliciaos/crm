@@ -1,6 +1,6 @@
 var models = require('../models');
 var Sequelize = require('sequelize');
-var paginate = require('./paginate').paginate;
+var paginate = require('../helpers/paginate').paginate;
 var cloudinary = require('cloudinary');
 
 var moment = require('moment');
@@ -540,7 +540,10 @@ exports.posts = function (req, res, next) {
         return models.Post.findAll(options);
     })
     .then(function (posts) {
-        res.render('trash/posts', {posts: posts});
+        res.render('trash/posts', {
+            posts: posts,
+            moment: moment
+        });
     })
     .catch(function (error) {
         next(error);

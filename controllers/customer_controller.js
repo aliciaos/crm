@@ -5,7 +5,7 @@ const readline = require('readline');
 
 var moment = require('moment');
 
-var paginate = require('./paginate').paginate;
+var paginate = require('../helpers/paginate').paginate;
 
 var companyHelper = require("../helpers/company");
 

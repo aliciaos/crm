@@ -1,42 +1,46 @@
+<div class="row">
+    <h1 class="text-center">
+        <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
 
-<h1>
-    Visitas Eliminadas:
-
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
-</h1>
+        Visitas Eliminadas:
+    </h1>
+</div>
 
 <%  if (locals.paginate_control) { %>
 <%- paginate_control %>
 <% } %>
 
-<table>
-    <tr>
-        <th>
+<table  class='table table-striped table-bordered table-sm'>
+    <thead>
+    <tr class="table-primary">
+        <th scope="col">
             Borrado
         </th>
-        <th>
+        <th scope="col">
             Cliente
         </th>
-        <th>
+        <th scope="col">
             Vendedor
         </th>
-        <th>
+        <th scope="col">
             Planificado
         </th>
-        <th>
+        <th scope="col">
             Realizado
         </th>
-        <th>
+        <th scope="col">
             Objetivos
         </th>
-        <th>
+        <th scope="col">
             Observaciones
         </th>
-        <th>
+        <th scope="col">
             
         </th>
-    </tr> 
+    </tr>
+    </thead>
 
+    <tbody>
     <% for (var i in visits) { %> 
         <% var visit = visits[i]; %>
 
@@ -55,22 +59,22 @@
                     <%= customerCode %>
                 <% } else { %>
                     <% customerCode = "SIN CLIENTE"; %>
-                    <span class='toberepared'><%= customerCode %></span>
+                    <span class='text-light bg-danger'><%= customerCode %></span>
                 <% } %>
             </td>
             <td>
-                <div class="vcenter">
+                <div>
                     <% if (salesmanPhotoUrl) { %>
-                        <img src="<%= salesmanPhotoUrl %>" width="30px" />
+                    <img src="<%= salesmanPhotoUrl %>" width="30px"/>
                     <% } else { %>
-                        <img src="/images/face.png" width="30px" />
+                    <img src="/images/face.png" width="30px"/>
                     <% } %>
 
                     <% if (salesmanName) { %>
-                        <%= salesmanName %>
+                    <%= salesmanName %>
                     <% } else { %>
-                        <% salesmanName = "SIN VENDEDOR"; %>
-                    <span class='toberepared'><em><%= salesmanName %></em></span>
+                    <% salesmanName = "SIN VENDEDOR"; %>
+                    <span class='text-light bg-danger'><em><%= salesmanName %></em></span>
                     <% } %>
                 </div>
             </td>
@@ -88,18 +92,18 @@
             </td>
             <td>
                 <% if (session.user && session.user.isAdmin) { %>
-                <a href="/trash/visits/<%= visit.id %>?_method=POST"><img class="icon" src="/icons/restore.png"></a>
+                <a href="/trash/visits/<%= visit.id %>?_method=DELETE"
+                   onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE la visita?');"><span class="oi oi-delete h4"></a>
                 <% } %>
 
-
                 <% if (session.user && session.user.isAdmin) { %>
-                <a href="/trash/visits/<%= visit.id %>?_method=DELETE"
-                   onClick="return confirm('¿Seguro que quiere borrar DEFINITIVAMENTE la visita?');"><img class="icon" src="/icons/kill.png"></a>
+                <a href="/trash/visits/<%= visit.id %>?_method=POST"><span class="oi oi-loop-circular h4"></span></a>
                 <% } %>
             </td>
 
          </tr> 
     <% } %>
+    </tbody>
 
 </table>
 

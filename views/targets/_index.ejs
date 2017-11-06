@@ -1,40 +1,40 @@
-<ul>
+<ul class="list-group list-group-flush">
     <% for (var i in targets) { %>
     <% var target = targets[i]; %>
 
     <% var typeName = target.TargetType ? target.TargetType.name : "" %>
     <% var companyName = target.Company ? target.Company.name : "" %>
 
-    <li>
+    <li class="list-group-item bg-light">
         <% if (companyName) { %>
         <b><%= companyName %></b>:
         <% } else { %>
-        <span class="toberepared">SIN FABRICA</span>:
+        <span class="text-light bg-danger">SIN FABRICA</span>:
         <% } %>
 
         <% if (typeName) { %>
         <%= typeName %>
         <% } else { %>
-        <span class="toberepared">SIN TIPO</span>
+        <span class="text-light bg-danger">SIN TIPO</span>
         <% } %>
 
         <small>
             <% if (target.success === null) { %>
-                <span class="tobedone">[PENDIENTE]</span>
+                <span class="text-info bg-warning">[PENDIENTE]</span>
             <% } else if (target.success) { %>
-                <span class="done">[Cumplido]</span>
+                <span class="text-success">[Cumplido]</span>
             <% } else { %>
-                <span class="failed">[Fallido]
+                <span class="text-light bg-danger">[Fallido]</span>
             <% } %>
         </small>
 
 
         <% if (locals.readwrite) { %>
-        <a href="/visits/<%= visit.id %>/targets/<%= target.id %>/edit"><img class="icon" src="/icons/edit.png"></a>
+        <a href="/visits/<%= visit.id %>/targets/<%= target.id %>/edit"><span class="oi oi-pencil h5"></span></a>
 
         <a href="/visit/<%= visit.id %>/targets/<%= target.id %>&_method=DELETE"
            onClick="return confirm('¿Seguro que quiere borrar el objetivo <%= typeName %>-<%= companyName %>?');">
-            <img class="icon" src="/icons/basura.png">
+            <span class="oi oi-trash h5"></span>
         </a>
         <% } %>
 

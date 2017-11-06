@@ -20,101 +20,249 @@
 </script>
 
 
-<ul>
-
-    <li>
-        <% if ( !user.id) { %>
-        <label for="preg" class="rem"><b>Login</b>:</label>
-        <input type="text" id="login" name="login" value="<%= user.login %>" autocomplete="off"/>
-        <% } else { %>
-        <b>Login</b>: <%= user.login %>
-        <% } %>
-    </li>
-
-
-    <li>
-        <b for="photo">Fotografía:</b></label>
-        <input type="file" id="photo" accept="image/*" name="photo"/>
-        <p>
-
-            <% if (!user.isNewRecord) { %>
-            <label>Mantener fotografía actual:</label>
-            <input type="checkbox" name="keepphoto" value="1" checked>
-            <% } %>
-    </li>
+<div class="form-row">
+    <div class="form-group col">
+        <label for="login">Login:</label>
+        <input type="text"
+               class="form-control"
+               id="login"
+               name="login"
+               value="<%= user.login %>"
+               placeholder="Login"
+               autocomplete="off"
+                <%= !!user.id || customerShowView ? "readonly" : "" %> />
+    </div>
+</div>
 
 
-    <li>
-        <label><b>Nombre y Apellidos:</b></label>
-        <input type="text" name="fullname" value="<%= user.fullname %>" placeholder="Nombre" autocomplete="off"
-               autofocus/>
-    </li>
 
-    <li class="vcenter">
-        <label><b>Administrador</b>:</label>
-        <% if (session.user && session.user.isAdmin) { %>
-            <input type="checkbox" name="isAdmin" value="1" <%= user.isAdmin ? 'checked' : '' %> >
-        <% } else { %>
-        <%= user.isAdmin ? 'Si' : 'No' %>
-        <% } %>
-    </li>
-
-    <li class="vcenter">
-        <label><b>Vendedor</b>:</label>
-        <% if (session.user && session.user.isAdmin) { %>
-        <input type="checkbox" name="isSalesman" value="1" <%= user.isSalesman ? 'checked' : '' %> >
-        <% } else { %>
-        <%= user.isSalesman ? 'Si' : 'No' %>
-        <% } %>
-    </li>
-
-    <li>
-        <label>Teléfono:</label>
-        <input type="text" name="phone1" value="<%= user.phone1 %>" placeholder="Teléfono" autocomplete="off"/>
-    </li>
+<div class="form-row">
+    <div class="form-group col">
+        <label for="fullname">Nombre y Apellidos:</label>
+        <input type="text"
+               class="form-control"
+               id="fullname"
+               name="fullname"
+               value="<%= user.fullname %>"
+               placeholder="Nombre"
+               autocomplete="off"
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+</div>
 
 
-    <li>
-        <label>Otro Teléfono:</label>
-        <input type="text" name="phone2" value="<%= user.phone2 %>" placeholder="Teléfono" autocomplete="off"/>
-    </li>
-
-    <li>
-        <label>Correo Electrónico:</label>
-        <input type="text" name="email1" value="<%= user.email1 %>" placeholder="email" size="50"
-               autocomplete="off"/>
-    </li>
-
-    <li>
-        <label>Otro Correo Electrónico:</label>
-        <input type="text" name="email2" value="<%= user.email2 %>" placeholder="email" size="50"
-               autocomplete="off"/>
-    </li>
-
-    <li>
-        <label>Observaciones:</label>
+<div class="form-row align-items-center">
+    <legend class="col-form-legend col-auto">
+        Fotografía:
         <br />
-        <textarea type="text" name="notes" placeholder="Observaciones" rows="5" cols="80"><%= user.notes %></textarea>
-    </li>
-
-    <li>
-        <% if (!user.id) { %>
-        <b>Password</b>: Introduzca el nuevo password dos veces.
+        <% if (user.Photo) { %>
+        <img src="<%= user.Photo.url %>" width="200px" />
         <% } else { %>
-        <b>Password</b>: Dejar en blanco para no cambiar el password actual.
+        <img src="/images/face.png" width="200px" />
         <% } %>
+    </legend>
 
-        <ul>
-            <li>
-                <label for="user_password" class="rem"><b>Nuevo Password</b>:</label>
-                <input type="password" id="user_password" name="password"/>
-            </li>
+    <% if (!customerShowView) { %>
+    <div class="col">
+        <div class="form-group">
+            <input type="file" class="form-control-file" id="photo" accept="image/*" name="photo">
+        </div>
 
-            <li>
-                <label for="user_confirm_password" class="rem"><b>Confirmar Password</b>:</label>
-                <input type="password" id="user_confirm_password"/>
-            </li>
-        </ul>
-    </li>
+        <% if (!user.isNewRecord) { %>
+        <div class="form-group">
+            <div class="form-check">
+                <label class="form-check-label ml-2" for="keepphoto">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           id="keepphoto"
+                           name="keepphoto"
+                           value="1"
+                           checked>
+                    - Mantener fotografía actual.
+                </label>
+            </div>
+        </div>
+        <% } %>
+    </div>
+    <% } %>
+</div>
 
-</ul>
+<fieldset class="form-group">
+    <div class="row">
+        <legend class="col-form-legend col-auto">Roles:</legend>
+
+        <div class="col-auto">
+
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="isAdmin"
+                           id="isAdmin"
+                           value="1"
+                            <%= user.isAdmin ? 'checked' : '' %>
+                            <%= session.user && session.user.isAdmin ? '' : 'disabled' %>
+                            <%= customerShowView ? "disabled" : "" %>
+                    >
+                    Administrador
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="isSalesman"
+                           id="isSalesman"
+                           value="1"
+                            <%= user.isSalesman ? 'checked' : '' %>
+                            <%= session.user && session.user.isAdmin ? '' : 'disabled' %>
+                            <%= customerShowView ? "disabled" : "" %>
+                    >
+                    Vendedor
+                </label>
+            </div>
+
+        </div>
+    </div>
+</fieldset>
+
+
+
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="phone1">Teléfono:</label>
+        <input type="text"
+               class="form-control"
+               id="phone1"
+               name="phone1"
+               value="<%= user.phone1 %>"
+               placeholder="Teléfono"
+               autocomplete="off"
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="phone2">Otro Teléfono:</label>
+        <input type="text"
+               class="form-control"
+               id="phone2"
+               name="phone2"
+               value="<%= user.phone2 %>"
+               placeholder="Teléfono"
+               autocomplete="off"
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+</div>
+
+
+
+
+
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="email1">Correo Electrónico:</label>
+        <input type="email"
+               class="form-control"
+               id="email1"
+               name="email1"
+               value="<%= user.email1 %>"
+               placeholder="email"
+               autocomplete="off"
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+
+    <div class="form-group col-md-6">
+        <label for="email2">Otro Correo Electrónico:</label>
+        <input type="email"
+               class="form-control"
+               id="email2"
+               name="email2"
+               value="<%= user.email2 %>"
+               placeholder="email"
+               autocomplete="off"
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+</div>
+
+
+<div class="form-row">
+    <div class="form-group col">
+        <label for="notes">Observaciones:</label>
+        <textarea type="text"
+                  class="form-control"
+                  id="notes"
+                  name="notes"
+                  placeholder="Observaciones"
+                  rows="5"
+                <%= customerShowView ? "readonly" : "" %>
+        ><%= user.notes %></textarea>
+    </div>
+</div>
+
+
+<% if (session.user.isAdmin || session.user.id === user.id) { %>
+
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="" token">
+                Token:
+                <% if (customerShowView) { %>
+                    <a href="/users/<%= user.id %>/token?_method=PUT"><span class="oi oi-reload ml-5"></span></a>
+                    Generar nuevo token
+                <% } %>
+            </label>
+            <input type="text"
+                   id="token"
+                   class="form-control"
+                   value="<%= user.token %>"
+                   readonly/>
+        </div>
+    </div>
+<% } %>
+
+
+<% if (!customerShowView) { %>
+
+<div class="form-group">
+    <div class="row">
+        <legend class="col-form-legend col">
+            Password:
+            <% if (!user.id) { %>
+            <span class="text-danger">(Introduzca el nuevo password dos veces)</span>
+            <% } else { %>
+            <span class="text-danger">(Dejar en blanco para no cambiar el password actual)</span>
+            <% } %>
+        </legend>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            <input type="password"
+                   class="form-control"
+                   id="user_password"
+                   name="password"
+                   placeholder="Nuevo Password"
+                   autocomplete="off"/>
+        </div>
+
+        <div class="form-group col-md-6">
+            <input type="password"
+                   class="form-control"
+                   id="user_confirm_password"
+                   placeholder="Confirmar Password"
+                   autocomplete="off"/>
+        </div>
+    </div>
+</div>
+
+<% } %>
+
+
+

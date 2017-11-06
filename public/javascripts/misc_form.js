@@ -38,4 +38,12 @@ function setDate(date, field1Id, field2Id, field3Id, field4Id) {
     }
 }
 
+/**
+ * Envia un formulario.
+ *
+ * @param formId Id del formulario a enviar.
+ */
+function submitForm(formId) {
 
+    document.getElementById(formId).submit();
+}

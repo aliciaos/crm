@@ -1,23 +1,26 @@
+<div class="row">
+    <h1 class="text-center">
+        <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
 
+        Tipos de Objetivo:
 
-<h1> 
-    Tipos de Objetivo:
+        <a href="/targettypes/new"><span class="oi oi-plus h3"></span></a>
+    </h1>
+</div>
 
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
-
-    <a href="/targettypes/new"><img class="icon" src="/icons/add.png"></a>
-</h1>
-
-<table>
-    <tr>
-        <th>
+<table  class='table table-striped table-bordered table-sm'>
+    <thead>
+    <tr class="table-primary">
+        <th scope="col">
             Nombre
         </th>
-        <th>
+        <th scope="col">
             
         </th>
-    </tr> 
+    </tr>
+    </thead>
 
+    <tbody>
     <% for (var i in targettypes) { %> 
         <% var targettype = targettypes[i]; %>      
 
@@ -27,10 +30,11 @@
             </td>
             <td>
                 <a href="/targettypes/<%= targettype.id %>?_method=DELETE" 
-                   onClick="return confirm('¿Seguro que quiere borrar el tipo de objetivo: <%= targettype.name %>?');"><img class="icon" src="/icons/basura.png"></a>
+                   onClick="return confirm('¿Seguro que quiere borrar el tipo de objetivo: <%= targettype.name %>?');"><span class="oi oi-trash h5"></span></a>
             </td>
          </tr> 
     <% } %>
+    </tbody>
 
 </table>
 

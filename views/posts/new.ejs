@@ -1,16 +1,26 @@
-<form method='post' action='/posts'>
 
-    <h1>
-        Nuevo Post
+<script src="/javascripts/misc_form.js"></script>
 
-        <input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit"/>
+<form id="myForm" method='post' action='/posts'>
 
-        <a href="/reload"><img class="icon" src="/icons/cancel.png"></a>
+    <div class="row">
+        <h1 class="text-center">
+            Nuevo Post
 
-    </h1>
+            <a href="#" onclick="submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+            <a href="/reload"><span class="oi oi-circle-x h3"></a>
+
+        </h1>
+    </div>
 
 
     <%- include _form.ejs %>
+
+
+    <a href="#" onclick="submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+    <a href="/reload"><span class="oi oi-circle-x h3"></a>
 
 </form>
 

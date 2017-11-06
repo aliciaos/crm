@@ -1,126 +1,86 @@
 
-<h1>
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
-</h1>
-
 <% var authorId = post.Author && post.Author.id || 0; %>
 <% var authorLogin = post.Author && post.Author.login || ""; %>
 <% var authorFullName = post.Author && post.Author.fullname || ""; %>
 <% var authorPhotoUrl = post.Author && post.Author.Photo && post.Author.Photo.url || ""; %>
 
+<div class="row">
 
-<article class="post">
+    <h1 class="text-center">
 
-    <div class="right">
-        <small>
-            <%= post.updatedAt.toLocaleDateString() %>
-        </small>
-    </div>
+        <a href="/goback"><span class="oi oi-arrow-circle-left h3"></span></a>
 
-        <div class="vcenter right clear">
+        Artículo:
 
-            <% if (authorId) { %>
-            <% if (session.user.isAdmin) { %>
-            <a href="/users/<%= authorId %>"> <%= authorFullName %> </a>
-            <% } else { %>
-            <%= authorFullName %>
-            <% } %>
-            <% } else { %>
-            <span class='toberepared'><em>sin autor</em></span>
-            <% } %>
-
-            <% if (authorPhotoUrl) { %>
-            <img src="<%= authorPhotoUrl %>" width="30px"/>
-            <% } else { %>
-            <img src="/images/face.png" width="30px"/>
-            <% } %>
-        </div>
-
-
-
-
-    <header class="post">
-        <h3 class="post">
-            <%= post.title %>
-
-            <% if (session.user && (session.user.id == post.AuthorId || session.user.isAdmin) ) { %>
-
-            <a href="/posts/<%= post.id %>/edit"><img class="icon" src="/icons/edit.png"></a>
-
-            <a href="/posts/<%= post.id %>?_method=DELETE"
-               onClick="return confirm('¿Seguro que quiere borrar el post: <%= post.title %>?');"><img class="icon"
-                                                                                                       src="/icons/basura.png"></a>
-
-            <% } %>
-        </h3>
-    </header>
-
-    <p class="small">
-        <%- escapeText(post.body) %>
-    </p>
-
-</article>
-
-<!-- -------------------------- -->
-
-<h2>
-    Adjuntos:
-
-    <% if (session.user && session.user.id == post.AuthorId) { %>
-    <a href="/posts/<%= post.id %>/attachments/new"><img class="icon" src="/icons/add.png"></a>
-    <% } %>
-</h2>
-
-<div class="attachments">
-    <% for (var i in post.Attachments) { %>
-    <% var attachment = post.Attachments[i]; %>
-
-    <div class="attachmentItem">
-        <a href='<%= attachment.url %>'
-           type='<%= attachment.mime %>'
-           target='_blank'>
-            <%= attachment.filename %>
-        </a>
-
-        <% if ( attachment.mime === "image/jpeg" ||
-                attachment.mime === "image/gif" ||
-                attachment.mime === "image/png" ||
-                attachment.mime === "image/jpg" ||
-                attachment.mime === "image/gif" ) { %>
-
-            <%- cloudinary.image(attachment.public_id, {width: 200, secure: true}) %>
-
-        <% } else if ( attachment.mime === "video/mp4" ) {  %>
-
-            <%- cloudinary.video(attachment.public_id, {width: 200, controls: true, secure: true}) %>
-
-        <% } else if ( attachment.mime === "application/pdf" ) {  %>
-
-            <%- cloudinary.image(attachment.public_id, {width: 150, format: "jpg", secure: true}) %>
-
-        <% } else {  %>
-
-            <img src='/icons/doc.png' width="150px"/>
-
+        <% if (session.user && (session.user.id == post.AuthorId || session.user.isAdmin) ) { %>
+        <a href="/posts/<%= post.id %>?_method=DELETE"
+           onClick="return confirm('¿Seguro que quiere borrar el post: <%= post.title %>?');"><span
+                    class="oi oi-trash mx-2 h3"></span></a>
         <% } %>
-
-        <div>
-            <% if (session.user && session.user.id == post.AuthorId) { %>
-            <a href="/posts/<%= post.id %>/attachments/<%= attachment.id %>?_method=DELETE"
-               onClick="return confirm('¿Seguro que quiere borrar el fichero adjunto: <%= attachment.filename %>?');"><img class="icon" src="/icons/basura.png"></a>
-            <% } %>
-
-            (<em><%= attachment.updatedAt.toLocaleDateString() %></em>)
-        </div>
-    </div>
-
-    <% } %>
+    </h1>
 </div>
 
-<!-- -------------------------- -->
 
-<% var comments = post.Comments; %>
-<%- include ../comments/index.ejs %>
+<div class="card bg-light my-2">
+    <div class="card-header">
+        <h1>
+            <div class="float-right h5">
+                <div class="row justify-content-end">
+                    <% if (authorPhotoUrl) { %>
+                    <img src="<%= authorPhotoUrl %>" class="rounded-circle" width="50px" width="50px" height="50px" />
+                    <% } else { %>
+                    <img src="/images/face.png" class="rounded-circle" width="50px" />
+                    <% } %>
+                </div>
 
-<!-- -------------------------- -->
+                <div class="row justify-content-end">
+                    <% if (authorId) { %>
+                    <% if (session.user.isAdmin) { %>
+                    <a href="/users/<%= authorId %>"> <%= authorFullName %> </a>
+                    <% } else { %>
+                    <%= authorFullName %>
+                    <% } %>
+                    <% } else { %>
+                    <span class='text-danger'><em>sin autor</em></span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="row">
+                <%= post.title %>
+            </div>
+
+            <div class="row h3">
+
+
+                <span class="text-muted"> <%= post.updatedAt.toLocaleDateString() %> </span>
+
+
+                <% if (session.user && (session.user.id == post.AuthorId || session.user.isAdmin) ) { %>
+                <a href="/posts/<%= post.id %>/edit"><span class="oi oi-pencil mx-2 h3"></span></a>
+                <% } %>
+
+                <div class=" clearfix"></div>
+        </h1>
+    </div>
+
+
+    <div class="card-body">
+
+        <p class="card-text lead">
+            <%- escapeText(post.body) %>
+        </p>
+
+        <!-- -------------------------- -->
+
+        <% include _indexAttachment.ejs %>
+
+        <!-- -------------------------- -->
+
+        <% var comments = post.Comments; %>
+        <%- include ../comments/index.ejs %>
+
+    </div>
+</div>
+
 

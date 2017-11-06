@@ -24,11 +24,12 @@
 </script>
 
 
-<ul>
+<div class="form-group">
+	<label for="companyId">Fábrica:</label>
 
-	<li>
-		<b>Fábrica</b>:
-		<select name="companyId" id="companyId" >
+		<select name="companyId"
+				class="form-control"
+				id="companyId" >
 
 		    <option value="0"  <%= target.CompanyId === 0 ? "selected" : "" %> > 
     				Seleccione una fábrica
@@ -41,12 +42,14 @@
     			</option>
     		<% } %>
 		</select>
-	</li>
+</div>
 
+<div class="form-group">
+	<label for="targettypeId">Tipo de Objetivo</label>
 
-	<li>
-		<b>Tipo de Objetivo</b>:
-		<select name="targettypeId" id="targettypeId" >
+		<select name="targettypeId"
+				class="form-control"
+				id="targettypeId" >
 
 		    <option value="0"  <%= target.TargetTypeId === 0 ? "selected" : "" %> > 
     				Seleccione un tipo
@@ -59,26 +62,53 @@
     			</option>
     		<% } %>
 		</select>
-	</li>
+</div>
 
+<div class="form-group">
+	<label for="exampleInputPassword1">Estado:</label>
 
-	<li>
-		<label><b>Estado</b>:</label>
-		<ul>
-			<li> Pendiente: <input type="radio" name="success"
-								   value="nulo" <%= target.success === null ? "checked" : "" %> ></li>
-			<li> Cumplido: <input type="radio" name="success"
-								  value="si" <%= target.success === true ? "checked" : "" %> ></li>
-			<li> Fallido: <input type="radio" name="success"
-								 value="no" <%= target.success === false ? "checked" : "" %> ></li>
-		</ul>
-	</li>
+	<div class="form-check">
+		<label class="form-check-label">
+			<input type="radio"
+				   class="form-check-input"
+				   name="success"
+				   value="nulo" <%= target.success === null ? "checked" : "" %> >
+			Pendiente.
+		</label>
+	</div>
 
+	<div class="form-check">
+		<label class="form-check-label">
 
-	<li>
-		<label>Observaciones:</label>
-		<br />
-		<textarea type="text" name="notes" placeholder="Observaciones" rows="5" cols="80"><%= target.notes %></textarea>
-	</li>
+			<input type="radio"
+				   class="form-check-input"
+				   name="success"
+				   value="si" <%= target.success === true ? "checked" : "" %> >
+			Cumplido.
+		</label>
+	</div>
 
-</ul>
+	<div class="form-check">
+		<label class="form-check-label">
+
+			<input type="radio"
+				   class="form-check-input"
+				   name="success"
+				   value="no" <%= target.success === false ? "checked" : "" %> >
+			Fallido.
+		</label>
+	</div>
+
+</div>
+
+<div class="form-group">
+	<label for="notes">Observaciones:</label>
+
+		<textarea type="text"
+				  class="form-control"
+				  id="notes"
+				  name="notes"
+				  placeholder="Observaciones"
+				  rows="5"><%= target.notes %></textarea>
+</div>
+

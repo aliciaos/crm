@@ -1,51 +1,63 @@
-<% include _filter.ejs %>
+<div class="row justify-content-between">
+
+    <div class="col-sm-auto">
+
+        <div class="row">
+            <h1 class="text-center">
+
+                <a href="/goback"><span class="oi oi-arrow-circle-left h3"></span></a>
+
+                <% if (locals.customer) { %>
+                <% if (locals.salesman) { %>
+                Mis visitas a <em><%= locals.customer.name %></em>:
+                <% } else { %>
+                Visitas a <em><%= locals.customer.name %></em>:
+                <% } %>
+                <% } else { %>
+                <% if (locals.salesman) { %>
+                Mis visitas:
+                <% } else { %>
+                Todas las visitas:
+                <% } %>
+                <% } %>
+
+                <a href="/visits/new"><span class="oi oi-plus h3"></span></a>
+
+                <%
+                var urlPrint = "";
+                if (locals.salesman) {
+                    urlPrint += "/salesmen/" + locals.salesman.id;
+                }
+                if (locals.customer) {
+                    urlPrint += "/customers/" + locals.customer.id;
+                }
+                urlPrint += "/visits/print?";
+                urlPrint += "searchdateafter=" + (locals.searchdateafter || '') + "&";
+                urlPrint += "searchdatebefore=" + (locals.searchdatebefore || '') + "&";
+                urlPrint += "searchcustomer=" + (locals.searchcustomer || '') + "&";
+                urlPrint += "searchsalesman=" + (locals.searchsalesman || '') + "&";
+                urlPrint += "searchCompanyId=" + (locals.searchCompanyId || '') + "&";
+                urlPrint += "searchfavourites=" + (locals.searchfavourites || '');
+                %>
+                <a href="<%= urlPrint %>"><span class="oi oi-print h3"></span></a>
+            </h1>
+        </div>
+
+        <div class="row">
+            <% if (locals.paginate_control) { %>
+            <%- paginate_control %>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="col-sm-auto">
+        <% include _filter.ejs %>
+    </div>
+</div>
 
 
-<h1>
-    <% if (locals.customer) { %>
-    <% if (locals.salesman) { %>
-    Mis visitas a <em><%= locals.customer.name %></em>:
-    <% } else { %>
-    Visitas a <em><%= locals.customer.name %></em>:
-    <% } %>
-    <% } else { %>
-    <% if (locals.salesman) { %>
-    Mis visitas:
-    <% } else { %>
-    Todas las visitas:
-    <% } %>
-    <% } %>
-
-    <a href="/goback"><img class="icon" src="/icons/back.png"></a>
-
-    <a href="/visits/new"><img class="icon" src="/icons/add.png"></a>
-
-    <%
-    var urlPrint = "";
-    if (locals.salesman) {
-        urlPrint += "/salesmen/" + locals.salesman.id;
-    }
-    if (locals.customer) {
-        urlPrint += "/customers/" + locals.customer.id;
-    }
-    urlPrint += "/visits/print?";
-    urlPrint += "searchdateafter=" + (locals.searchdateafter || '') + "&";
-    urlPrint += "searchdatebefore=" + (locals.searchdatebefore || '') + "&";
-    urlPrint += "searchcustomer=" + (locals.searchcustomer || '') + "&";
-    urlPrint += "searchsalesman=" + (locals.searchsalesman || '') + "&";
-    urlPrint += "searchCompanyId=" + (locals.searchCompanyId || '') + "&";
-    urlPrint += "searchfavourites=" + (locals.searchfavourites || '');
-    %>
-    <a href="<%= urlPrint %>">
-        <img class="icon" src="/icons/print.png">
-    </a>
-
-</h1>
-
-
-<% if (locals.paginate_control) { %>
-<%- paginate_control %>
-<% } %>
+<div class=" clearfix">
+</div>
 
 <% for (var i in visits) { %>
 <% var visit = visits[i]; %>
@@ -65,103 +77,108 @@
 <% var salesmanPhotoUrl = visit.Salesman && visit.Salesman.Photo && visit.Salesman.Photo.url || ""; %>
 <% var salesmanId = visit.Salesman && visit.Salesman.id || 0; %>
 
-<div class="boxItem">
-
-    <div class="right">
-
-        <div class="vcenter">
-
-            <%- include ../favourites/_stars.ejs %>
-
-            <% if (salesmanName) { %>
-                <% if (session.user.isAdmin) { %>
-                    <a href="/users/<%= salesmanId %>"> <%= salesmanName %> </a>
-                <% } else { %>
-                    <%= salesmanName %>
-                <% } %>
-            <% } else { %>
-                <% salesmanName = "SIN VENDEDOR"; %>
-                <span class='toberepared'><em><%= salesmanName %></em></span>
-            <% } %>
-
-            <% if (salesmanPhotoUrl) { %>
-            <img src="<%= salesmanPhotoUrl %>" width="30px"/>
-            <% } else { %>
-            <img src="/images/face.png" width="30px"/>
-            <% } %>
-
-        </div>
-    </div>
 
 
-    <div class="vcenter">
+<div class="card bg-light my-2">
 
-        <small>
-            <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
-            /
-            <% if (!!visit.fulfilledAt) { %>
-            <%= moment(visit.fulfilledAt).format("DD-MM-YYYY") %>
-            <% } else { %>
-            <span class='tobedone'><em>PENDIENTE</em></span>
-            <% } %>
-        </small>
+    <div class="card-header">
 
-
-        <% if (session.user && session.user.isAdmin || salesmanId === session.user.id) { %>
-        <a href="/visits/<%= visit.id %>"><img class="icon" src="/icons/ver.png"></a>
-        <% } %>
-
-
-        <% if (session.user && session.user.isAdmin) { %>
-        <a href="/visits/<%= visit.id %>?_method=DELETE"
-           onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><img
-                    class="icon" src="/icons/basura.png"></a>
-        <% } %>
-
-    </div>
-
-    <div class="vcenter">
         <% if (customerArchived) { %>
-        <small>
-            <span class="archived">[Archivado]</span>
-        </small>
-        <br />
+        <h4 class="card-title">
+            <span class="text-warning">[Archivado]</span>
+        </h4>
         <% } %>
+
+        <h4 class="card-title">
+            <% if (customerCode) { %>
+            <a href="/customers/<%= customerId %>"> <%= customerName %> </a>
+            (<a href="/customers/<%= customerId %>"><%= customerCode %></a>)
+            <% } else { %>
+            <% customerCode = "SIN CLIENTE"; %>
+            <span class='text-light bg-danger'><%= customerCode %></span>
+            <% } %>
+
+
+            <% if (session.user && session.user.isAdmin || salesmanId === session.user.id) { %>
+            <a href="/visits/<%= visit.id %>"><span class="oi oi-eye"></span></a>
+            <% } %>
+
+            <!--
+            <% if (session.user && session.user.isAdmin) { %>
+            <a href="/visits/<%= visit.id %>?_method=DELETE"
+               onClick="return confirm('¿Seguro que quiere borrar la visita de <%= salesmanName %> a <%= customerCode %>?');"><span class="oi oi-trash"></span></a>
+            <% } %>
+            -->
+        </h4>
 
         <% if (customerCode) { %>
-        <big>
-            <a href="/customers/<%= customerId %>"> <%= customerName %> </a>
-        </big>
-        <small>
-            (<a href="/customers/<%= customerId %>"><%= customerCode %></a>)
-        </small>
-        <small>
+        <h6 class="card-subtitle mb-2 text-muted">
             <%= customerAddr %>
-        </small>
-
-        <% } else { %>
-        <% customerCode = "SIN CLIENTE"; %>
-        <span class='toberepared'><%= customerCode %></span>
+        </h6>
         <% } %>
     </div>
 
+    <div class="card-body">
 
-    <div>
+        <div class="float-right ml-4">
+
+            <div class="row justify-content-end">
+
+                <%- include ../favourites/_stars.ejs %>
+
+                <% if (salesmanPhotoUrl) { %>
+                <img src="<%= salesmanPhotoUrl %>" class="rounded-circle" width="50px" width="50px" height="50px" />
+                <% } else { %>
+                <img src="/images/face.png" class="rounded-circle" width="50px" width="50px" height="50px" />
+                <% } %>
+            </div>
+
+
+            <div class="row justify-content-end">
+
+                <% if (salesmanName) { %>
+                <% if (session.user.isAdmin) { %>
+                <a href="/users/<%= salesmanId %>"> <%= salesmanName %> </a>
+                <% } else { %>
+                <%= salesmanName %>
+                <% } %>
+                <% } else { %>
+                <% salesmanName = "SIN VENDEDOR"; %>
+                <span class='text-light bg-danger'><em><%= salesmanName %></em></span>
+                <% } %>
+            </div>
+        </div>
+
+        <%= moment(visit.plannedFor).format("DD-MM-YYYY") %>
+        /
+        <% if (!!visit.fulfilledAt) { %>
+        <%= moment(visit.fulfilledAt).format("DD-MM-YYYY") %>
+        <% } else { %>
+        <span class='text-info bg-warning'><em>PENDIENTE</em></span>
+        <% } %>
+
+
+
         <% if (visit.notes) { %>
-        <div class="notes">
-        <%- escapeText(visit.notes) %>
+        <p class="card-text ">
+            <%- escapeText(visit.notes) %>
+        </p>
+        <% } %>
+
+        <% var targets = visit.Targets %>
+        <% locals.readwrite = false; %>
+
+        <% if (targets.length > 0) { %>
+        <h5 class="card-title">
+            Objetivos:
+        </h5>
+        <div class="targetindex">
+            <%- include ../targets/_index.ejs %>
         </div>
         <% } %>
     </div>
-
-    <% var targets = visit.Targets %>
-    <% locals.readwrite = false; %>
-
-    <div class="targetindex">
-        <%- include ../targets/_index.ejs %>
-    </div>
-
 </div>
+
 
 <% } %>
 

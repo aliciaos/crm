@@ -1,67 +1,62 @@
-<h2>
+<h3 class="card-title">
     Comentarios:
 
-    <a href="/posts/<%= post.id %>/comments/new"><img class="icon" src="/icons/add.png"></a>
-</h2>
-
-<% for (var i in comments) { %>
-<% var comment = comments[i]; %>
-
-<% var authorId = comment.Author && comment.Author.id || 0; %>
-<% var authorLogin = comment.Author && comment.Author.login || ""; %>
-<% var authorFullName = comment.Author && comment.Author.fullname || ""; %>
-<% var authorPhotoUrl = comment.Author && comment.Author.Photo && comment.Author.Photo.url || ""; %>
+    <a href="/posts/<%= post.id %>/comments/new"><span class="oi oi-plus h4"></span></a>
+</h3>
 
 
-<article class="comment">
+<ul class="list-group list-group-flush">
 
-    <div class="right">
-        <small>
-            <%= post.updatedAt.toLocaleDateString() %>
-        </small>
-    </div>
+    <% for (var i in comments) { %>
+    <% var comment = comments[i]; %>
 
-    <div class="vcenter right clear">
+    <% var authorId = comment.Author && comment.Author.id || 0; %>
+    <% var authorLogin = comment.Author && comment.Author.login || ""; %>
+    <% var authorFullName = comment.Author && comment.Author.fullname || ""; %>
+    <% var authorPhotoUrl = comment.Author && comment.Author.Photo && comment.Author.Photo.url || ""; %>
 
-            <% if (authorId) { %>
-            <% if (session.user.isAdmin) { %>
-            <a href="/users/<%= authorId %>"> <%= authorFullName %> </a>
-            <% } else { %>
-            <%= authorFullName %>
-            <% } %>
-            <% } else { %>
-            <span class='toberepared'><em>sin autor</em></span>
-            <% } %>
+    <li class="list-group-item bg-light">
 
-            <% if (authorPhotoUrl) { %>
-            <img src="<%= authorPhotoUrl %>" width="30px"/>
-            <% } else { %>
-            <img src="/images/face.png" width="30px"/>
+        <div class="float-right">
+            <div class="row justify-content-end">
+                <% if (authorPhotoUrl) { %>
+                <img src="<%= authorPhotoUrl %>" class="rounded-circle" width="50px" width="50px" height="50px" />
+                <% } else { %>
+                <img src="/images/face.png" class="rounded-circle" width="50px" width="50px" height="50px" />
+                <% } %>
+            </div>
+
+            <div class="row justify-content-end">
+                <% if (authorId) { %>
+                <% if (session.user.isAdmin) { %>
+                <a href="/users/<%= authorId %>"> <%= authorFullName %> </a>
+                <% } else { %>
+                <%= authorFullName %>
+                <% } %>
+                <% } else { %>
+                <span class='text-danger'><em>sin autor</em></span>
+                <% } %>
+            </div>
+        </div>
+
+        <div>
+            <small><%= post.updatedAt.toLocaleDateString() %></small>
+            <% if (session.user && (session.user.id == comment.AuthorId || session.user.isAdmin) ) { %>
+            <a href="/posts/<%= post.id %>/comments/<%= comment.id %>/edit"><span class="oi oi-pencil"></span></a>
+
+            <a href="/posts/<%= post.id %>/comments/<%= comment.id %>?_method=DELETE"
+               onClick="return confirm('¿Seguro que quiere borrar el comentario?');"><span
+                        class="oi oi-trash"></span></a>
             <% } %>
         </div>
 
+        <p class="card-text" >
+            <%- escapeText(comment.body) %>
+        </p>
 
-
-    <% if (session.user && (session.user.id == comment.AuthorId || session.user.isAdmin) ) { %>
-
-    <div>
-        <a href="/posts/<%= post.id %>/comments/<%= comment.id %>/edit"><img class="icon" src="/icons/edit.png"></a>
-
-        <a href="/posts/<%= post.id %>/comments/<%= comment.id %>?_method=DELETE"
-           onClick="return confirm('¿Seguro que quiere borrar el comentario?');"><img class="icon" src="/icons/basura.png"></a>
-
-    </div>
+    </li>
     <% } %>
 
-
-    <p>
-        <%- escapeText(comment.body) %>
-    </p>
-
-
-
-</article>
-<%  } %>
-
+</ul>
 
 

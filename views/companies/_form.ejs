@@ -1,57 +1,113 @@
-<ul>
-	<li>
-		<label>Nombre:</label>
-		<input type="text" name="name" value="<%= company.name %>" placeholder="Nombre" autocomplete="off" autofocus/>
-	</li>
+<div class="form-row">
+    <div class="form-group col">
+        <label for="name">Nombre:</label>
+        <input type="text"
+               class="form-control"
+               id="name"
+               name="name"
+               value="<%= company.name %>"
+               placeholder="Nombre"
+               autocomplete="off"
+               autofocus
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+</div>
 
-	<li>
-		<label>Web 1:</label>
-		<input type="text" name="web1" value="<%= company.web1 %>" placeholder="URL" size="60" autocomplete="off"/>
-	</li>
+<div class="form-row">
+    <div class="form-group col">
+        <label for="web1">Página Web 1:</label>
+        <input type="text"
+               class="form-control"
+               id="web1"
+               name="web1"
+               value="<%= company.web1 %>"
+               placeholder="URL"
+               autocomplete="off"
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+</div>
 
-	<li>
-		<label>Web 2:</label>
-		<input type="text" name="web2" value="<%= company.web2 %>" placeholder="URL" size="60" autocomplete="off"/>
-	</li>
+<div class="form-row">
+    <div class="form-group col">
+        <label for="web2">Página Web 2:</label>
+        <input type="text"
+               class="form-control"
+               id="web2"
+               name="web2"
+               value="<%= company.web2 %>"
+               placeholder="URL"
+               autocomplete="off"
+                <%= customerShowView ? "readonly" : "" %>
+        />
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col">
+        <label for="notes">Observaciones:</label>
+        <textarea type="text"
+                  class="form-control"
+                  id="notes"
+                  name="notes"
+                  placeholder="Observaciones"
+                  rows="5"
+                <%= customerShowView ? "readonly" : "" %>><%= company.notes %></textarea>
+    </div>
+</div>
 
-	<li>
-		<label>Observaciones:</label>
-		<br/>
-		<textarea type="text" name="notes" placeholder="Observaciones" rows="5"
-				  cols="80"><%= company.notes %></textarea>
-	</li>
-
-</ul>
 
 <h2>
-	Clientes:
+    Clientes:
 </h2>
 
+<% if (customerShowView) { %>
 <ul>
     <% for (var i in allCustomers) { %>
     <% var customer = allCustomers[i]; %>
 
-	<li>
-		<input type="checkbox" name="customerIds[]" value="<%= customer.id %>" id="customer<%= customer.id %>">
+    <% if (!customer.archived) { %>
+
+    <li>
         <%= customer.code %> - <%= customer.name %>
-	</li>
+    </li>
+    <% } %>
 
     <% } %>
 </ul>
+<% } else { %>
+    <% for (var i in allCustomers) { %>
+    <% var customer = allCustomers[i]; %>
 
-<!-- Seleccionar (check) los clientes de la fabrica -->
-
-<script>
-    <% for (var i in customerIds) { %>
-    <% var customerId = customerIds[i]; %>
-
-    var element = document.getElementById("customer<%= customerId %>");
-    if (element) {
-        element.checked = true;
-    }
+    <div class="form-check my-0">
+        <label class="form-check-label ml-2" for="customer<%= customer.id %>">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="customerIds[]"
+                   value="<%= customer.id %>"
+                   id="customer<%= customer.id %>">
+            <%= customer.code %> - <%= customer.name %>
+        </label>
+    </div>
 
     <% } %>
-</script>
 
+    <!-- Seleccionar (check) los clientes de la fabrica -->
+
+    <script>
+        <% for (var i in customerIds) { %>
+        <% var customerId = customerIds[i]; %>
+
+        var element = document.getElementById("customer<%= customerId %>");
+        if (element) {
+            element.checked = true;
+        }
+
+        <% } %>
+    </script>
+
+
+
+<% } %>
 
 

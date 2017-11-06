@@ -1,0 +1,45 @@
+<script src="/javascripts/misc_form.js"></script>
+
+<div class="card border-primary my-2">
+    <div class="card-body p-1 m-1">
+        <form id="myForm" method="get" action="<%= url %>" id="filterForm" >
+
+            <h4 class="card-title">
+                Filtros:
+
+                <a href="#" onclick="submitForm('myForm')"><span class="oi oi-magnifying-glass h3"></span></a>
+
+                <a href="#" onClick="cleanupForm('filterForm'); return false"><span
+                            class="oi oi-circle-x h3"></span></a>
+            </h4>
+
+            <label>Código/Nombre:</label>
+            <input type="text" name="searchCodeName" value="<%= locals.searchCodeName || '' %>"
+                   placeholder="código o nombre a buscar"
+                   size="30" autocomplete="off"/>
+
+            <br/>
+
+            <label>Clientes de la fábrica:</label>
+            <select name="searchCompanyId">
+
+                <option value="" <%= !locals.searchCompanyId ? "selected" : "" %> >
+                    Todas
+                </option>
+
+                <% for (var i in companiesInfo) { %>
+                <% var companyInfo = companiesInfo[i]; %>
+                <option value="<%= companyInfo.id %>" <%= companyInfo.id == locals.searchCompanyId ? "selected" : "" %> >
+                    <%= companyInfo.name %>
+                </option>
+                <% } %>
+            </select>
+
+            <br/>
+
+            <label>Incluir Archivados:</label>
+            <input type="checkbox" name="searchArchived" value="1" <%= locals.searchArchived ? 'checked' : '' %> >
+        </form>
+
+    </div>
+</div>

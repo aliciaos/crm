@@ -1,17 +1,25 @@
 
-<form method="post" action="/targettypes" >
+<script src="/javascripts/misc_form.js"></script>
 
-	<h1>
-  		Crear Tipo de Objetivo: 
+<form id="myForm" method="post" action="/targettypes" >
 
-    	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" />
-		<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
-	</h1>
+	<div class="row">
+		<h1 class="text-center">
+			Crear Tipo de Objetivo:
 
-	<% include _form.ejs %>
+			<a href="#" onClick="submitForm('myForm')" ><span class="oi oi-circle-check h3"></span></a>
 
-   	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" />
-	<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
+			<a href="/goback"><span class="oi oi-circle-x h3"></span></a>
+		</h1>
+	</div>
+
+    <% var customerShowView = false; %>
+
+    <% include _form.ejs %>
+
+	<a href="#" onClick="submitForm('myForm')" ><span class="oi oi-circle-check h3"></span></a>
+
+	<a href="/goback"><span class="oi oi-circle-x h3"></span></a>
 
 </form>
 

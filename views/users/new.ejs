@@ -1,17 +1,25 @@
 
-<form method="post" action="/users"  enctype="multipart/form-data" >
+<script src="/javascripts/misc_form.js"></script>
+
+<form id="myForm" method="post" action="/users"  enctype="multipart/form-data" >
 
 
-	<h1>
-  		Crear Usuario
+	<div class="row">
+		<h1 class="text-center">
+			Crear Usuario
 
-    	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return confirmPassword()" />
-		<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
-	</h1>
+			<a href="#" onclick="return confirmPassword() && submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
 
-	<% include _form.ejs %>
+			<a href="/goback"><span class="oi oi-circle-x h3"></span></a>
+		</h1>
+	</div>
 
-	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" onclick="return confirmPassword()" />
-	<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
+    <% var customerShowView = false; %>
+
+    <% include _form.ejs %>
+
+	<a href="#" onclick="return confirmPassword() && submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+	<a href="/goback"><span class="oi oi-circle-x h3"></span></a>
 
 </form>

@@ -1,18 +1,24 @@
 
+<script src="/javascripts/misc_form.js"></script>
 
+<form id="myForm" method="post" action="/customers/<%= customer.id %>?_method=PUT" >
 
-<form method="post" action="/customers/<%= customer.id %>?_method=PUT" >
+	<div class="row">
+		<h1 class="text-center">
+			Editar Cliente
 
-	<h1>
-		Editar Cliente
+			<a href="#" onclick="submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
 
-    	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" />
-		<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
-	</h1>
+			<a href="/reload"><span class="oi oi-circle-x h3"></a>
+		</h1>
+	</div>
+
+    <% var customerShowView = false; %>
 
     <% include _form.ejs %>
 
-   	<input type="image" class="icon" src="/icons/save.png" border="0" alt="Submit" />
-	<a href="/goback"><img class="icon" src="/icons/cancel.png"></a>
+	<a href="#" onclick="submitForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
+
+	<a href="/reload"><span class="oi oi-circle-x h3"></a>
 
 </form>
