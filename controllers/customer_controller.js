@@ -53,7 +53,7 @@ exports.index = function (req, res, next) {
     options.order = [];
 
     // Busquedas por varios campos: codigo y nombre.
-    var searchCodeName = req.query.searchCodeName || '';
+    var searchCodeName = req.query.codename || '';
     if (searchCodeName) {
         var search_like = "%" + searchCodeName.replace(/ +/g, "%") + "%";
 
@@ -74,7 +74,7 @@ exports.index = function (req, res, next) {
     }
 
     // Filtrar: Clientes de una fabrica:
-    var searchCompanyId = req.query.searchCompanyId || "";
+    var searchCompanyId = req.query.companyid || "";
     if (searchCompanyId) {
 
         options.include.push({
@@ -88,7 +88,7 @@ exports.index = function (req, res, next) {
     }
 
     // Incluir clientes archivados:
-    var searchArchived = !!req.query.searchArchived;
+    var searchArchived = !!req.query.archived;
     if (!searchArchived) {
 
         options.where.$and.push({

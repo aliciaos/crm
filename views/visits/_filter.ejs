@@ -4,7 +4,7 @@
 <div class="card border-primary my-2">
     <div class="card-body p-1 m-1">
 
-        <form id="myForm" method="get" action="<%= url %>" id="filterForm" >
+        <form method="get" action="<%= url %>" id="filterForm" >
 
             <input type="hidden" name="forceCustomerId" value=<%= locals.forceCustomerId %>>
 
@@ -12,7 +12,7 @@
             <h4 class="card-title">
                 Filtros:
 
-                <a href="#" onclick="submitForm('myForm')"><span class="oi oi-magnifying-glass h3"></span></a>
+                <a href="#" onclick="submitForm('filterForm')"><span class="oi oi-magnifying-glass h3"></span></a>
 
                 <a href="#" onClick="cleanupForm('filterForm'); return false"><span
                             class="oi oi-circle-x h3"></span></a>
@@ -22,7 +22,7 @@
             <label>Planificado desde:</label>
             <input type="text"
                    id="searchdateafter"
-                   name="searchdateafter"
+                   name="dateafter"
                    value="<%= locals.searchdateafter || '' %>"
                    placeholder="dd-mm-aaaa"
                    pattern="\d\d-\d\d-\d\d\d\d"
@@ -32,7 +32,7 @@
             <label>Hasta:</label>
             <input type="text"
                    id="searchdatebefore"
-                   name="searchdatebefore"
+                   name="datebefore"
                    value="<%= locals.searchdatebefore || '' %>"
                    placeholder="dd-mm-aaaa"
                    pattern="\d\d-\d\d-\d\d\d\d"
@@ -47,14 +47,14 @@
 
             <% if (!locals.customer) { %>
             <label>Cliente:</label>
-            <input type="text" name="searchcustomer" value="<%= locals.searchcustomer || '' %>"
+            <input type="text" name="customer" value="<%= locals.searchcustomer || '' %>"
                    placeholder="Cliente a buscar"
                    size="40" autocomplete="off"/>
 
             <br/>
 
             <label>Clientes de la fábrica:</label>
-            <select name="searchCompanyId">
+            <select name="companyid">
 
                 <option value="" <%= !locals.searchCompanyId ? "selected" : "" %> >
                     Todas
@@ -74,7 +74,7 @@
 
             <% if (!locals.salesman) { %>
             <label>Vendedor:</label>
-            <input type="text" name="searchsalesman" value="<%= locals.searchsalesman || '' %>"
+            <input type="text" name="salesman" value="<%= locals.searchsalesman || '' %>"
                    placeholder="Vendedor a buscar"
                    size="40" autocomplete="off"/>
 
@@ -83,7 +83,7 @@
 
             <div>
                 <label>Favoritas:</label>
-                <input type="checkbox" name="searchfavourites"
+                <input type="checkbox" name="favourites"
                        value="1" <%= locals.searchfavourites ? 'checked' : '' %> >
                 <img class="star" src="/icons/star_yellow.png" \>
             </div>

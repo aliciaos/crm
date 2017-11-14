@@ -32,12 +32,12 @@
                     urlPrint += "/customers/" + locals.customer.id;
                 }
                 urlPrint += "/visits/print?";
-                urlPrint += "searchdateafter=" + (locals.searchdateafter || '') + "&";
-                urlPrint += "searchdatebefore=" + (locals.searchdatebefore || '') + "&";
-                urlPrint += "searchcustomer=" + (locals.searchcustomer || '') + "&";
-                urlPrint += "searchsalesman=" + (locals.searchsalesman || '') + "&";
-                urlPrint += "searchCompanyId=" + (locals.searchCompanyId || '') + "&";
-                urlPrint += "searchfavourites=" + (locals.searchfavourites || '');
+                urlPrint += "dateafter=" + (locals.searchdateafter || '') + "&";
+                urlPrint += "datebefore=" + (locals.searchdatebefore || '') + "&";
+                urlPrint += "customer=" + (locals.searchcustomer || '') + "&";
+                urlPrint += "salesman=" + (locals.searchsalesman || '') + "&";
+                urlPrint += "companyid=" + (locals.searchCompanyId || '') + "&";
+                urlPrint += "favourites=" + (locals.searchfavourites || '');
                 %>
                 <a href="<%= urlPrint %>"><span class="oi oi-print h3"></span></a>
             </h1>

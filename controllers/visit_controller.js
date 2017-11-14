@@ -77,18 +77,18 @@ exports.admin_Or_SalesmanIsLoggedUser_Required = function (req, res, next) {
 exports.index = function (req, res, next) {
 
     var countOptions = {};
-    countOptions.where = {};
+    countOptions.where = {$and: []};
     countOptions.include = [];
     countOptions.order = [];
 
     //----------------
 
-    var searchdateafter = req.query.searchdateafter || '';
-    var searchdatebefore = req.query.searchdatebefore || '';
-    var searchcustomer = req.query.searchcustomer || '';
-    var searchCompanyId = req.query.searchCompanyId || "";
-    var searchsalesman = req.query.searchsalesman || '';
-    var searchfavourites = req.query.searchfavourites || "";
+    var searchdateafter = req.query.dateafter || '';
+    var searchdatebefore = req.query.datebefore || '';
+    var searchcustomer = req.query.customer || '';
+    var searchCompanyId = req.query.companyid || "";
+    var searchsalesman = req.query.salesman || '';
+    var searchfavourites = req.query.favourites || "";
 
 
     // Busquedas por fecha de planificacion: despues de una fecha
@@ -98,7 +98,7 @@ exports.index = function (req, res, next) {
             req.flash("error", "La fecha " + searchdateafter + " no es válida.");
             momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
         }
-        countOptions.where.plannedFor = {$gte: momentafter.toDate()};
+        countOptions.where.$and.push({plannedFor: {$gte: momentafter.toDate()}});
     }
 
     // Busquedas por fecha de planificacion: antes de una fecha
@@ -108,7 +108,7 @@ exports.index = function (req, res, next) {
             req.flash("error", "La fecha " + searchdatebefore + " no es válida.");
             momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
         }
-        countOptions.where.plannedFor = {$lte: momentbefore.toDate()};
+        countOptions.where.$and.push({plannedFor: {$lte: momentbefore.toDate()}});
     }
 
 
@@ -572,12 +572,12 @@ exports.printIndex = function (req, res, next) {
 
     //----------------
 
-    var searchdateafter = req.query.searchdateafter || '';
-    var searchdatebefore = req.query.searchdatebefore || '';
-    var searchcustomer = req.query.searchcustomer || '';
-    var searchCompanyId = req.query.searchCompanyId || "";
-    var searchsalesman = req.query.searchsalesman || '';
-    var searchfavourites = req.query.searchfavourites || "";
+    var searchdateafter = req.query.dateafter || '';
+    var searchdatebefore = req.query.datebefore || '';
+    var searchcustomer = req.query.customer || '';
+    var searchCompanyId = req.query.companyid || "";
+    var searchsalesman = req.query.salesman || '';
+    var searchfavourites = req.query.favourites || "";
 
 
     // Busquedas por fecha de planificacion: entre dos fechas

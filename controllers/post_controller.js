@@ -97,7 +97,7 @@ exports.index = function (req, res, next) {
     var options = {};
 
     // Busquedas en el titulo o body de los poss:
-    var searchContent = req.query.searchContent || '';
+    var searchContent = req.query.content || '';
     if (searchContent) {
         var search_like = "%" + searchContent.replace(/ +/g, "%") + "%";
 

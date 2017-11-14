@@ -68,12 +68,12 @@ exports.indexFlattened = function (req, res, next) {
     //----------------
 
 
-    var searchdateafter = req.query.searchdateafter || '';
-    var searchdatebefore = req.query.searchdatebefore || '';
-    var searchcustomer = req.query.searchcustomer || '';
-    var searchCompanyId = req.query.searchCompanyId || "";
-    var searchsalesman = req.query.searchsalesman || '';
-    var searchfavourites = req.query.searchfavourites || "";
+    var searchdateafter = req.query.dateafter || '';
+    var searchdatebefore = req.query.datebefore || '';
+    var searchcustomer = req.query.customer || '';
+    var searchCompanyId = req.query.companyid || "";
+    var searchsalesman = req.query.salesman || '';
+    var searchfavourites = req.query.favourites || "";
 
 
     // Busquedas por fecha de planificacion: despues de una fecha
@@ -292,12 +292,12 @@ exports.index = function (req, res, next) {
 
     //----------------
 
-    var searchdateafter = req.query.searchdateafter || '';
-    var searchdatebefore = req.query.searchdatebefore || '';
-    var searchcustomer = req.query.searchcustomer || '';
-    var searchCompanyId = req.query.searchCompanyId || "";
-    var searchsalesman = req.query.searchsalesman || '';
-    var searchfavourites = req.query.searchfavourites || "";
+    var searchdateafter = req.query.dateafter || '';
+    var searchdatebefore = req.query.datebefore || '';
+    var searchcustomer = req.query.customer || '';
+    var searchCompanyId = req.query.companyid || "";
+    var searchsalesman = req.query.salesman || '';
+    var searchfavourites = req.query.favourites || "";
 
 
     // Busquedas por fecha de planificacion: despues de una fecha
