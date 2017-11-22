@@ -75,8 +75,17 @@ router.get('/customers/:customerId(\\d+)/visits/flattened',
 router.get('/users/:userId(\\d+)/visits/flattened',
     visitApi.indexFlattened);
 
+router.get('/users/tokenOwner/visits/flattened',
+    userApi.loadToken,
+    visitApi.indexFlattened);
+
 router.get('/salesmen/:userId(\\d+)/visits/flattened',
     visitApi.indexFlattened);
+
+router.get('/salesmen/tokenOwner/visits/flattened',
+    userApi.loadToken,
+    visitApi.indexFlattened);
+
 
 router.get('/users/:userId(\\d+)/customers/:customerId(\\d+)/visits/flattened',
     visitApi.indexFlattened);
