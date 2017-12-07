@@ -95,6 +95,11 @@ exports.index = function (req, res, next) {
         });
     }
 
+    // Orden de los clientes: Se coge de la query y se guarda en la sesion
+    const sortedby = req.query.sortedby || req.session.orders && req.session.orders.customers || "code";
+    req.session.orders = req.session.orders || {};
+    req.session.orders.customers = sortedby;
+
 
     models.Customer.count(options)
     .then(function (count) {
@@ -138,8 +143,20 @@ exports.index = function (req, res, next) {
             required: false
         });
 
-        options.order.push(['name']);
+        // Orden de los clientes
+        if (sortedby === "code") {
+            options.order.push(['code']);
+        } else if (sortedby === "name") {
+            options.order.push(['name']);
+        } else {
+            options.order.push(['name']);
+        }
+
+
+        // Orden de las visitas para acceder a la ultima facilmente en la vista (refactorizar)
         options.order.push([models.Visit, 'plannedFor', 'DESC']);
+
+
         return models.Customer.findAll(options);
     })
     .then(function (customers) {
@@ -154,8 +171,8 @@ exports.index = function (req, res, next) {
                     moment: moment,
                     searchCodeName: searchCodeName,
                     searchCompanyId: searchCompanyId,
-                    searchArchived: searchArchived
-
+                    searchArchived: searchArchived,
+                    sortedby: sortedby
                 });
         });
     })

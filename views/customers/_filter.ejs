@@ -13,6 +13,20 @@
                             class="oi oi-circle-x h3"></span></a>
             </h4>
 
+
+            <label>Ordenar por:</label>
+            <select name="sortedby">
+
+                <option value="code" <%= locals.sortedby === "code" ? "selected" : "" %> >
+                    Código
+                </option>
+                <option value="name" <%= locals.sortedby === "name" ? "selected" : "" %> >
+                    Nombre
+                </option>
+            </select>
+
+            <br/>
+
             <label>Código/Nombre:</label>
             <input type="text" name="codename" value="<%= locals.searchCodeName || '' %>"
                    placeholder="código o nombre a buscar"
