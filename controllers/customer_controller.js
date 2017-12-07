@@ -84,7 +84,6 @@ exports.index = function (req, res, next) {
                 where: {id: searchCompanyId}
             }
         );
-        options.order.push([{model: models.Company, as: "MainCompanies"}, 'name', 'ASC']);
     }
 
     // Incluir clientes archivados:
@@ -120,16 +119,29 @@ exports.index = function (req, res, next) {
     })
     .then(function (pagination) {
 
-            options.offset = pagination.offset;
-            options.limit = pagination.limit;
+        options.offset = pagination.offset;
+        options.limit = pagination.limit;
 
-            options.include.push(models.Visit);
+        // Incluir las visitas de este año:
+        const year = moment().year();
+        const moment1 = moment("01-01-" + year + " 08:00", "DD-MM-YYYY");
+        const moment2 = moment("31-12-" + year + " 08:00", "DD-MM-YYYY");
 
-            options.order.push(['name']);
-            options.order.push([models.Visit, 'plannedFor', 'DESC']);
-            return models.Customer.findAll(options);
-        }
-    )
+        options.include.push({
+            model: models.Visit,
+            where: {
+                $and: [
+                    {plannedFor: {$gte: moment1.toDate()}},
+                    {plannedFor: {$lte: moment2.toDate()}}
+                ]
+            },
+            required: false
+        });
+
+        options.order.push(['name']);
+        options.order.push([models.Visit, 'plannedFor', 'DESC']);
+        return models.Customer.findAll(options);
+    })
     .then(function (customers) {
 
         companyHelper.getAllCompaniesInfo()
