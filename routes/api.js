@@ -42,6 +42,10 @@ router.get('/users',
 router.get('/salesmen',
     userApi.indexSalesmen);
 
+router.get('/managers',
+    userApi.indexManagers
+);
+
 router.get('/users/:userId(\\d+)',
     userApi.show);
 

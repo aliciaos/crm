@@ -1,14 +1,56 @@
-<div class="row">
-	<h1 class="text-center">
-		<a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
+<div class="row justify-content-between">
 
-		Cliente:
+	<div class="col-sm-auto">
 
-        <% if (session.user && session.user.isAdmin) { %>
-		<a href="/customers/<%= customer.id %>/edit"><span class="oi oi-pencil h3"></span></a>
-        <% } %>
-	</h1>
+		<div class="row">
+			<h1 class="text-center">
+				<a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
+
+				Cliente:
+
+                <% if (session.user && (session.user.isAdmin || session.user.isManager)) { %>
+				<a href="/customers/<%= customer.id %>/edit"><span class="oi oi-pencil h3"></span></a>
+                <% } %>
+			</h1>
+		</div>
+	</div>
+
+	<div class="col-sm-auto">
+
+		<div class="card border-primary my-2">
+			<div class="card-body p-1 m-1">
+
+				<h4 class="card-title">
+					Visitas a este cliente:
+				</h4>
+
+                <% if (session.user && (session.user.isAdmin || session.user.isManager || session.user.isSalesman)) {%>
+                <% if (!customer.archived) { %>
+				<a href="/visits/new?customerId=<%= customer.id %>"><span class="oi oi-plus"></span></a>
+				Crear una visita nueva
+
+				<br/>
+                <% } %>
+                <% } %>
+
+                <% if (session.user && (session.user.isAdmin || session.user.isManager)) {%>
+				<a href="/customers/<%= customer.id %>/visits"><span class="oi oi-eye"></span></a>
+				Ver todas las visitas
+
+				<br/>
+                <% } %>
+
+				<a href="/salesmen/<%= session.user.id %>/customers/<%= customer.id %>/visits"><span
+							class="oi oi-eye"></span></a>
+				Ver mis visitas
+
+			</div>
+		</div>
+
+	</div>
 </div>
+
+
 
 <form>
 
@@ -18,17 +60,4 @@
 </form>
 
 
-<h2>
-Visitas:
-</h2>
-
-<ul>
-    <% if (!customer.archived) { %>
-	<li> <a href="/visits/new?customerId=<%= customer.id %>"><span class="oi oi-plus"></span> Crear una visita nueva a este cliente</a> </li>
-    <% } %>
-
-	<li> <a href="/customers/<%= customer.id %>/visits"><span class="oi oi-eye"></span> Ver todas las visitas a este cliente</a> </li>
-	<li> <a href="/salesmen/<%= session.user.id %>/customers/<%= customer.id %>/visits"><span class="oi oi-eye"></span> Ver mis visitas a este cliente</a> </li>
-
-</ul>
 

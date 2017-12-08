@@ -48,6 +48,11 @@ exports.indexSalesmen = function (req, res, next) {
     index(req, res, next, {isSalesman: true});
 }
 
+// GET /api/managers
+exports.indexManagers = function (req, res, next) {
+
+    index(req, res, next, {isManager: true});
+}
 // GET /api/users
 exports.indexAll = function (req, res, next) {
 

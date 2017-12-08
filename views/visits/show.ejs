@@ -46,7 +46,7 @@
 			<span class='text-light bg-danger'><%= customerCode %></span>
             <% } %>
 
-            <% if (session.user && session.user.isAdmin || salesmanId === session.user.id) { %>
+            <% if (session.user && (session.user.isAdmin || session.user.isManager) || salesmanId === session.user.id) { %>
 			<a href="/visits/<%= visit.id %>/edit"><span class="oi oi-pencil h3"></span></a>
             <% } %>
 
@@ -119,7 +119,7 @@
 		</div>
 
         <% var targets = visit.Targets %>
-        <% locals.readwrite = session.user && session.user.isAdmin || salesmanId === session.user.id; %>
+        <% locals.readwrite = session.user && (session.user.isAdmin || session.user.isManager) || salesmanId === session.user.id; %>
 		<h4 class="card-title">
 			Objetivos:
 

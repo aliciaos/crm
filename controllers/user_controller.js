@@ -59,6 +59,12 @@ exports.indexSalesmen = function (req, res, next) {
     index(req, res, next, {isSalesman: true}, "Vendedores")
 };
 
+// GET /managers
+exports.indexManagers = function (req, res, next) {
+
+    index(req, res, next, {isManager: true}, "Gestores")
+};
+
 // GET /admins
 exports.indexAdmins = function (req, res, next) {
 
@@ -135,6 +141,7 @@ exports.new = function (req, res, next) {
         fullname: "",
         isAdmin: false,
         isSalesman: true,
+        isManager: true,
         phone1: "",
         phone2: "",
         email1: "",
@@ -155,6 +162,7 @@ exports.create = function (req, res, next) {
         fullname: req.body.fullname,
         isAdmin: req.body.isAdmin || false,
         isSalesman: req.body.isSalesman || false,
+        isManager: req.body.isManager || false,
         phone1: req.body.phone1.trim(),
         phone2: req.body.phone2.trim(),
         email1: req.body.email1.trim(),
@@ -239,6 +247,7 @@ exports.update = function (req, res, next) {
     req.user.fullname = req.body.fullname;
     req.user.isAdmin = req.body.isAdmin || false;
     req.user.isSalesman = req.body.isSalesman || false;
+    req.user.isManager = req.body.isManager || false;
     req.user.phone1 = req.body.phone1.trim();
     req.user.phone2 = req.body.phone2.trim();
     req.user.email1 = req.body.email1.trim();
@@ -250,6 +259,7 @@ exports.update = function (req, res, next) {
     if (req.session.user && req.session.user.isAdmin) {
         fields_to_update.push("isAdmin");
         fields_to_update.push("isSalesman");
+        fields_to_update.push("isManager");
     }
 
     // ¿Cambio el password?
@@ -269,6 +279,7 @@ exports.update = function (req, res, next) {
             req.session.user.fullname = user.fullname;
             req.session.user.isAdmin = user.isAdmin;
             req.session.user.isSalesman = user.isSalesman;
+            req.session.user.isManager = user.isManager;
         }
 
         if (req.body.keepphoto) {

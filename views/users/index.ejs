@@ -27,6 +27,9 @@
             Administrador
         </th>
         <th scope="col">
+            Gestor
+        </th>
+        <th scope="col">
             Vendedor
         </th>
         <th scope="col">
@@ -44,22 +47,25 @@
         <td>
             <div>
                 <% if (user.Photo) { %>
-                <img src="<%= user.Photo.url %>" width="30px" />
+                <img src="<%= user.Photo.url %>" width="30px"/>
                 <% } else { %>
-                <img src="/images/face.png" width="30px" />
+                <img src="/images/face.png" width="30px"/>
                 <% } %>
                 <a href="/users/<%= user.id %>"> <%= user.fullname %> </a>
             </div>
         </td>
 
         <td>
-          <a href="/users/<%= user.id %>" > <%= user.login %> </a>
-      </td>
+            <a href="/users/<%= user.id %>"> <%= user.login %> </a>
+        </td>
 
-      <td> 
-        <%= user.isAdmin ? "Si" : "" %>
-      </td>
+        <td>
+            <%= user.isAdmin ? "Si" : "" %>
+        </td>
 
+        <td>
+            <%= user.isManager ? "Si" : "" %>
+        </td>
 
         <td>
             <%= user.isSalesman ? "Si" : "" %>
@@ -67,14 +73,14 @@
 
         <% if (session.user) { %>
         <td>
-          <% if (session.user.isAdmin && session.user.id !== users[i].id) { %>
-            <a href="/users/<%= users[i].id %>?_method=DELETE" 
+            <% if (session.user.isAdmin && session.user.id !== users[i].id) { %>
+            <a href="/users/<%= users[i].id %>?_method=DELETE"
                onClick="return confirm('Borrar cuenta: <%= users[i].login %>');">
                 <span class="oi oi-trash h5"></span>
-            </a> 
-          <% } %>
+            </a>
+            <% } %>
         </td>
-      <% } %>
+        <% } %>
     </tr>
 
   <%  }; %>

@@ -81,7 +81,12 @@ exports.index = function (req, res, next) {
                 model: models.Company,
                 as: "MainCompanies",
                 attributes: ['id', 'name'],
-                where: {id: searchCompanyId}
+                required: true,
+                through: {
+                    attributes: ['CompanyId'],
+                    where: {CompanyId: searchCompanyId},
+
+                }
             }
         );
     }

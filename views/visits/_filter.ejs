@@ -88,6 +88,15 @@
                 <img class="star" src="/icons/star_yellow.png" \>
             </div>
 
+            <div>
+                <label>Solo pendientes de realizar:</label>
+                <input type="checkbox" name="notfulfilled" value="1" <%= locals.searchnotfulfilled ? 'checked' : '' %> >
+            </div>
+
+            <div>
+                <label>Solo objetivos pendientes:</label>
+                <input type="checkbox" name="pendingtargets" value="1" <%= locals.searchpendingtargets ? 'checked' : '' %> >
+            </div>
         </form>
 
     </div>

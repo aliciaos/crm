@@ -26,6 +26,9 @@
             Administrador
         </th>
         <th scope="col">
+            Gestor
+        </th>
+        <th scope="col">
             Vendedor
         </th>
         <th scope="col">
@@ -62,6 +65,10 @@
 
         <td>
             <%= user.isAdmin ? "Si" : "" %>
+        </td>
+
+        <td>
+            <%= user.isManager ? "Si" : "" %>
         </td>
 
         <td>

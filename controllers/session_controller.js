@@ -92,6 +92,56 @@ exports.adminAndNotMyselfRequired = function(req, res, next){
 };
 
 
+// MW que permite gestionar un usuario solamente si el usuario logeado es:
+//   - admin
+//   - o es manager
+//   - o es el usuario a gestionar.
+exports.adminOrManagerOrMyselfRequired = function(req, res, next){
+
+    var isAdmin      = req.session.user.isAdmin;
+    var isManager    = req.session.user.isManager;
+    var userId       = req.user.id;
+    var loggedUserId = req.session.user.id;
+
+    if (isAdmin || isManager || userId === loggedUserId) {
+        next();
+    } else {
+        console.log('Ruta prohibida: no es el usuario logeado, ni un administrador, ni un manager.');
+        res.send(403);    }
+};
+
+// MW que solo permite pasar si el usuario logeado es:
+//   - admin
+//   - o un gestor.
+exports.adminOrManagerRequired = function(req, res, next){
+
+    var isAdmin      = req.session.user.isAdmin;
+    var isManager    = req.session.user.isManager;
+
+    if (isAdmin || isManager) {
+        next();
+    } else {
+        console.log('Ruta prohibida: el usuario logeado no es ni administrador, ni manager.');
+        res.send(403);    }
+};
+
+
+// MW que solo permite pasar si el usuario logeado es:
+//   - admin
+//   - o un gestor
+//   - o un vendedor.
+exports.adminOrManagerOrSalesmanRequired = function(req, res, next){
+
+    var isAdmin      = req.session.user.isAdmin;
+    var isManager    = req.session.user.isManager;
+    var isSalesman   = req.session.user.isSalesman;
+
+    if (isAdmin || isManager || isSalesman) {
+        next();
+    } else {
+        console.log('Ruta prohibida: el usuario logeado no es ni administrador, ni gestor, ni vendedor.');
+        res.send(403);    }
+};
 
 /*
  * Autenticar un usuario: Comprueba si el usuario esta registrado en users
@@ -140,6 +190,7 @@ exports.create = function(req, res, next) {
                     fullname: user.fullname,
                     isAdmin: user.isAdmin,
                     isSalesman: user.isSalesman,
+                    isManager: user.isManager,
                     expires: Date.now() + maxIdleTime
                 };
 

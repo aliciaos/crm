@@ -1,13 +1,47 @@
-<div class="row">
-    <h1 class="text-center">
-        <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
+<div class="row justify-content-between">
 
-        Fábrica:
+    <div class="col-sm-auto">
 
-        <% if (session.user && session.user.isAdmin) { %>
-        <a href="/companies/<%= company.id %>/edit"><span class="oi oi-pencil h3"></span></a>
-        <% } %>
-    </h1>
+        <div class="row">
+            <h1 class="text-center">
+                <a href="/goback"><span class="oi oi-arrow-circle-left h3"></a>
+
+                Fábrica:
+
+                <% if (session.user && session.user.isAdmin) { %>
+                <a href="/companies/<%= company.id %>/edit"><span class="oi oi-pencil h3"></span></a>
+                <% } %>
+            </h1>
+        </div>
+
+    </div>
+
+    <div class="col-sm-auto">
+
+        <div class="card border-primary my-2">
+            <div class="card-body p-1 m-1">
+
+                <h4 class="card-title">
+                    Clientes habituales:
+                </h4>
+
+                <% if (session.user && (session.user.isAdmin || session.user.isManager)) {%>
+                <a href="/companies/<%= company.id %>/statistics"><span class="oi oi-graph h5"></span></a>
+                Ver informe de eficiencia
+
+                <br/>
+                <% } %>
+
+                <% if (session.user && (session.user.isAdmin || session.user.isManager || session.user.isSalesman)) {%>
+                <a href="/companies/<%= company.id %>/visits/new"><span class="oi oi-layers"></span><span
+                            class="oi oi-plus"></a>
+                Crearles una visita
+                <% } %>
+
+            </div>
+        </div>
+
+    </div>
 </div>
 
 

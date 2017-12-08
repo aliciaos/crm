@@ -11,6 +11,7 @@ function cleanupForm(formId) {
     var inputs = form.getElementsByTagName("input");
     for (var i=0 ; i < inputs.length ; i++) {
         inputs[i].value = "";
+        inputs[i].checked = "";
     }
 
     var selects = form.getElementsByTagName("select");

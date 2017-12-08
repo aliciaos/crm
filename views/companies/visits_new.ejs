@@ -29,75 +29,94 @@
 
     <div class="row">
         <h1 class="text-center">
-            Crear Visitas para los Clientes de <%= company.name %>:
+            Crear una visita para todos los Clientes de <%= company.name %>:
 
             <a href="#" onclick="return validateForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
 
-            <a href="/goback"><span class="oi oi-circle-x h3"></span></a>
+            <a href="/reload"><span class="oi oi-circle-x h3"></span></a>
         </h1>
     </div>
 
-    <ul>
 
-        <li>
-            <b>Vendedor</b>:
-            <select name="salesmanId" id="salesmanId">
+    <div class="form-group">
+        <label for="salesmanId">Vendedor:</label>
 
-                <option value="0" <%= !locals.salesmanId ? "selected" : "" %> >
-                    Seleccione un vendedor
-                </option>
+        <select name="salesmanId"
+                class="form-control"
+                id="salesmanId">
 
-                <% for (var i in locals.salesmenInfo) { %>
-                <% var salesmanInfo = salesmenInfo[i]; %>
-                <option value="<%= salesmanInfo.id %>" <%= salesmanInfo.id == locals.salesmanId ? "selected" : "" %> >
-                    <%= salesmanInfo.fullname %>
-                </option>
-                <% } %>
-            </select>
-        </li>
+            <option value="0" <%= !locals.salesmanId ? "selected" : "" %> >
+                Seleccione un vendedor
+            </option>
 
-        <li>
-            <label><b>Fecha planificación</b> (dd-mm-aaaa):</label>
-            <input type="text" name="plannedFor"
-                   value="<%= moment(locals.plannedFor).format("DD-MM-YYYY") %>"
-                   pattern="\d\d-\d\d-\d\d\d\d"
-                   placeholder="dd-mm-aaaa"
-                   size="11"
-                   autocomplete="off"/>
-        </li>
+            <% for (var i in locals.salesmenInfo) { %>
+            <% var salesmanInfo = salesmenInfo[i]; %>
+            <option value="<%= salesmanInfo.id %>" <%= salesmanInfo.id == locals.salesmanId ? "selected" : "" %> >
+                <%= salesmanInfo.fullname %>
+            </option>
+            <% } %>
+        </select>
+    </div>
 
-        <li>
-            <label>Observaciones de las Visitas:</label>
-            <br/>
-            <textarea type="text" name="visitsNotes" placeholder="Observaciones" rows="5"
-                      cols="80"><%= locals.visitsNotes %></textarea>
-        </li>
 
-        <li>
-            <b>Tipo de Objetivo</b>:
-            <select name="targetTypeId" id="targetTypeId">
+    <div class="form-group">
+        <label for="plannedFor">Fecha planificación (dd-mm-aaaa):</label>
 
-                <option value="0" <%= !locals.targetTypeId ? "selected" : "" %> >
-                    Seleccione un tipo de objetivo
-                </option>
+        <input type="text"
+               class="form-control"
+               id="plannedFor"
+               name="plannedFor"
+               value="<%= moment(locals.plannedFor).format("DD-MM-YYYY") %>"
+               pattern="\d\d-\d\d-\d\d\d\d"
+               placeholder="dd-mm-aaaa"
+               autocomplete="off" />
+    </div>
 
-                <% for (var i in locals.targetTypesInfo) { %>
-                <% var targetTypeInfo = targetTypesInfo[i]; %>
-                <option value="<%= targetTypeInfo.id %>" <%= targetTypeInfo.id == locals.targetTypeId ? "selected" : "" %> >
-                    <%= targetTypeInfo.name %>
-                </option>
-                <% } %>
-            </select>
-        </li>
 
-        <li>
-            <label>Observaciones del Objetivo:</label>
-            <br/>
-            <textarea type="text" name="targetTypesNotes" placeholder="Observaciones" rows="5"
-                      cols="80"><%= locals.targetTypesNotes %></textarea>
-        </li>
+    <div class="form-group">
+        <label for="notes">Observaciones de las Visitas:</label>
 
-    </ul>
+        <textarea type="text"
+                  class="form-control"
+                  id="visitsNotes"
+                  name="visitsNotes"
+                  placeholder="Observaciones"
+                  rows="5"><%= locals.visitsNotes %></textarea>
+    </div>
+
+
+    <div class="form-group">
+        <label for="targettypeId">Tipo de Objetivo</label>
+
+        <select name="targetTypeId"
+                class="form-control"
+                id="targetTypeId">
+
+            <option value="0" <%= !locals.targetTypeId ? "selected" : "" %> >
+                Seleccione un tipo de objetivo
+            </option>
+
+            <% for (var i in locals.targetTypesInfo) { %>
+            <% var targetTypeInfo = targetTypesInfo[i]; %>
+            <option value="<%= targetTypeInfo.id %>" <%= targetTypeInfo.id == locals.targetTypeId ? "selected" : "" %> >
+                <%= targetTypeInfo.name %>
+            </option>
+            <% } %>
+        </select>
+    </div>
+
+
+    <div class="form-group">
+        <label for="notes">Observaciones del Objetivo:</label>
+
+        <textarea type="text"
+                  class="form-control"
+                  id="targetTypesNotes"
+                  name="targetTypesNotes"
+                  placeholder="Observaciones"
+                  rows="5"><%= locals.targetTypesNotes %></textarea>
+    </div>
+
 
     <a href="#" onclick="return validateForm('myForm')"><span class="oi oi-circle-check h3"></span></a>
 

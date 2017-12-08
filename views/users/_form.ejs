@@ -113,6 +113,21 @@
 
                     <input class="form-check-input"
                            type="checkbox"
+                           name="isManager"
+                           id="isManager"
+                           value="1"
+                            <%= user.isManager ? 'checked' : '' %>
+                            <%= session.user && session.user.isAdmin ? '' : 'disabled' %>
+                            <%= customerShowView ? "disabled" : "" %>
+                    >
+                   Gestor
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+
+                    <input class="form-check-input"
+                           type="checkbox"
                            name="isSalesman"
                            id="isSalesman"
                            value="1"

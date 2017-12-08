@@ -9,11 +9,13 @@
 
                 Clientes:
 
-                <% if (session.user && session.user.isAdmin) { %>
+                <% if (session.user && (session.user.isAdmin || session.user.isManager)) { %>
                 <a href="/customers/new"><span class="oi oi-plus h3"></span></a>
-                <a href="/customers/import"><img class="align-middle icon" src="/icons/csv2.png"></a>
                 <% } %>
 
+                <% if (session.user && session.user.isAdmin) { %>
+                <a href="/customers/import"><img class="align-middle icon" src="/icons/csv2.png"></a>
+                <% } %>
             </h1>
         </div>
 
@@ -37,10 +39,7 @@
     <thead>
     <tr class="table-primary">
         <th scope="col">
-            Código
-        </th>
-        <th scope="col">
-            Nombre
+            Nombre - Código
         </th>
         <th scope="col">
             Dirección
@@ -60,10 +59,11 @@
 
         <tr>
             <td>
-                <a href="/customers/<%= customer.id %>"><%= customer.code %></a>
-            </td>
-            <td>
                 <a href="/customers/<%= customer.id %>"><%= customer.name %></a>
+                <br/>
+                <small>
+                    <%= customer.code %>
+                </small>
 
                 <% if (!!customer.archived) { %>
                 <br/>

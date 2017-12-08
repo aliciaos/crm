@@ -62,31 +62,37 @@
 
                 <% if (session.user) { %>
 
+                    <% if (session.user.isAdmin || session.user.isManager) { %>
                     <a class="nav-item nav-link <%= url.match(/^\/visit/) ? 'active' : '' %>" href="/visits"><span
                                 class="oi oi-list-rich"></span> Visitas <span class="sr-only">(current)</a>
+                    <% } %>
 
                     <% if (session.user.isSalesman) { %>
                     <a class="nav-item nav-link <%= url.match(/^\/sales/) ? 'active' : '' %>"
                        href="/salesmen/<%= session.user.id %>/visits"><span class="oi oi-list-rich"></span> Mis visitas</a>
                     <% } %>
 
+                    <% if (session.user.isAdmin || session.user.isManager || session.user.isSalesman) { %>
                     <a class="nav-item nav-link <%= url.match(/^\/custo/) ? 'active' : '' %>" href="/customers"> <span
-                                class="oi oi-map-marker"></span> Clientes</a>
+                            class="oi oi-map-marker"></span> Clientes</a>
+                    <% } %>
 
-                    <% if (session.user.isAdmin || true) { %>
+                    <% if (session.user.isAdmin || session.user.isManager || session.user.isSalesman) { %>
                     <a class="nav-item nav-link <%= url.match(/^\/compa/) ? 'active' : '' %>" href="/companies"><span
                                 class="oi oi-tags"></span> Fábricas</a>
                     <% } %>
 
                     <% if (session.user.isAdmin) { %>
                     <a class="nav-item nav-link <%= url.match(/^\/targettypes/) ? 'active' : '' %>"
-                       href="/targettypes"><span class="oi oi-target"></span> Objetivos</a>
+                        href="/targettypes"><span class="oi oi-target"></span> Objetivos</a>
                     <% } %>
 
+                    <% if (session.user.isAdmin || session.user.isManager) { %>
                     <a class="nav-item nav-link <%= url.match(/^\/repor/) ? 'active' : '' %>" href="/reports"><span
-                                class="oi oi-pie-chart"></span> Informes</a>
+                            class="oi oi-pie-chart"></span> Informes</a>
+                    <% } %>
 
-                    <% if (session.user.isAdmin) { %>
+                    <% if (session.user.isAdmin || session.user.isManager) { %>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -96,6 +102,8 @@
                         <div class="dropdown-menu bg-primary" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item text-light" href="/salesmen"><span class="oi oi-person"></span>
                                 Vendedores</a>
+                            <a class="dropdown-item text-light" href="/managers"><span class="oi oi-person"></span>
+                                Gestores</a>
                             <a class="dropdown-item text-light" href="/admins"><span class="oi oi-wrench"></span>
                                 Admininstradores</a>
                             <div class="dropdown-divider"></div>
@@ -188,7 +196,7 @@
 
             <footer>
                 <p class="text-info text-right">
-                    <small>Versión: 12 Noviembre 2017</small>
+                    <small>Versión: 10 Diciembre 2017</small>
                 </p>
             </footer>
         </div>

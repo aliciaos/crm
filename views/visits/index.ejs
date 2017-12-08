@@ -92,16 +92,18 @@
         <h4 class="card-title">
             <% if (customerCode) { %>
             <a href="/customers/<%= customerId %>"> <%= customerName %> </a>
-            (<a href="/customers/<%= customerId %>"><%= customerCode %></a>)
+            <small>
+                (<%= customerCode %>)
+            </small>
             <% } else { %>
             <% customerCode = "SIN CLIENTE"; %>
             <span class='text-light bg-danger'><%= customerCode %></span>
             <% } %>
 
 
-            <% if (session.user && session.user.isAdmin || salesmanId === session.user.id) { %>
+            <!-- % if (session.user && session.user.isAdmin || salesmanId === session.user.id) { % -->
             <a href="/visits/<%= visit.id %>"><span class="oi oi-eye"></span></a>
-            <% } %>
+            <!-- % } % -->
 
             <!--
             <% if (session.user && session.user.isAdmin) { %>

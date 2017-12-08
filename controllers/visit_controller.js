@@ -65,6 +65,22 @@ exports.admin_Or_SalesmanIsLoggedUser_Required = function (req, res, next) {
     }
 };
 
+
+// MW que permite el paso solamente si:
+//   - el usuario logeado es admin o  gestor,
+//   - o el vendedor de la visita es el usuario logeado.
+exports.admin_Or_Manager_Or_SalesmanIsLoggedUser_Required = function (req, res, next) {
+
+    if (req.session.user.isAdmin ||
+        req.session.user.isManager ||
+        req.visit.SalesmanId === req.session.user.id) {
+        next();
+    } else {
+        console.log('Ruta prohibida: el usuario logeado no es el vendedor referenciado, ni un administrador.');
+        res.send(403);
+    }
+};
+
 //-----------------------------------------------------------
 
 
@@ -85,10 +101,12 @@ exports.index = function (req, res, next) {
 
     var searchdateafter = req.query.dateafter || '';
     var searchdatebefore = req.query.datebefore || '';
+    var searchnotfulfilled = !!req.query.notfulfilled;
     var searchcustomer = req.query.customer || '';
     var searchCompanyId = req.query.companyid || "";
     var searchsalesman = req.query.salesman || '';
     var searchfavourites = req.query.favourites || "";
+    var searchpendingtargets = !!req.query.pendingtargets;
 
 
     // Busquedas por fecha de planificacion: despues de una fecha
@@ -111,6 +129,13 @@ exports.index = function (req, res, next) {
         countOptions.where.$and.push({plannedFor: {$lte: momentbefore.toDate()}});
     }
 
+    // Filtrar para mostrar solo visitas pendientes de realizar
+    if (searchnotfulfilled) {
+
+        countOptions.where.$and.push({
+            fulfilledAt: null
+        });
+    }
 
     // Visitas de un cliente especificado en la URL:
     if (!req.customer) {
@@ -225,6 +250,28 @@ exports.index = function (req, res, next) {
         });
     }
 
+    // Filtrar para mostrar solo visitas con objetivos pendientes.
+    // Se añade, o no, una condicion where al include de los targets.
+    var targetInclude = {
+        model: models.Target,
+        attributes: ['id', 'success'],
+        include: [
+            {
+                model: models.Company,
+                attributes: ['id', 'name']
+            },
+            {
+                model: models.TargetType,
+                attributes: ['id', 'name']
+            }
+        ]
+    };
+    if (searchpendingtargets) {
+        targetInclude.where = {
+            success: null
+        };
+    }
+    countOptions.include.push(targetInclude);
 
     //----------------
 
@@ -246,14 +293,6 @@ exports.index = function (req, res, next) {
 
         findOptions.offset = items_per_page * (pageno - 1);
         findOptions.limit = items_per_page;
-
-        findOptions.include.push({
-            model: models.Target,
-            include: [
-                models.Company,
-                models.TargetType
-            ]
-        });
 
         findOptions.order.push(['plannedFor', 'DESC']);
 
@@ -281,6 +320,8 @@ exports.index = function (req, res, next) {
                 searchsalesman: searchsalesman,
                 searchfavourites: searchfavourites,
                 searchCompanyId: searchCompanyId,
+                searchnotfulfilled: searchnotfulfilled,
+                searchpendingtargets: searchpendingtargets,
                 customer: req.customer,
                 salesman: req.user
             });
@@ -394,7 +435,7 @@ exports.create = function (req, res, next) {
         fulfilledAt: momentFulfilledAt,
         notes: req.body.notes.trim(),
         CustomerId: Number(req.body.customerId) || 0,
-        SalesmanId: Number(req.body.salesmanId) || 0
+        SalesmanId: (req.session.user.isManager || req.session.user.isAdmin) ? Number(req.body.salesmanId) : (req.session.user.id || 0)
     };
 
     Sequelize.Promise.all([
@@ -482,7 +523,9 @@ exports.update = function (req, res, next) {
     req.visit.fulfilledAt = momentFulfilledAt;
     req.visit.notes = req.body.notes.trim();
     req.visit.CustomerId = Number(req.body.customerId) || 0;
-    req.visit.SalesmanId = Number(req.body.salesmanId) || 0;
+    if (req.session.user.isManager || req.session.user.isAdmin) {
+        req.visit.SalesmanId = Number(req.body.salesmanId) || 0;
+    }
 
     Sequelize.Promise.all([
         // Comprobar que existe el cliente seleccionado:
@@ -546,7 +589,7 @@ exports.destroy = function (req, res, next) {
     req.visit.destroy()
     .then(function () {
         req.flash('success', 'Visita borrada con éxito.');
-        res.redirect("/reload");
+        res.redirect("/goback");
     })
     .catch(function (error) {
         req.flash('error', 'Error al borrar una visita: ' + error.message);
@@ -606,7 +649,6 @@ exports.printIndex = function (req, res, next) {
             options.where.plannedFor = {$lte: searchmomentbefore};
         }
     }
-
 
 
     // Visitas de un cliente:
@@ -722,16 +764,15 @@ exports.printIndex = function (req, res, next) {
     }
 
 
-
     //----------------
 
-        options.include.push({
-            model: models.Target,
-            include: [
-                models.Company,
-                models.TargetType
-            ]
-        });
+    options.include.push({
+        model: models.Target,
+        include: [
+            models.Company,
+            models.TargetType
+        ]
+    });
 
     options.order.push(['plannedFor', 'DESC']);
 

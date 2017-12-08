@@ -34,6 +34,10 @@ module.exports = function (sequelize, DataTypes) {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false
             },
+            isManager: {
+                type: DataTypes.BOOLEAN,
+                defaultValue: false
+            },
             isSalesman: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false

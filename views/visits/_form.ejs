@@ -23,6 +23,37 @@
     }
 </script>
 
+<% if (session.user.isAdmin || session.user.isManager) { %>
+
+<div class="form-group">
+
+	<label for="salesmanId">Vendedor:</label>
+
+	<select name="salesmanId"
+			class="form-control"
+			id="salesmanId">
+
+		<option value="0" <%= visit.SalesmanId === 0 ? "selected" : "" %> >
+			Seleccione un vendedor
+		</option>
+
+        <% for (var i in salesmen) { %>
+        <% var salesman = salesmen[i]; %>
+		<option value="<%= salesman.id %>" <%= salesman.id === visit.SalesmanId ? "selected" : "" %> >
+            <%= salesman.fullname %>
+		</option>
+        <% } %>
+	</select>
+</div>
+
+<% } else { %>
+
+<input type="hidden"
+	   id="salesmanId"
+	   name="salesmanId"
+	   value="<%= visit.SalesmanId %>" />
+
+<% } %>
 
 <div class="form-group">
 	<label for="customerId">Cliente:</label>
@@ -39,26 +70,6 @@
 				<% var customer = customers[i]; %>
 			    <option value="<%= customer.id %>"  <%= customer.id === visit.CustomerId ? "selected" : "" %> >
     				<%= customer.code %> - <%= customer.name %>
-    			</option>
-    		<% } %>
-		</select>
-</div>
-
-<div class="form-group">
-	<label for="salesmanId">Vendedor:</label>
-
-		<select name="salesmanId"
-				class="form-control"
-				id="salesmanId" >
-
-		    <option value="0"  <%= visit.SalesmanId === 0 ? "selected" : "" %> > 
-    				Seleccione un vendedor  
-    		</option>
-
-			<% for (var i in salesmen) { %>
-				<% var salesman = salesmen[i]; %>
-    			<option value="<%= salesman.id %>"  <%= salesman.id === visit.SalesmanId ? "selected" : "" %> > 
-    				<%= salesman.fullname %>
     			</option>
     		<% } %>
 		</select>
