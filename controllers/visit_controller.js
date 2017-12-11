@@ -92,10 +92,17 @@ exports.admin_Or_Manager_Or_SalesmanIsLoggedUser_Required = function (req, res, 
 // GET /salesmen/:userId/customers/:customerId/visits
 exports.index = function (req, res, next) {
 
+    // Opciones para la llamada a count
     var countOptions = {};
     countOptions.where = {$and: []};
     countOptions.include = [];
     countOptions.order = [];
+
+    // Opciones para la llamada a findAll
+    var findOptions = {};
+    findOptions.where = {$and: []};
+    findOptions.include = [];
+    findOptions.order = [];
 
     //----------------
 
@@ -116,7 +123,9 @@ exports.index = function (req, res, next) {
             req.flash("error", "La fecha " + searchdateafter + " no es válida.");
             momentafter = moment("01-01-1900 08:00", "DD-MM-YYYY");
         }
-        countOptions.where.$and.push({plannedFor: {$gte: momentafter.toDate()}});
+        const option = {plannedFor: {$gte: momentafter.toDate()}};
+        countOptions.where.$and.push(option);
+        findOptions.where.$and.push(option);
     }
 
     // Busquedas por fecha de planificacion: antes de una fecha
@@ -126,22 +135,22 @@ exports.index = function (req, res, next) {
             req.flash("error", "La fecha " + searchdatebefore + " no es válida.");
             momentbefore = moment("31-12-9999 08:00", "DD-MM-YYYY");
         }
-        countOptions.where.$and.push({plannedFor: {$lte: momentbefore.toDate()}});
+        const option = {plannedFor: {$lte: momentbefore.toDate()}};
+        countOptions.where.$and.push(option);
+        findOptions.where.$and.push(option);
     }
 
     // Filtrar para mostrar solo visitas pendientes de realizar
     if (searchnotfulfilled) {
-
-        countOptions.where.$and.push({
-            fulfilledAt: null
-        });
+        countOptions.where.$and.push({fulfilledAt: null});
+        findOptions.where.$and.push({fulfilledAt: null});
     }
 
     // Visitas de un cliente especificado en la URL:
     if (!req.customer) {
 
-        // Incluir los clientes no archivados:
-        var customerInclude = {
+        // Incluir solo los clientes no archivados:
+        const customerInclude = {
             model: models.Customer,
             where: {
                 $and: [{
@@ -180,9 +189,11 @@ exports.index = function (req, res, next) {
             });
         }
         countOptions.include.push(customerInclude);
+        findOptions.include.push(customerInclude);
 
     } else {
-        countOptions.include.push({
+        countOptions.where.$and.push({CustomerId: req.customer.id});
+        findOptions.include.push({
             model: models.Customer,
             where: {
                 id: req.customer.id
@@ -204,24 +215,27 @@ exports.index = function (req, res, next) {
                 likeCondition = {$like: search_like};
             }
 
-            // CUIDADO: Estoy retocando el include existente.
             countOptions.include.push({
+                model: models.User,
+                as: "Salesman",
+                where: {fullname: likeCondition}
+            });
+            findOptions.include.push({
                 model: models.User,
                 as: "Salesman",
                 where: {fullname: likeCondition},
                 include: [{model: models.Attachment, as: 'Photo'}]
             });
         } else {
-            // CUIDADO: Estoy retocando el include existente.
-            countOptions.include.push({
+            findOptions.include.push({
                 model: models.User,
                 as: "Salesman",
                 include: [{model: models.Attachment, as: 'Photo'}]
             });
         }
     } else {
-        // CUIDADO: Estoy retocando el include existente.
-        countOptions.include.push({
+        countOptions.where.$and.push({SalesmanId: req.user.id});
+        findOptions.include.push({
             model: models.User,
             as: "Salesman",
             where: {id: req.user.id},
@@ -232,18 +246,20 @@ exports.index = function (req, res, next) {
 
     // Filtrar por mis visitas favoritas
     if (searchfavourites) {
-
-        // CUIDADO: Estoy retocando el include existente.
         countOptions.include.push({
             model: models.User,
             as: "Fans",
             attributes: ['id', 'login'],
             where: {id: req.session.user.id}
         });
+        findOptions.include.push({
+            model: models.User,
+            as: "Fans",
+            attributes: ['id', 'login'],
+            where: {id: req.session.user.id}
+        });
     } else {
-
-        // CUIDADO: Estoy retocando el include existente.
-        countOptions.include.push({
+        findOptions.include.push({
             model: models.User,
             as: "Fans",
             attributes: ['id', 'login']
@@ -271,7 +287,17 @@ exports.index = function (req, res, next) {
             success: null
         };
     }
-    countOptions.include.push(targetInclude);
+    findOptions.include.push(targetInclude);
+    if (searchpendingtargets) {
+        // Cuenta de mas si la visita tiene varios objetivos penndientes
+        countOptions.include.push({
+            model: models.Target,
+            where: {
+                success: null
+            }
+        });
+    }
+
 
     //----------------
 
@@ -288,8 +314,6 @@ exports.index = function (req, res, next) {
         // Crear un string con el HTML que pinta la botonera de paginacion.
         // Lo añado como una variable local de res para que lo pinte el layout de la aplicacion.
         res.locals.paginate_control = paginate(count, items_per_page, pageno, req.url);
-
-        var findOptions = countOptions;
 
         findOptions.offset = items_per_page * (pageno - 1);
         findOptions.limit = items_per_page;
