@@ -30,24 +30,17 @@ exports.load = function (req, res, next, visitId) {
 
 
 // MW que permite el paso solamente si el vendedor de la visita esta asociado al token usado.
-exports.salesmanIsLoggedUser_Required = function (req, res, next) {
+exports.salesmanIsTokenOwner_Required = function (req, res, next) {
 
     var tokenUserId = req.token.userId;
+    var salesmanId = req.visit.SalesmanId;
 
-    models.Salesman.findOne({
-        where: {UserId: tokenUserId}
-    })
-    .then(function (salesman) {
-        if (salesman) {
-            next();
-        } else {
-            console.log('Ruta prohibida: el token usado no es el del vendedor.');
-            res.send(403);
-        }
-    })
-    .catch(function (error) {
-        next(error);
-    });
+    if (tokenUserId === salesmanId) {
+        next();
+    } else {
+        console.log('Ruta prohibida: el token usado no es el del vendedor de la visitga.');
+        res.send(403);
+    }
 };
 
 //-----------------------------------------------------------

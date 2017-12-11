@@ -10,6 +10,7 @@ var targetApi = require('../api/target');
 var targetTypeApi = require('../api/targetType');
 var userApi = require('../api/user');
 var postApi = require('../api/post');
+var favouriteApi = require('../api/favourite');
 
 //-----------------------------------------------------------
 
@@ -152,6 +153,18 @@ router.get('/targetTypes',
 
 router.get('/targetTypes/:targettypeId(\\d+)',
     targetTypeApi.show);
+
+//-----------------------------------------------------------
+
+// Favoritos
+// Rutas de Favoritos
+router.put('/users/tokenOwner/favourites/:visitId(\\d+)',
+    userApi.loadToken,
+    favouriteApi.add);
+
+router.delete('/users/tokenOwner/favourites/:visitId(\\d+)',
+    userApi.loadToken,
+    favouriteApi.del);
 
 //-----------------------------------------------------------
 
